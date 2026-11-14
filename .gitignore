@@ -1,0 +1,8 @@
+# Ignorar documentos iniciales del enunciado / sprint previo
+*.pdf
+Diagrama de Flujo TPI.drawio.png
+
+# Ignorar archivos generados por Python
+__pycache__/
+*.pyc
+*.pyo
