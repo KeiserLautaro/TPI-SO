@@ -1,7 +1,0 @@
-id_proceso,tamano,tiempo_arribo,tiempo_irrupcion
-P1,120,0,8
-P2,250,2,4
-P3,80,3,6
-P4,150,5,3
-P5,100,7,5
-P6,60,10,2
