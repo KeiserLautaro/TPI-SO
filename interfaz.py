@@ -15,6 +15,7 @@ en una pila antes de cada avance.
 
 import copy
 import os
+import sys
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
 
@@ -28,7 +29,12 @@ from simulacion import (
     calcular_estadisticas, grado_multiprogramacion, alertas_del_ultimo_paso,
 )
 
-CARPETA = os.path.dirname(os.path.abspath(__file__))
+# Carpeta del programa: la del .exe si es el ejecutable generado con PyInstaller
+# (ahí __file__ apunta a una carpeta temporal), o la de este archivo si no.
+if getattr(sys, "frozen", False):
+    CARPETA = os.path.dirname(sys.executable)
+else:
+    CARPETA = os.path.dirname(os.path.abspath(__file__))
 CARPETA_LOTES = os.path.join(CARPETA, "lotes")
 
 COLORES_PROCESOS = ["#74b9ff", "#55efc4", "#ffeaa7", "#fab1a0", "#a29bfe",

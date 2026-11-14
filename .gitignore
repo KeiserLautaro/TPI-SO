@@ -7,3 +7,8 @@ __pycache__/
 *.pyc
 *.pyo
 .pytest_cache/
+
+# Generados por PyInstaller (build.ps1)
+build/
+dist/
+*.spec

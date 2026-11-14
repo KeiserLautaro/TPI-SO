@@ -1,0 +1,7 @@
+# La simulación y la interfaz solo usan la biblioteca estándar (tkinter incluido).
+
+# Tests
+pytest
+
+# Generación del ejecutable
+pyinstaller

@@ -10,17 +10,30 @@ Implementado con **programación estructurada** (solo funciones, sin clases).
 
 ## Cómo ejecutar
 
-Requiere Python 3 (Tkinter viene incluido en el instalador de Windows).
+**Ejecutable (Windows, no requiere Python):** abrir `SimuladorMVT.exe` con doble
+clic. La carpeta `lotes/` tiene que estar al lado del ejecutable.
+
+**Desde el código** (Python 3; Tkinter viene incluido en el instalador de Windows):
 
 ```
 python interfaz.py                              interfaz gráfica
 python consola.py lotes/lote_1.csv              consola, pausa en cada instante
 python consola.py lotes/lote_1.csv --eventos    consola, pausa en arribos y terminaciones
-python -m pytest                                tests (requiere pip install pytest)
+python -m pytest                                tests
 ```
 
-En Windows también se puede hacer doble clic en `ejecutar_simulador.bat`.
 Si `python` no se encuentra, usar `py` (por ejemplo `py interfaz.py`).
+
+## Generar el ejecutable
+
+```
+python -m pip install -r requirements.txt
+powershell -ExecutionPolicy Bypass -File build.ps1
+```
+
+Corre los tests y, si pasan, genera `dist\SimuladorMVT.exe` con PyInstaller y
+copia `lotes/` y este README a `dist\`. Para entregar, comprimir la carpeta
+`dist\` completa. `build/` y `dist/` no se suben al repositorio.
 
 ## Organización del código
 
