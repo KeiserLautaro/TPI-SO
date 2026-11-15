@@ -3,8 +3,12 @@
 Versión por consola del simulador (sirve para verificar el motor sin la interfaz).
 
 Uso:
-    python consola.py lotes/lote_1.csv            pausa en cada instante
-    python consola.py lotes/lote_1.csv --eventos  pausa solo cuando llega o termina un proceso
+    python consola.py lotes/lote_1.csv
+
+En cada pausa se elige cómo avanzar (igual que los botones de la interfaz):
+    [Enter]  siguiente instante (T + 1)
+    [e]      siguiente evento (hasta que llegue o termine un proceso)
+    [q]      salir
 """
 
 import sys
@@ -15,6 +19,43 @@ from simulacion import crear_estado, avanzar_instante, avanzar_hasta_evento, sim
 
 # Líneas en blanco entre un instante y el siguiente, para que no queden pegados
 SEPARACION_ENTRE_INSTANTES = "\n" * 2
+
+
+def leer_tecla(mensaje):
+    """
+    Muestra el mensaje y devuelve la tecla apretada, sin esperar Enter.
+    Devuelve "" para Enter y "q" para Ctrl+C o fin de entrada.
+    Si la entrada no es una terminal (por ejemplo, viene de un pipe), lee una línea entera.
+    """
+    if not sys.stdin.isatty():
+        try:
+            return input(mensaje).strip().lower()
+        except EOFError:
+            return "q"
+
+    print(mensaje, end="", flush=True)
+    try:
+        import msvcrt   # Windows
+        tecla = msvcrt.getwch()
+        if tecla in ("\x00", "\xe0"):   # flechas y teclas especiales mandan dos caracteres
+            msvcrt.getwch()
+            tecla = "?"
+    except ImportError:
+        import termios, tty   # Linux / Mac
+        fd = sys.stdin.fileno()
+        config_anterior = termios.tcgetattr(fd)
+        try:
+            tty.setraw(fd)
+            tecla = sys.stdin.read(1)
+        finally:
+            termios.tcsetattr(fd, termios.TCSADRAIN, config_anterior)
+
+    if tecla in ("\r", "\n"):
+        tecla = ""
+    elif tecla in ("\x03", "\x04", "\x1a"):   # Ctrl+C, Ctrl+D, Ctrl+Z
+        tecla = "q"
+    print(tecla if tecla.isprintable() else "")
+    return tecla.lower()
 
 
 def cargar_procesos(ruta):
@@ -41,29 +82,27 @@ def main():
         return
 
     ruta = sys.argv[1]
-    solo_eventos = "--eventos" in sys.argv
 
     procesos = cargar_procesos(ruta)
     if procesos is None:
         return
 
-    paso = "evento" if solo_eventos else "instante"
     print(f"Procesos cargados desde {ruta}: {len(procesos)}")
     estado = crear_estado(procesos)
     print()
     print(texto_estado(estado))
     while not simulacion_terminada(estado):
-        try:
-            respuesta = input(f"\n[Enter] siguiente {paso}, [q] salir: ")
-        except EOFError:
-            respuesta = "q"
-        if respuesta.strip().lower() == "q":
+        opcion = leer_tecla("\n[Enter] siguiente instante, [e] siguiente evento, [q] salir: ")
+        if opcion == "q":
             print("Simulación interrumpida.")
             return
-        if solo_eventos:
+        if opcion == "e":
             avanzar_hasta_evento(estado)
-        else:
+        elif opcion == "":
             avanzar_instante(estado)
+        else:
+            print("Opción no válida.")
+            continue
         print(SEPARACION_ENTRE_INSTANTES)
         print(texto_estado(estado))
 

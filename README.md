@@ -17,8 +17,7 @@ clic. La carpeta `lotes/` tiene que estar al lado del ejecutable.
 
 ```
 python interfaz.py                              interfaz gráfica
-python consola.py lotes/lote_1.csv              consola, pausa en cada instante
-python consola.py lotes/lote_1.csv --eventos    consola, pausa en arribos y terminaciones
+python consola.py lotes/lote_1.csv              consola ([Enter] siguiente instante, [e] siguiente evento)
 python -m pytest                                tests
 ```
 

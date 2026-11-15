@@ -78,8 +78,6 @@ lbl_fragmentacion = None
 canvas_memoria = None
 canvas_gantt = None
 txt_logs = None
-tree_estadisticas = None
-lbl_metricas_resumen = None
 btn_ciclo_anterior = None
 btn_siguiente_ciclo = None
 btn_siguiente_evento = None
@@ -294,18 +292,6 @@ def actualizar_interfaz_grafica():
 
     # 5. Registro de sucesos
     actualizar_registro()
-
-    # 6. Terminados y métricas parciales
-    stats = calcular_estadisticas(estado)
-    filas = []
-    for d in stats["detalle"]:
-        filas.append((d["id"], f"{d['tamano']}K", d["arribo"], d["irrupcion"], d["fin"], d["retorno"], d["espera"]))
-    actualizar_tabla_tree(tree_estadisticas, filas)
-    lbl_metricas_resumen.config(
-        text=f"Terminados: {stats['cantidad']}/{len(estado['procesos'])}  |  "
-             f"TRP: {stats['retorno_promedio']:.2f} u.  |  TEP: {stats['espera_promedio']:.2f} u.  |  "
-             f"Rendimiento: {stats['rendimiento']:.4f} proc/u."
-    )
 
 
 def exportar_informe():
@@ -601,7 +587,7 @@ def construir_pantalla_simulador(parent):
     global frame_pantalla_simulador, lbl_badge_reloj_t, lbl_alerta, lbl_grado
     global lbl_cpu_actual, lbl_cpu_restante, lbl_cpu_arribo, lbl_cpu_tamano
     global tree_listos, tree_suspendidos, tree_nuevos, tree_particiones, lbl_fragmentacion
-    global canvas_memoria, canvas_gantt, txt_logs, tree_estadisticas, lbl_metricas_resumen
+    global canvas_memoria, canvas_gantt, txt_logs
     global btn_ciclo_anterior, btn_siguiente_ciclo, btn_siguiente_evento
 
     frame_pantalla_simulador = tk.Frame(parent, bg="#f5f6fa")
@@ -645,15 +631,6 @@ def construir_pantalla_simulador(parent):
     crear_boton(frame_botones, "🔄 Reiniciar (T=0)", "#e67e22", "#d35400", reiniciar_simulacion).pack(side=tk.LEFT, padx=5)
     crear_boton(frame_botones, "📊 Informe Estadístico", "#8e44ad", "#71368a", mostrar_dialogo_informe_final).pack(side=tk.LEFT, padx=5)
     crear_boton(frame_botones, "🏠 Volver a Inicio / Carga", "#7f8c8d", "#636e72", volver_a_pantalla_inicio).pack(side=tk.RIGHT, padx=5)
-
-    # ------------------ PANEL DE TERMINADOS Y MÉTRICAS ------------------
-    frame_stats_box = tk.LabelFrame(frame_pantalla_simulador, text="Procesos Finalizados y Métricas",
-                                    font=("Arial", 9, "bold"), padx=6, pady=2, bg="white")
-    frame_stats_box.pack(fill=tk.X, side=tk.BOTTOM, padx=8, pady=2)
-    tree_estadisticas = crear_tabla(frame_stats_box, ("ID", "Tamaño", "Arribo (TA)", "Irrupción (TI)", "T. Fin",
-                                                      "Retorno (TR)", "Espera (TE)"), 3, 100)
-    lbl_metricas_resumen = tk.Label(frame_stats_box, text="", font=("Arial", 9, "bold"), fg="#2c3e50", bg="white")
-    lbl_metricas_resumen.pack(anchor="w", pady=1)
 
     # ------------------ PANELES CENTRALES ------------------
     paned_central = tk.PanedWindow(frame_pantalla_simulador, orient=tk.HORIZONTAL, sashrelief=tk.RAISED)
