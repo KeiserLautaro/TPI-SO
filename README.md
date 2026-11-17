@@ -28,6 +28,8 @@ La tabla de la derecha muestra los procesos cargados (máximo 10).
 **Eliminar Seleccionado** quita el proceso marcado y **Limpiar Todo** vacía la
 lista. Cuando estén listos, apretar **INICIAR SIMULACIÓN CON ESTOS PROCESOS**.
 
+![Figura 1: Pantalla de carga con el lote 4 de la cátedra](capturas/01_carga.png)
+
 ### Formato del archivo CSV
 
 - Un proceso por línea: Id, tamaño (K), arribo e irrupción.
@@ -66,15 +68,21 @@ Qué muestra la pantalla en cada instante:
   la memoria, el diagrama de Gantt y el registro de sucesos (los del último
   paso en negrita y las alertas en rojo).
 
+![Figura 2: Lote 4 en T = 8. P5 se adelanta a P1 y P2 (alerta SRTF) y P7 queda suspendido: hay 140K libres, pero en dos huecos de 70K](capturas/02_simulacion.png)
+
 ## 3. Informe final
 
 Cuando terminan todos los procesos se abre el informe estadístico: tiempo de
 retorno y de espera de cada proceso, sus promedios, el tiempo total y el
 rendimiento del sistema. **Exportar a TXT** lo guarda en un archivo de texto.
 
+![Figura 3: Informe estadístico final del lote 4](capturas/03_informe.png)
+
 ## Lotes de prueba
 
-Resultados esperados de cada lote de la carpeta `lotes`:
+Resultados esperados de cada lote de la carpeta `lotes`.
+
+**Lotes de la cátedra:**
 
 | Lote | Qué prueba | TRP | TEP | Tiempo total |
 |---|---|---|---|---|
@@ -84,6 +92,18 @@ Resultados esperados de cada lote de la carpeta `lotes`:
 | 4 | 10 procesos con expropiaciones | 15,90 | 10,30 | 56 |
 | 5 | P2 de 451K (se descarta; se simulan P1 y P3) | 6,00 | 1,50 | 9 |
 | 6 | 12 procesos (se toman P1 a P10) | 19,40 | 14,90 | 45 |
+
+**Lotes propios del equipo:**
+
+| Lote | Qué prueba | TRP | TEP | Tiempo total |
+|---|---|---|---|---|
+| 7 | Fragmentación externa: entre T=5 y T=15 hay 300K libres, pero en dos huecos de 150K, y P5 (200K) no entra hasta que P2 termina y los huecos se fusionan | 14,20 | 8,00 | 31 |
+| 8 | Empates SRTF: P1 no es expropiado por procesos con el mismo restante, y entre P3 y P10 (mismo arribo y restante) gana P3 | 6,00 | 3,25 | 11 |
+| 9 | Best-Fit: en T=7, P6 (55K) va al hueco de 60K y P7 (95K) al de 100K, aunque hay otros huecos donde entran | 10,14 | 5,43 | 33 |
+| 10 | Archivo con 7 errores distintos (irrupción 0, tamaño 0, arribo negativo, valor no numérico, Id repetido, fila incompleta y más de 450K): se informan todos y se simulan P1 y P8 | 2,50 | 0,50 | 4 |
+| 11 | Columnas en otro orden e Id numéricos. En T=3, P3 (350K) sigue suspendido, pero P4, que está detrás en la cola, entra igual | 9,50 | 5,25 | 17 |
+
+![Figura 4: Lote 7 en T = 5. Los huecos de 150K quedan separados por P2 y P5 (200K) no entra](capturas/04_fragmentacion.png)
 
 ## Reglas de la simulación
 
