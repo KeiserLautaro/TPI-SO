@@ -652,7 +652,7 @@ def main():
     global ventana_principal
 
     ventana_principal = tk.Tk()
-    ventana_principal.title("Simulador de Memoria y CPU - Sistemas Operativos (UTN FRRe)")
+    ventana_principal.title("Simulador de Memoria y CPU - Sistemas Operativos (UTN FRRe) - Equipo 9")
     ventana_principal.geometry("1120x820")
     ventana_principal.minsize(980, 720)
 

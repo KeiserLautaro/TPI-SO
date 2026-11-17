@@ -9,39 +9,28 @@ Simula un procesador con memoria de **particiones variables (MVT)**:
 - Planificación **SRTF** (expropiativo).
 - Grado de multiprogramación máximo 5, hasta 10 procesos por simulación.
 
-## Cómo usarlo
+## Cómo abrirlo
 
-### Ejecutable (Windows, no requiere Python)
+Abrir `Simulador_Equipo9.exe` con doble clic (Windows, no requiere instalar nada).
+Los lotes de prueba están en la carpeta `lotes`, al lado del ejecutable.
 
-Abrir `SimuladorMVT.exe`. Los lotes de prueba están en la carpeta `lotes/`, al
-lado del ejecutable.
+## 1. Cargar los procesos
 
-### Desde el código
+La primera pantalla tiene dos formas de cargar procesos, que se pueden combinar:
 
-Requiere Python 3 (Tkinter viene incluido en el instalador de Windows).
+- **Opción A - Archivo CSV:** el botón **Seleccionar Archivo CSV** abre la
+  carpeta `lotes`. Al elegir un archivo, sus procesos reemplazan a los que
+  estaban cargados.
+- **Opción B - Carga manual:** completar Id, tamaño, tiempo de arribo y tiempo
+  de irrupción, y apretar **Agregar Proceso a la Lista**.
 
-| Comando | Qué hace |
-|---|---|
-| `python interfaz.py` | Interfaz gráfica |
-| `python -m pytest` | Corre los tests (requiere `pytest`) |
+La tabla de la derecha muestra los procesos cargados (máximo 10).
+**Eliminar Seleccionado** quita el proceso marcado y **Limpiar Todo** vacía la
+lista. Cuando estén listos, apretar **INICIAR SIMULACIÓN CON ESTOS PROCESOS**.
 
-Si `python` no se encuentra, usar `py` (por ejemplo `py interfaz.py`).
+### Formato del archivo CSV
 
-### Generar el ejecutable
-
-```
-python -m pip install pytest pyinstaller
-powershell -ExecutionPolicy Bypass -File build.ps1
-```
-
-El script corre los tests y, si pasan, genera `dist\SimuladorMVT.exe` con
-PyInstaller. Después copia `lotes/` y `README.pdf` a `dist\`. Para entregar,
-comprimir la carpeta `dist\` completa.
-
-## Archivo de entrada
-
-- Solo se aceptan archivos `.csv`, con un proceso por línea: Id, tamaño (K),
-  arribo e irrupción.
+- Un proceso por línea: Id, tamaño (K), arribo e irrupción.
 - Separador: coma, punto y coma, tabulación o espacios.
 - El encabezado es opcional. Si está, las columnas pueden venir en cualquier
   orden (por ejemplo `Proceso,TA,TI,Tamaño`, como en los lotes de la cátedra).
@@ -52,7 +41,38 @@ Los procesos con errores (más de 450K, valores no numéricos, Id repetido, etc.
 **no frenan la carga**: se informan y se pregunta si se sigue con los válidos.
 Si hay más de 10, se toman los 10 primeros del archivo.
 
+## 2. Simular
+
+La simulación arranca en T = 0. Botones de la barra inferior:
+
+| Botón | Qué hace |
+|---|---|
+| **Ciclo Anterior** | Vuelve al instante anterior (también con la flecha ←) |
+| **Siguiente Ciclo (T + 1)** | Avanza un instante (también con la flecha →) |
+| **Siguiente Evento (Arribo/Fin)** | Avanza hasta que llega o termina un proceso |
+| **Reiniciar (T=0)** | Vuelve al principio con los mismos procesos |
+| **Informe Estadístico** | Muestra las métricas hasta el momento |
+| **Volver a Inicio / Carga** | Regresa a la pantalla de carga de procesos |
+
+Qué muestra la pantalla en cada instante:
+
+- **Arriba:** el tiempo T y, en amarillo, la alerta SRTF cuando un proceso
+  expropia la CPU o pasa delante de otros que llegaron antes.
+- **Izquierda:** el proceso en CPU, el grado de multiprogramación y las colas
+  de Listos, Listos y Suspendidos, y Nuevos.
+- **Derecha:** la tabla de particiones, la fragmentación externa, un gráfico de
+  la memoria, el diagrama de Gantt y el registro de sucesos (los del último
+  paso en negrita y las alertas en rojo).
+
+## 3. Informe final
+
+Cuando terminan todos los procesos se abre el informe estadístico: tiempo de
+retorno y de espera de cada proceso, sus promedios, el tiempo total y el
+rendimiento del sistema. **Exportar a TXT** lo guarda en un archivo de texto.
+
 ## Lotes de prueba
+
+Resultados esperados de cada lote de la carpeta `lotes`:
 
 | Lote | Qué prueba | TRP | TEP | Tiempo total |
 |---|---|---|---|---|
@@ -83,7 +103,7 @@ Lo que se muestra en el instante T es el estado después de esos pasos, es
 decir, qué proceso usa la CPU durante [T, T+1). Un proceso que llega en T ya
 aparece en la pantalla de T.
 
-
+Además:
 
 - **Desempates SRTF:** si un Listo empata con el que está en CPU, sigue el que
   está en CPU (solo se expropia con restante estrictamente menor). Entre
@@ -93,32 +113,9 @@ aparece en la pantalla de T.
 - **Sin swap-out:** un proceso solo va a Listo y Suspendido si no había hueco
   al admitirlo. Nunca se suspende un Listo para hacer lugar.
 - **Fragmentación interna:** siempre 0K, porque en MVT cada partición se corta
-  al tamaño exacto del proceso. La columna se muestra porque la consigna la
-  pide.
+  al tamaño exacto del proceso.
 - **Fragmentación externa:** se informa el total libre, la cantidad de huecos y
   el mayor, y se avisa cuando a un suspendido le alcanza la memoria libre total
   pero no entra en ningún hueco.
-- **Alerta SRTF:** se muestra cuando el proceso que toma la CPU expropia al que
-  estaba, o pasa delante de Listos que llegaron antes.
 - **Estadísticas:** retorno = fin − TA; espera = retorno − TI;
   rendimiento = procesos terminados / tiempo total (fin del último, desde T = 0).
-
-## Organización del código
-
-| Archivo | Contenido |
-|---|---|
-| `constantes.py` | Valores de la consigna (memoria y límites) |
-| `memoria.py` | MVT: Best-Fit, asignación, liberación con fusión de huecos, tabla de particiones |
-| `planificador.py` | SRTF: elección del proceso en CPU y desempates |
-| `simulacion.py` | Motor: estado, arribos, admisión, planificación, ejecución y estadísticas |
-| `entrada.py` | Lectura y validación del CSV y del formulario |
-| `informe.py` | Texto del informe estadístico (exportación a TXT) |
-| `interfaz.py` | Interfaz gráfica (Tkinter) |
-| `lotes/` | Los 6 lotes de prueba de la cátedra |
-| `tests/` | Tests con pytest |
-
-La simulación (`simulacion.py`, `memoria.py`, `planificador.py`) no importa
-nada de la interfaz. Todo su estado vive en un único diccionario `estado` que se
-pasa a cada función; la interfaz gráfica solo llama a esas funciones y muestra
-el `estado`. Para "Ciclo Anterior", guarda una copia del `estado` antes de
-cada avance.
