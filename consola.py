@@ -107,7 +107,7 @@ def main():
         print(texto_estado(estado))
 
     print(SEPARACION_ENTRE_INSTANTES)
-    print(texto_informe(estado, con_gantt=False))
+    print(texto_informe(estado))
 
 
 if __name__ == "__main__":

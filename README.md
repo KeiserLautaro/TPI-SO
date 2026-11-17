@@ -42,7 +42,7 @@ memoria.py        MVT: Best-Fit, asignar, liberar con fusión de huecos, tabla d
 planificador.py   SRTF: elegir el proceso que ocupa la CPU y reglas de desempate
 simulacion.py     Motor: estado, arribos, admisión, planificación, ejecución, estadísticas
 entrada.py        Lectura y validación de archivos y del formulario
-informe.py        Textos del estado, del informe y del Gantt (consola y exportación)
+informe.py        Textos del estado y del informe (consola y exportación)
 consola.py        Interfaz por consola
 interfaz.py       Interfaz gráfica (Tkinter)
 lotes/            Los 6 lotes de prueba de la cátedra

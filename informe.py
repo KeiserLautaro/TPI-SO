@@ -169,27 +169,8 @@ def texto_estado(estado):
 # Informe final
 # =============================================================================
 
-def texto_gantt(estado):
-    """Diagrama de Gantt de una línea: un casillero por unidad de tiempo ('--' = CPU ociosa)."""
-    historial = estado["historial_cpu"]
-    if len(historial) == 0:
-        return "(sin ejecución)"
-    etiquetas = []
-    for id_proceso in historial:
-        etiquetas.append(id_proceso if id_proceso is not None else "--")
-    ancho = max(len(e) for e in etiquetas)
-
-    barra = "|"
-    for etiqueta in etiquetas:
-        barra += etiqueta.center(ancho) + "|"
-    tiempos = ""
-    for t in range(len(historial) + 1):
-        tiempos += str(t).ljust(ancho + 1)
-    return barra + "\n" + tiempos.rstrip()
-
-
-def texto_informe(estado, con_gantt=True):
-    """Informe estadístico final (con el diagrama de Gantt al final si `con_gantt`)."""
+def texto_informe(estado):
+    """Informe estadístico final."""
     est = calcular_estadisticas(estado)
     filas = []
     for d in est["detalle"]:
@@ -208,6 +189,4 @@ def texto_informe(estado, con_gantt=True):
         f"Rendimiento del sistema:    {est['cantidad']}/{est['tiempo_total']} = "
         f"{formato_numero(est['rendimiento'], 4)} trabajos por unidad de tiempo",
     ]
-    if con_gantt:
-        lineas += ["", "Diagrama de Gantt:", texto_gantt(estado)]
     return "\n".join(lineas)

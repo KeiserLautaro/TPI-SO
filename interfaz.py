@@ -295,7 +295,7 @@ def actualizar_interfaz_grafica():
 
 
 def exportar_informe():
-    """Guarda el informe (y el Gantt) en un archivo de texto."""
+    """Guarda el informe en un archivo de texto."""
     ruta = filedialog.asksaveasfilename(
         title="Guardar informe", defaultextension=".txt", initialfile="informe.txt",
         filetypes=[("Texto", "*.txt")],
@@ -522,9 +522,6 @@ def construir_pantalla_inicio(parent):
     lf_csv = tk.LabelFrame(col_izq, text="Opción A: Cargar desde Archivo CSV",
                            font=("Arial", 10, "bold"), padx=12, pady=10, bg="white")
     lf_csv.pack(fill=tk.X, pady=(0, 10))
-    tk.Label(lf_csv, text="Columnas: Id, tamaño, arribo, irrupción.\n"
-                          "Con encabezado pueden venir en cualquier orden\n(como en los lotes de la cátedra).",
-             font=("Arial", 8), justify=tk.LEFT, bg="white", fg="#555555").pack(anchor="w", pady=(0, 8))
     crear_boton(lf_csv, "📁 Seleccionar Archivo CSV", "#3498db", "#2980b9",
                 accion_cargar_csv_inicio).pack(fill=tk.X)
     lbl_ruta_csv_inicio = tk.Label(lf_csv, text="Ningún archivo cargado.", font=("Arial", 8, "italic"),
