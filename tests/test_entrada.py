@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from entrada import leer_archivo, validar_proceso, normalizar_id
 
 

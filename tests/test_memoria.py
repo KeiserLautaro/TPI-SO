@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from memoria import (crear_memoria, asignar_memoria, liberar_memoria, buscar_hueco_best_fit,
                      tabla_particiones, fragmentacion_externa)
 

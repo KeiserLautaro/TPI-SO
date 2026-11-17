@@ -1,32 +1,13 @@
-# -*- coding: utf-8 -*-
-"""
-Versión por consola del simulador (sirve para verificar el motor sin la interfaz).
-
-Uso:
-    python consola.py lotes/lote_1.csv
-
-En cada pausa se elige cómo avanzar (igual que los botones de la interfaz):
-    [Enter]  siguiente instante (T + 1)
-    [e]      siguiente evento (hasta que llegue o termine un proceso)
-    [q]      salir
-"""
-
 import sys
 
 from entrada import leer_archivo
 from informe import texto_estado, texto_informe
 from simulacion import crear_estado, avanzar_instante, avanzar_hasta_evento, simulacion_terminada
 
-# Líneas en blanco entre un instante y el siguiente, para que no queden pegados
 SEPARACION_ENTRE_INSTANTES = "\n" * 2
 
 
 def leer_tecla(mensaje):
-    """
-    Muestra el mensaje y devuelve la tecla apretada, sin esperar Enter.
-    Devuelve "" para Enter y "q" para Ctrl+C o fin de entrada.
-    Si la entrada no es una terminal (por ejemplo, viene de un pipe), lee una línea entera.
-    """
     if not sys.stdin.isatty():
         try:
             return input(mensaje).strip().lower()
@@ -59,7 +40,6 @@ def leer_tecla(mensaje):
 
 
 def cargar_procesos(ruta):
-    """Lee el archivo; si hay errores los muestra y pregunta si se sigue con los válidos."""
     procesos, errores = leer_archivo(ruta)
     if len(errores) > 0:
         print("Problemas en el archivo:")
@@ -78,7 +58,7 @@ def cargar_procesos(ruta):
 
 def main():
     if len(sys.argv) < 2:
-        print(__doc__)
+        print("Uso: python consola.py lotes/lote_1.csv")
         return
 
     ruta = sys.argv[1]
@@ -112,5 +92,5 @@ def main():
 
 if __name__ == "__main__":
     if hasattr(sys.stdout, "reconfigure"):
-        sys.stdout.reconfigure(encoding="utf-8")   # para que las tildes se vean bien en Windows
+        sys.stdout.reconfigure(encoding="utf-8")
     main()

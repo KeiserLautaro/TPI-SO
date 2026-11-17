@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-"""Textos del estado y del informe final (los usa la consola y la exportación a TXT)."""
-
 from constantes import MAX_MULTIPROGRAMACION
 from memoria import tabla_particiones, fragmentacion_externa
 from planificador import clave_srtf
@@ -14,7 +11,6 @@ from simulacion import (
 # =============================================================================
 
 def tabla_texto(encabezados, filas):
-    """Tabla con columnas alineadas y bordes simples."""
     celdas = [[str(c) for c in encabezados]]
     for fila in filas:
         celdas.append([str(c) for c in fila])
@@ -43,7 +39,6 @@ def tabla_texto(encabezados, filas):
 
 
 def formato_numero(valor, decimales=2):
-    """2.6 -> '2,60' (coma decimal)."""
     return f"{valor:.{decimales}f}".replace(".", ",")
 
 
@@ -58,7 +53,6 @@ def lista_o_vacia(partes, vacia="(vacía)"):
 # =============================================================================
 
 def suspendidos_bloqueados_por_fragmentacion(estado):
-    """Suspendidos para los que alcanza la memoria libre total, pero no entran en ningún hueco."""
     resumen = fragmentacion_externa(estado["memoria"])
     bloqueados = []
     for p in estado["suspendidos"]:
@@ -68,7 +62,6 @@ def suspendidos_bloqueados_por_fragmentacion(estado):
 
 
 def texto_fragmentacion(estado):
-    """Una línea con la memoria libre, en cuántos huecos y si eso deja procesos afuera."""
     resumen = fragmentacion_externa(estado["memoria"])
     if resumen["cantidad_huecos"] == 0:
         return "Fragmentación externa: 0K (no hay huecos libres)"
@@ -99,7 +92,6 @@ def texto_tabla_particiones(estado):
 
 
 def texto_colas(estado):
-    """Una línea por cola, con los títulos alineados."""
     en_cpu = estado["en_cpu"]
     if en_cpu is None:
         ejecucion = "CPU libre (ociosa)"
@@ -125,7 +117,6 @@ def texto_colas(estado):
 
 
 def texto_estado(estado):
-    """Bloque completo de salida para una pausa."""
     es_evento = estado["t"] == 0 or estado["hubo_evento"]
     marca = "  [EVENTO]" if es_evento else ""
     lineas = [f"=============== T = {estado['t']}{marca} ==============="]
@@ -170,7 +161,6 @@ def texto_estado(estado):
 # =============================================================================
 
 def texto_informe(estado):
-    """Informe estadístico final."""
     est = calcular_estadisticas(estado)
     filas = []
     for d in est["detalle"]:

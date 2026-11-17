@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-"""Resultados de los lotes de la cátedra (verificados contra otro simulador independiente)."""
 import copy
 import os
 
@@ -66,7 +64,6 @@ def test_lote_6_toma_los_10_primeros():
 
 
 def test_lote_1_el_estado_en_T_ya_incluye_los_arribos_de_T():
-    """En T=3 llega P1: la pantalla de T=3 ya lo tiene que mostrar en CPU."""
     procesos, _ = leer_lote(1)
     estado = crear_estado(procesos)
     for _ in range(3):

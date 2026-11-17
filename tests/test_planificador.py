@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from planificador import elegir_proceso_srtf, numero_de_id
 from simulacion import crear_proceso
 
