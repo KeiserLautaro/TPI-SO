@@ -1,6 +1,7 @@
 # Ignorar documentos iniciales del enunciado / sprint previo
 *.pdf
 !README.pdf
+!docs/documentacion_codigo.pdf
 Diagrama de Flujo TPI.drawio.png
 
 # Ignorar archivos generados por Python

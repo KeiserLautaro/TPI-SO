@@ -1,0 +1,832 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Documentación del código - TPI Sistemas Operativos - Equipo 9</title>
+<style>
+/* ===== Página ===== */
+@page {
+  size: A4;
+  margin: 27mm 20mm 20mm 20mm;
+  @top-left { content: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMTYwIiBoZWlnaHQ9IjU2Ij48aW1hZ2Ugd2lkdGg9IjE2MCIgaGVpZ2h0PSI1NiIgeGxpbms6aHJlZj0iZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFYc0FBQUNGQ0FNQUFBQ05ENmprQUFBQTZsQk1WRVgvLy84ZEVReG5abXBrWTJjQUFBQmdYMlAzOS9meTh2SnJhbTRaREFiZTN0L1YwOUxiMmRndkl4NFZCQUQ4L1B6cjZla0tBQUFlRHdhM3M3S2FsWk5OUkVFQU9XTjFkSGh3YjNPT283WFgzK1lBRkV5RmhJZ0FIMUx0N2UzbzdmSE56YzRBSkZXYW1wd0FNbDY2eU5PcXVzZ0FLVml0cmErbHBLZDBibXNlU1c1eWlKN04xOTkvZm9HWnFycU5qWTlVYzVDN3U3eHJoWjB6V0hzQUdFOStsYXBGYUlhendNek8yT0RDd2NNQUNFbWVzTDgzTENnQUxsd0xQMmQ4ZG5ObVgxdzdZSUJPUmtKZWZKWkFOek1BRGtxUWlvY29HaFJwWVY1YlVrOTRjbThSUm13bFVYVk5SVUtWUFYvQkFBQWNFa2xFUVZSNG5PMmRDWHZhdU5QQXZYYXh3VkFNU1F1WUFEWTM1YjZQRUdoWm1oNGIzdS8vZGQ2WmtYd2JrdlMvM2REbjhldytEYllsV2Y1NU5CcEpZMXNRSW9ra2trZ2lpU1NTU0NLSkpKSklJb2tra2tnaWlTU1NTQ0tKSkpLcms0eFBaTi94eWpQSEZkOXhKWEFHV1FGeC9kQ3NiUUYvYU5aK2pXL3hoRElkNVNMelJOWUdpcVpra3NsVVJYYmxZR1c0MGxoN1hCVnh6dkwyY3VPVjlLM3YrTWUwNTNqMmcrLzQ1NnczL3lmL3pSRTZZancrd0I5dC9GRVIxSHc4WGtqQnRsS0NIUnZZTDhYamVTMEovNHE0VzlCcVlsenNLSkNNaTFpcUNCTnJvekF5a1ozY3pzZEZVWXlQa3JDUmdaTEV0aVpnR1NRc0RZaUpXd05XSnlpV0pGOVRyNE4rd2l2cGllLzR4N1RuK0RzLyszK3ludVBaSVB0YVRKUVllMG1VOHNnZS9zSTlBUGFTUk93aFFWNkRMVkZxSXhTMUlFbWlxa0F5VVNLSlFlcUpLUEV0U1pyZy9ZblJUOWhuUXVQa2VaTXhFZlBBLzdFT3F3ZVVMVXB4azM1M1dJR1l3SCtWYnlOL2VTWGQ5aDMvbVBZYzkrdTkvTk4zL0ZOQXBUcVNpLzJBc1JlbEdyRVhIZmJDQk84UkV0dmdENjJDeWZJamxGSkhBZmFpV0lEZmNWYUlDVW8vbUV4R1FEa3ZlOWpIOHdPQUs4WTJlTW9NRmtJbll4VVI0NE04M1kzVWIwRDVha240MkgvenNYdUdmZVp2My9GdmdUT0VzaGRCRjMzczFRTHNWa0dsTzdBOUVaQzlOSkUxR1VWQTl0S29JbXNUZ0Y0d3FkQU9zczBQd0NDNTJlZVQ2bVRBV2hpWW5KZ1lML0RmbEdlVVNiVUxrblUzM2xnZWZPeC8rR3pHTSt6TkIrL05DOWlrYyt6aGwreGxyOVVRSU5mVkRHTi9LM1AwakwwZzBCMWk3TVY4WjVKS1ZTb1pqOTVMQStoWms2ajRvTnB5VFpJR05jZ3hzU3FDek50NDlzenZnUGxLK2VwbGwzanZjMVNlWVgvclBSeTBXZWRzamhocisvUmUyT0J4RFhWVnFza0NzemtsRXBXeEw1bG1lNEIvWmV3VEFLK1VIN1ZScFQzc1dVOGlTbEN5R29mV0FlZWp1MmF6eDl1WFQvNFdtcStUVHo3Mk43NUtQY1ArVzlhWDNlOG5oYk9QQThJNFdHc1Ard3lZaW5nRk4yT213Tmp6dnRZazltQSs0bWpLQzFqRkRmMkVnL2xKQ1BzUm1pVG9RaVFzQ3JyMGZFcHcyRlBEMnZ3T21LK1VEejdGVGZnTTltWDJmbk9mZUFqcVV5Y1dZQThzZ0ZzQlRMZWJQYVlVSnpKMGxma01aeDh2a0NRWmUyd3VZcnlqc2xOM3dNbEUvQVgxSEhzRmkxTFJ4c1N3T2JyWlM5Zmc2Wmgrby9IUjI5bGVaai9KK25KL0NiaVloSmJZMzdyWWsvTW4rdGliQmV3TVFlMUJaWWw5Yk1Mc3ZjYnQvUVlabzZsbVBiQTZLY0h0Z3o0M2xQMUdVT0hmMGliWmhudFVVanpzcGF1d09aa2J2OUh4YXNSRjl0cG5IL3ZzNStBWmtCcjVqcVQzTW1PdlZRWlNnRDFZQjdHQVBTNkNJZlliVHlrak1rdElOOVB1bEVyWVhkYUlwNyt2aFZZbHhwTFVJVnRpT3V5eHFMejZMM1A4RlZHKytCWC9pK2Y0UmZiSjczNFhOY1IzUzJHM1dGTlZFNXM2ZEhxTXZaQ0tTd0gyYmVxRnBSTDFuNWk4clRLUkdYdVpVc1E2Z2pLSVNXS0grMFlkdjQ5cG90ckhLMHJCR281UkhzdkgzRkE5cm1KazIvR3BidUs3Ui9FdnNRK29mWmk1RjdRUmptYkVQSTRvNDBtYlBiTTZYdlpzS0JTai90cGw3K09ncFp5OVFxNTdodTZCMk5uVXdKekVWZSs0dGxDSUlleUpZS0orMTBCR1RORTdlTDY4RkpQc2tlNWJTOUxINzYvMFQ3ZWJlWW45SnBnMTdBd3FLaWwxaXpHOHJjUmVSa2N3WnMwcFNKeTlNRUl0WllOT1lHK0xpT3dsWkM5c2FNSUFMRHFVR2FONWhWdWN6NEcveEo1bmlPR2NRb2xTUW0rUkFaOEl6RmZOS2k0V3Y0YWVGaVRqbXhYQXNhM3I4QVgybFkrQm5NR1JGWjJpQTlvV2k4VkhKbTZwcFVKaGdLaVRnMEkrRDdzbThUemJBYjF0UHArUHM2bVlTZ21PTWlrTVZHRURmMm80bnprcTVBdGc2aXN3ZU1VeWEwbnNsM0huTGRneGtXVVlkRXdaK2daV1BJNlVDMUNxMEdZRkZrYnRxNWhSUU9tODh4SDBkTGZuMld2LytOVSs4WENtQjVNelpMVlplOUp3cXBsK1ZkaWN0R0x2WU1kY3lTelJLRkhGeWtRejJSV25USzNDc3NrOGVZVm1PbGxHRkpiWm11NittamxrNkF0OTB3S2d2aTZ6Zlo3OU43L1crN3ZwU0o2VlFJOEpFTC9hcmZJcys0bmZ4NEgyY2cyRHhUOUx6QUJGR0dGWjhNK3cxOW9obVg1ZVQyUCtZeVNvK0tENVhJZkQyY3Zmc2dIMGlYU2s5cThYODMwQTVGL3Btdy9VallXeVQzMTZGNUxqUzZUMnZ5REJiaFBVT1BzRDlmai9ndXdydGEvQmhnSnFmdzFUSkgrZVpMNkd3UDhyKy8zelJ2Q3ZDWGFVRHorellhbmZCVmVzL2h0SmRtcVRQN25GM2Q0RWJRaXEvdnNmUG5PVStQaC82VER5ZjZYL3JyeE4xYlZCYkhBbGNRZS9LSU5Rb0dCSUFvN2ttWVNKdCtwb0o5SW9HQlAwUjBubDd4QVQvZ29KeE8zWXdxYmFaV3NpWHZOc3NRUVl6TVNqb3F5OW1uM1ljMXh6c25HUmsyWkZkaTBhVUdvck5zcVZXdmFFVEhrT3VlcnBPK1E3WFdoTnZidTlWK0NxaGhYUjVmeDBSSDBJVitnWG9nK1p0K2V5NFd1dUpHMUJkVFlIMUZUVXpnRERsem8wcTFBYmxFcTB0dzJIYVdaRFV6c1lKRFZvMDNGMUJBbGNmYnF5R2JGd0tlc3FrelVLcVJwdGFOWUJFck5GRXNVY0ZlemRLT1lBVCtDR3I0NmdTbWczTTFnSk5qbXlLVm5Wb0pyVVdFMHdrUVlWQ2F1ZzBMR3U0QmF5c3NWckJVc1prVW5XSm5DNEU3Q1E1dmRmaDUvK2N0N1l0MlBPZktSVUUweG5rK2FLSnlJUGNTcVlBaTZlc0FWRG5IUEVLWGNZdzlGUmtjMTRDc21DNUo3LzVUT2trSlpkbW14SFRNVnczcTNDMTNxRlRJbWZsWFlMTEN4TG9tVVdXMUpZVGszRFFxRUFGaUJIcVVwOGZxbHRCV1BoNHErVzV4V1V2UlVVUmpHSkxjeEFWV0pzTldOanJUbFQvSXVFUy8xK3VmMWwrTm1mRi9wWllrOXJyWWlJVGJIejZja05CdEJRdFdOc1ZoNFhyc1FZVGhYWEpGcnVZS3NwN0RndVBTVnhuZDFtajZ0WVlreWt0UkUwK2hqWkk4WUtnempOMzJ2QVhxUmxkd3hHd1ZReHZuQXI0R29pMXNnOW41bkNFRU1NYnFBbGU5TDdaTUZhOGhJb1lvdktZQXRuR3E2cXRiMFZwSXFOSkxiUVlLK1NRUk5oOFZreXNaZkVNUGEvREQvNzhkS2NySW1yRjNnSkkvZzdJZmFTcWZJNVNKbmlBemZtQk5VSWxLNUUxWnpZN05VNExibmljVnB6OWJBbjFQRzJhZFo0SEpxSlpYZFNxbG1LeGFTYVlyTW5iRFhUN01CSmlEZm9zQmlQaTZUbVh2YWdBS3JObnNwbnE4ZENwV0RYUkFMb0ZudHZCV1hHbmxaL2JQYVpPSjVMTEdRdXNRZFA4MWZnWjM5Y25BN1haRTJyWUVSQ1V0QTB0clFrMlcwOXlTTFVVTVZHYmROaUQyMldzKy9ZQVdaeFN1aGhEeGNsMG1xTWpHdUVJMW11U1V6bGhFemJUR1pzdmRkd1ZRdlZUcXNOYWhORW9PUWhJUmlVZ3N2b0VIdkVaZXM5cm9hVlJqeU95clNDVTB5b2FWS3oyTmQ0YktsVlFjWWVZeWRzOWgxSVVlTnJ6K2ZaQytiRHE3MGRHUDQrNzlncldERjJoOGptWUJPbzFkb0toWWdSTFlGTnhCTjdNQ0JZUjJRL1lxRi82TVhUdFhyWXAxQXRxWWREaFk5WEZPL3F1bUN4cDNWYnlxVHdFSFlURTA1aW9qc21sckVIcTFPeDJHOGcrMlRDb3F3SUdtc21WRk9MZmNtdUlOOHhZdFpzcEZuc29lYlNLQVd0QmVNRkxyQVgxTCtEYzJUUG9QL3dBdTlhWVhwdnM4Y1ZwMWdNdklxYTVHMzRHS21HcERZMXRpU085NEpaYU5ZUVBPd3hnQzNQM0I4TUZhbFVSRzVpbUJlVnNkampVZEYwVG9JV0dEUVQxeTVMWHZaNURLbkFRQlJrajgxSXpHU1lxY2FtRlhNNUtCdzFMaCtMTEJ4c1pMUEhLNGh0T2p3RzE4VFlPS3craXpVOXp4N2NzdGZZblVUNmZUQU83UVhzV1ZROWRJOGpiZzBjOWxLK0RaZFZHUEJ3Qk1uU3pSRDJHeXVrZ1lYUjJ1eVpaeFZUejdJSDI0MnREVTVlY013bHNpOWhPOHpESFVEMkt1a3E5ZFBxT2ZiVVJwd0tNdmI4Q3VLTWZZMXFqTEhWR0ZkeGliMmdiYjRHeHJMbkpIM3o2V1VocFQ3MnJLOU5nVVh1MkE1QWtwWUs0VUx6cVEwTG0rSjZ6NXEwTUFoaEgrTTlHTmtjWUI5bjdDY0ZqSGh6MkZjS0Z2dU1Tc01ySk54UkZCNTc2N0FIS3N6b0VYdU1TZTlVS21qOUpqd1loWllpazJpNFhIclB5eGpZN0F0Sms1V0M3Q2tRSzFQQnNLKzgvQXg3U1AzNS9Zc01UenI5OFVWS0g4TGU3aUUyVmtod0pRN2Vna3pCVVVtWjJVeTA5elVXMHNPamRTYSt2bGFpQ0NpUVc0cUpRbkI0K1VxR2dObnMwWmxpY1NmdFdLR21VdDlML3FJVnRPV3cxeWpHbHRnckkxZXFDZ1hWVVNOVG9jMlltc3U4OHdvV21JZUtOc2ZFTzhYWlQwU3JGSXdCSmZhalM2aVNQNzQvU3orZC9mamh4Yk5uZnZhcENvbUN5SUZ4UnNsZ2l3VWJoT3hOSGlXTzdFM2tNS2xVTWpYbS9oQjc4Q3BCa2hwRi9vM1VTc1VrRVBUMEJHU1hjV2pxWnM4ZWVERWhIWXNWU2NiWmFFT3luQ3lIdlN5d1JnZnNVekVuRmR6aERHNjFLeFVWaTY3SkZ2c05CZ1RaRmN3d3ZUZGR6MXlNckloZWlxdEQ5dUtBNm0rZW96ZjU1K0hkQmJ1ZnlHYi8vdkNLQ0hhL3ZTK3h4MG5hTW5zbVp6QkN1NDVhdzlqVEZSRjdlY1NTVTB4eWg0MnRlRThOamlvMmJTay9LcUdQWGVEaHMxSzgxdWxnS2hmN0RIYmZoZEZJWkRjWXI3OHdBQUZWamRtQmRKdzlESTBaZTRyWXdsVFlBZGMwcmVhcXFXbTdOZGpXSkY1Qkdtc3g5dVJ5SXZzVTJqdXJsRUtGUFhkRTlZK2RqeEV5UC94ODl5N1U4aWV5Nzc1L2FyL3EyWUdBbjhNRytDTzZWSWs5QkVWUFNKWDQzTUtJaC9IaHJBRi9TSXBHcnNTZTJkSUNXTStKeERKYmdXWXBlcUFuRnVQRldlekJKMmNEV3hqMHFtU2o0eE1NRnJtTnV4NkM0T3habzR1cnpHSEZWR2ozZ1pveXNtc0NUY3dlMTdvcVdGTWM5dVRZQUh1OGd5VXNCVWRzNExKMVlsYUFhT3pTeEs5aWRyNEVMWDhpL2ZXZjI5ZkdGbFh3UGpQMlpzd1JwQ20zQy9TN01FSExPNGpGcUZmTTRFNDJLdXpBTUI0MjhoTzhNak51WjhZQm1tWU84QmNNWXZuOEdsZ0VPaGl2NFlPR0dmekpic29vUnFXTVZPd2M0R3dLVXduNGFmVzJTVHdKUGVHQ3VhRERoMUxvdm1UaVRFbVZkdHlwcVlZVjdBUXJLT0NRR3FsVzhuZ0ZjdDVXOEJyOEdzZzE1K29uUXVxc3FCblZ2TzM0Z25jU1B6c1Q5RkxPWlVxR3RnZU54Yk9peUtvakZMbWtaWktiemNaaytUSldPdnhSNFJtU2s4MGtsUW5rSm9ldm9tSm0xUjVqeUtvSk81SnNES1U1QVZrSzdhY05pdFBpdDhvK0N5dWFLa1Rua0N2V0psU1FwOUl5ckd4ZlZxcmdKc1hMeVZpbnpGQUJ6b1ZUS0pkV2NlcXZDTzh2eWNQWHIzNkw4LzdyMTRjTE9iNS9QdTlBUmVLVHhETVNOUGNYSmVUNTJrak95VE91NUdzbFl2OEtpZGkvblVUczMwNGk5bThuRWZ1M2s0ajkyMG5FL3Uwa1l2OTJFckYvTzRuWXY1MjhPZnRnZU9Jcjhtb2hBY2h5eUQ3bjRBdjMvU2Z5KzluM2RTNEdiaFYxdmVnY0syNFg0M0Z2Mk5CZ2Y4Tk8zeGNFYlRpazJjQ0dic3V3U050RGd5WFRodnAwUEQ0dWhnM1hHWTJ0ZnNRQys3Z2hEM25PSnJzYlJoTnlIQmRiS0VCZVdiVm93TDdGY00wMlZ2cFdzM1k3MWJHU0Z2WG12M3ViZmovN3hWMjFCVkt0RTVERjQrUENVa3hsMFgyc3p3NzcrNk1zYk8rUGJLZTJ1TmZoVUN0SFY3eTh2NzkvTEZmdjRNLzlGcmZ2eWpwTForekt1Y05zdG52TWpWZjJ1ZFpQNWROaFZuOTgwdUVjUnBWTzNLb3U2WVRiUTNuZW5aMTJXSTZ4cE5JRVk3cWJkdys1eHk0cmREeXZibGtscHZjOVZxSThudDhQMmMvVjQ4ejQxN2lqdkxzc2diV1RkUFp5aHVCTFhQVHFzYjhHS2VJUlk3YmZXMWRnak9mZFp0RXdpbzIxSmpUTC9HTGg3c0MxS3JrdXNTODJRTVpsSGY5QXRtTDNWRit5WkVwdTN6QU1ZOTFjbG5OTjYxekZVdzUyRnJmN0Z0d1BJOWR0ck9uTW1MelgydXY5SW1hQVRXVmN4VHpHWVg3c1kvcGNkWUhacDd2ZGlVNnJMZGdPTEdTL1A3SnJhclNXL3k3NzVBVkpxV3JTdDNhUy9nUTdVeGZ5Qko4czEyMnFJUDN5dERmbnpYazZuenJYc2cxblQ5Szdzd3lBWGg1Mjkrd0FwR0M1alY3NVpLVUY5dlJUbndNdm8zNXl5bCtVVDMybkdwejl1RHpsV0hjNzNEN1dqMVdxaHJZb2MvYk42bkhNV3V5L3ovNkNLTWx2UDBQV1RuN2NxcTh5ZTdwMWdRSmRVNk41eDR6T3F1VkNjNG05TnIyenJNcTRhdlNxekQ3WTdLSDlXS0JzOXYzZHdmQ3c3OWVmWE9nNSs3NlRRQytqeVR2VzlWTjlKYmpZeStOY1gzOWtodWcvWTYra1ByOVBwNE9MNVlsRU9uM3pzZk1LL0c3Mnh1bXB1TjdURlFQUnBpdlZpOWl2bjA0S0VHQVZkRkkwNWhZVW16MWljclBYSDNYUDFSSDdxV1ZZSUdPOUMvZm0yQm8yNTB2RnhkNm96N1JWZGN6Ni9mK0dmZWIyWi9aOGVGb2lrYjM1Ykw3MEtTZmQxa3FvZm5tTUxSMU5TUEZVWDd0U3ZZaTlEazFHZWRxVEJYS2xLRDUxZVZFVys4V2RMdGpzc2R0ZHRpeXpSY0xZSCtwOVowY1pkaHlyUS9rd0g3cllnK0pBcjFDbTR2OFQ5cFhidnk5RjV4RCtiUGJUQzU5dTA2dmo1Z3BralJUUllDeksySG4xY3dmM2xieUV2WXgzVFo0eUxLNFV4ckxLeWJLK2RxM1BaMFhxSnFjTGxDTGNIZDZIUW1kckZEWEczdWptbkJyb2VMZU9MUjBJUTRkaXNkY09hSUo2Yy9KMC9ndjJrNS9Qa1NmSnByKzk2R2xtZmRlYWc5eFBOY0hZZDhsWndXdjJYY2xMMkRkMmFBLzYxU1hhTUE5N1M2dUxzOTFwZHNwVmozakl5TlgzSkExaFhaOVJZakJhNElNYWpIM3hhZTlZVHB1OVBMMmJhaGI3WXYyQTU2MlRhL2I3MmF2LzNMd3dDRC94N3VIREM4dys2UDJxQVhwZlJIaUhkYVBSbjZFSDJLaS9XdStIZDlOK283L0trZEZ4c3ova3VQRW96dXJqNmJIYklnZktxSGNiUlpDMUxCUnpUTytMeCtseFh5N2FldS9ZVGYxdXlOaURhb0Q1NGV6MTFoak8yRHkxYUZ6M3U5bTN2NGE4S3VHY3BOTS9ubi9mbnN2SFBPNTJ1WG85dDl1Tk5kUisxd0QzSmV5TmNhc08yZXN0OG5UYzlwNXJOYmYzV3ZGNGgrUmNmYTB4cTdPV0lhUDE1dXkxazFNRDVVajJIdGtMdytwTTRld1ByVHJLcm9WanRkL01Ydm44eXNkK3NnL1BXbjNIejFHZWN2b1FaSkhiR3ppeVdybFNOY3A4WEN2MzVzMXc5djFkRjdOdkYyVTBQYTRVemZtUkQ1VjVYMXVrWXk3Mld1OXVhRjJpelI0OFZ0djVnUng5aTcyOHJPcGJjb0hXK3h6V2R6dXRuK1RmelQ3ejVaV1BuZEQ3UnA1NW9ONWh2d0tIRGY5cU14ekpETXR1bzFPczh1R3VNY3Mxd3RsdjU2eHBGSjk0Q3N1L1AvR1pBSnM5ZVB3ckQzdGhaWSsvSEwwWFZydVpaWFNHekw4bjlrSWo5N1J0SVhzWWt2TXoxSXUvbVgzcVZ4NHVUNlMvWGZZMkhmWkh5NTlldE1iWVE1WmQxd0pJbUdZMmFhOUQxbVlQM2d3YkVNalR1ZTRlMTQ2cEhaRFk0MXEwVzI3MnhxdzhaaHZ5MG1Zdkg2cDhiZ2tVSEcwU1p5LzBXZ2RpdjJ6eHBqbkdtdjlPOXFtUHYvUmNmeUw3NlNKOG03MUMyb1BTcnlPM1JyZDhZdk01RFNDd2JlV2FobUkwYzBRWXlQWU43Q2lMTnZ0aXk1b0lhdUpZQ2x1R29oakY1cWw4c24xM2kvMkt6U2s0WllBdVYwK3JJcHhnUGJQWkEvSnlEL2V0bnBqMU9YSWpaSnhhTzREZDMrLzVHYmZZWWh1dHc1cksrL2Z2d0M5cFBjbmxTZnZGUForTEdwWlAxbHNGdWpRYjJWL3U1dFg5dm5XUDQwWk4zODlQeTlQOGlkUmZxVmZyT1pENlhoRzA0ejJDMHUrbnZNVGlIdng4WTdjN0xKZW5Wcmw3ZFByczRsT0xoa0hyM0s0dkdLMVdqc3A0d3RNMmxybTcrbUY1cUZleHMxbXllWUwrc2x3OWpQZHpheDd6am5jQXpSWjIvWXRIWG5Od2ptRUVzU3F6OG5iSGYzdkdQL00vdk0waThMVUl0elI2ZlA2OE9XMWFiMzlvOXVqUzVXMXZ2RnhPRncyTkpWd2V4Z3MyUXBVWFBTWUxHVkpQMXpnYjM3UFVXOTVPKzVBQ3NoNk92YUhiV3pMMGhjRlRyRjFsVVBIeWFqRTlITVk5SGM0R0oyWmVxVHljUWdXc0dmcXRkUXB0MFlPbU51elo0MTRkdG90V2VkdG5lcmpYaXZMbGYzaVJTQ0xkK2RYemF1NlhlMml2ZWh1TEpzdXZmWHVMRXBKQmUrdFZUdTJ6L3cybHI0UC8zWHpqQy9pRHBYTm01aXhrSGpNMFhmcnJOYnpVL0krVTRMdGh1UzE1NzkvMS9pYjhMbVdqaHg1K1RiVEErNmlaaWo5OFVQemZVUHFRK3Z3OWxQNjdsejVzRzRsSGFxR3ZDWHpBQjJoRDN0R1kraGsyOFpCNHVJYlBGdjF4b29hOG9qR1IvVUl6eEtIdkptMkh2VzhrNUxOaWtUd3JINElrRTkrNXl4NytUbDQxeENOTjNFVGQ3YXNsUk8yZDcxU2RlUmQxNVhQUTZLZlB2N0F1a2pQeUllRGF1ejRSZHU0ZDdGcndQYjZKOTZIUFBCdU41bkE0WExHbFU0cTNRU0d2eUZqcDdJREdkd2pGcHI1dEtKREhrU0lrNHo4aGFiOWhqV1A3RFh0MnZyR0ZYQmh1MXVoYkx3enNyOXpqM1d1VlRPRFRHWW52anM5eTl2MzM4cWZnYS9OREZYKzQzOTNkelZ1bkhqNUYzdHZuZGlDdEo1d2owMCt0dTdzcXJrTEpYVnI5TUtaUDVidDVmV21zY25YNGI3L0h0WktGc0sxVHB0ME94dmtIYTVsWEhqK3hTVWFqZDlyTjhRU0dzSDZ5WmhyN3A5enhEM2hsNlNTZzl1NFhqWjcvN29QL20yNDR3QXE3WEwwODdxLzdpejFPWjhySDZyRzVCV2txT0R2K3BLLzdXd3pwazNNWThhUXN5OHNWSkQwYS9lbHhPajIwVHRQcDhkZ1VodlB4bGdUU3pGcDhJbG8rVURpVDBEaVZUMXM0d2ZBb0MvMmROVXV2dCtyMTYxZDhKYUMvMlg5Y2MwVVh2aldUQ3J5Ni9TWnNXb2V2R2ZhNzFUV3l0NVk1TUVpRWhhemlaN05wcVdSYkpiWFZaSHA5cXJDOVc3QzNyQTd2bk9DYVdaM1dWcEE5UlRHdHV5MmROd1NjbSthTGg4Wnl0bXdOaFd1WGxQODExSzRQYmdpWHY3RjBHN2hyUDBKT1lNM2ZUOHRiWUYrMjJUZkxZM3Nvek5qM3l1NW9LYUY1eDVkYWhuZE9oTTlzdjYxU1BzWmVXNVpkUVU4MisvNXV1czB0cjM2a2ZlczNPZDRQSlYxaVgvRVBoeE5oc3pvVys4V2MyTnZhdUdvNWE0WVcrNFU3b3hVODZHUGZPQkJ1eHI1WlA3bnNuTTErZUwvVlp2WC9MSHJ5RjBYKzVQK20zdDhlZGJuNFRiM0F4OFZ1Z3ArdnRkakx5M2tmMmR1cWJSeXFDNHNPWTkrbzU5d1I3aTcyTHB1VFd6ZXFhTlVaKzU1YjdXMzJ4cUhlc0JlaHJsY3EvbG0waFBlTjNoZlpLei84MzVJTUdkdXltRUNqOXpoVzBONVBNVlpuaFpaK1ZTL1ArRk1IakwzV3EwSlhiR3VydzM1K3hEek52b2IyZmkxTTczb2Faejh1dTBOY0xmYU5PWmlsUnYxMDVhL0ZUL3JOeG9QM1BWNlh2NkhxTjFoaEJsOXZ6WHE5M21HUDhVcnl0RVZCYW85alBMSTZ6T2NuMG4zR1hwRDEvYng2c0phRkhQWlZGdGwyVUpCOVgxanZkdzNHSHRxTzI1dXgyRk9RbWR6TnVRTStyMUQ4M3c1T2YvSWV2OHcrNWYva2RzaXJrZlZkUFplcmx2ZW9vUEt4TlYxWmVvOVA0WXlyNVdYUlpnLzBocWR5aXlQMzYvMks2WDBmdyt0bnhnWDJ4b2xLVzFSZGdmL1hLSjl2dlBCdVRPL3haNzZaN2ZzOGsrOGpvQ1I2OVZnc0ZrSDdrZkhSNjhvSXlxcUxKa2wyQmZqcExSNWRHVzd2a1QwTUJJWUN0em51K0dMT3Z0L0t6VUNlV29mck5qb2YvN2R2eGZ1L3dKb096dUtEZjY5Um9NZFE4UGc1WEJvN3dDNjdIek5aekpsakZPN24wS0JnbGNzWlk5Ylh1bDBqeGw1YnRMb0hZSDlnZ1p2WEs3NEhTOUkvZlU3eE0rejluOFo2Ri96MkJ2ZHptaGljRk1MZU9MVDZYdlpXRE5JRjlzSzAybHZzeU1mY3V6eEp4dDdvNWxZNE9GT09WMjUwdk9pRDBSN1BzRTk5ZkNuN05jYSt1c2RXWElyZC9kckx2bGsrUHFmM0dLVkhlaStNcTJNSFBtUGZ0MnpOaWo5aGVLM2laKytmRlhpR3Zlei8vdFUvZ2F1MS9IdDBCOEhISE9KcjhQR1paS05QZ2RxTE81em5JZlpyN0V5RjliTE1Kc25jN0RXZXlXSXZERnYxSENicmQ4dkxoZ0hIRE1qTTJQZXFQSWpLMkYrMzBmR3o5L2VWSVd1R0h2SE5Cb1dFcU9sM3pIejNIblhVKzBOdml0SVhodVdsdnRVUGo5UUgxM0V1YmJ3N0RvZUwvYnpIK3B6dGZjL3ljMmFVNXdna1R6dnUwQytyZFRhWE5wdVhsOVBlZExZelFPTmgxS1hzZWJ3M25PM3VxbzJPLy9sWWYxLzU0RHZ1SHp4OWV2YjUydVpKWjJGbmg2T3M2YlBaQ1dXMkV2clRXYXU4T3l6SXNUK0FpZGRXNDI2NXVoOXZyYkRscHlGM05rOHMweDdzMWZqQWpkUDZjR0NJaS9wNFg2M3VaejFaS0I2T2hsQ2NqYTIyMXpqMXJubE81OVluL2dYdmplKzQzMzlQK282YkFadWo4TmhSRFI5MFlyR3BJUFNnYzcvUnR4NFFOT2kxb01WK3YraThaOVFLT2xXc1RIQUlDK0ZaaWhaWFk5MW9yTEVBRFl0Um5GaFZqUlViU1NTUlJCSkpKSkZFRWtra2tVUVNTU1NSUkJKSkpKRkVFa2tra1VRU1NTU1JSSEtGOHYrM1NLVmhkQVArNndBQUFBQkpSVTVFcmtKZ2dnPT0iLz48L3N2Zz4NCg=="); vertical-align: bottom; padding-bottom: 2mm;
+              border-bottom: 0.75px solid #1f3864; }
+  @top-right { content: "Sistemas Operativos \A Documentación del código"; white-space: pre;
+               text-align: right; vertical-align: bottom; padding-bottom: 2mm;
+               font: italic 8.5pt Cambria, Georgia, serif; color: #444;
+               border-bottom: 0.75px solid #1f3864; }
+  @bottom-left { content: "Equipo 9"; font: 8.5pt Cambria, Georgia, serif; color: #555;
+                 vertical-align: top; padding-top: 2mm; border-top: 0.75px solid #8a96a8; }
+  @bottom-right { content: "Página " counter(page) " de " counter(pages);
+                  font: 8.5pt Cambria, Georgia, serif; color: #555;
+                  vertical-align: top; padding-top: 2mm; border-top: 0.75px solid #8a96a8; }
+}
+@page :first {
+  margin: 20mm;
+  @top-left { content: none; border: none; }
+  @top-right { content: none; border: none; }
+  @bottom-left { content: none; border: none; }
+  @bottom-right { content: none; border: none; }
+}
+
+/* ===== Texto ===== */
+body { font-family: Cambria, Georgia, "Times New Roman", serif; font-size: 10.5pt; line-height: 1.45;
+       color: #1a1a1a; margin: 0; text-align: justify; }
+h1 { font-size: 15pt; color: #1f3864; margin: 0 0 3mm; padding-bottom: 1.5mm;
+     border-bottom: 1.5px solid #1f3864; }
+h1:not(:first-child) { margin-top: 9mm; }
+#s1 { break-before: page; }
+h2 { font-size: 12pt; color: #1f3864; margin: 6mm 0 2mm; }
+h3 { font-size: 10.5pt; color: #1f3864; margin: 4mm 0 1.5mm; font-style: italic; }
+p { margin: 1.5mm 0 2mm; }
+ul, ol { margin: 1mm 0 2mm; padding-left: 7mm; }
+li { margin: 0.8mm 0; }
+code { font-family: Consolas, "Courier New", monospace; font-size: 9pt; background: #eef0f3;
+       padding: 0 3px; border-radius: 2px; }
+pre { background: #f4f5f7; padding: 7px 10px; border-left: 3px solid #1f3864; text-align: left;
+      font-size: 8.8pt; line-height: 1.35; break-inside: avoid; }
+pre code { padding: 0; background: none; font-size: inherit; }
+h1, h2, h3 { break-after: avoid; }
+p:has(+ table), p:has(+ pre), p:has(+ ul), p:has(+ ol) { break-after: avoid; }
+
+/* ===== Tablas ===== */
+table { border-collapse: collapse; margin: 3mm auto; font-size: 9.3pt; text-align: left; width: 100%;
+        break-inside: avoid; }
+th, td { border: 0.75px solid #8a96a8; padding: 3px 7px; vertical-align: top; }
+th { background: #dfe5ee; color: #1f3864; }
+tbody tr:nth-child(even) td { background: #f6f7f9; }
+td code { font-size: 8.5pt; }
+table.angosta { width: auto; }
+
+/* ===== Figuras ===== */
+figure { margin: 4mm 0 5mm; text-align: center; break-inside: avoid; }
+figure img { max-width: 100%; max-height: 98mm; border: 0.75px solid #8a96a8;
+             box-shadow: 0 1px 3px rgba(0,0,0,0.25); }
+figure svg { max-width: 100%; height: auto; }
+figcaption { font-size: 9pt; font-style: italic; color: #333; margin-top: 2mm; text-align: center; }
+figcaption b { font-style: normal; }
+
+/* ===== Recuadros ===== */
+.nota { border: 0.75px solid #8a96a8; border-left: 3px solid #1f3864; background: #f6f7f9;
+        padding: 2mm 3mm; margin: 3mm 0; break-inside: avoid; }
+.completar { background: #fff3b0; color: #7a5b00; padding: 0 3px; font-style: italic; }
+
+/* ===== Portada ===== */
+.portada { height: 255mm; display: flex; flex-direction: column; text-align: center; }
+.portada .logo { margin-top: 6mm; }
+.portada .logo img { width: 95mm; }
+.portada .institucion { margin-top: 8mm; font-size: 11pt; color: #333; line-height: 1.6; }
+.portada .titulo { margin-top: 30mm; padding: 6mm 0; border-top: 1.5px solid #1f3864;
+                   border-bottom: 1.5px solid #1f3864; }
+.portada .titulo .tipo { font-size: 11pt; letter-spacing: 2px; text-transform: uppercase; color: #555; }
+.portada .titulo .nombre { font-size: 21pt; font-weight: bold; color: #1f3864; margin: 3mm 0; line-height: 1.25; }
+.portada .titulo .sub { font-size: 12pt; font-style: italic; color: #333; }
+.portada .datos { margin: auto auto 0; font-size: 10.5pt; text-align: left; }
+.portada .datos table { width: auto; margin: 0; font-size: 10.5pt; }
+.portada .datos td { border: none; background: none !important; padding: 1mm 4mm; }
+.portada .datos td:first-child { font-weight: bold; color: #1f3864; text-align: right; }
+
+/* ===== Índice ===== */
+.indice { break-before: page; }
+.indice h1 { break-before: auto; }
+.indice ol { list-style: none; padding-left: 0; font-size: 10.5pt; }
+.indice ol ol { padding-left: 7mm; font-size: 10pt; }
+.indice li { margin: 1.2mm 0; }
+.indice a { color: #1a1a1a; text-decoration: none; }
+.indice a::after { content: ""; }
+
+a { color: #1f3864; }
+</style>
+</head>
+<body>
+
+<!-- ======================================================================= -->
+<!-- PORTADA                                                                 -->
+<!-- ======================================================================= -->
+<section class="portada">
+  <!-- Precarga del logo del encabezado (si no, Edge no lo muestra en las páginas siguientes) -->
+  <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMTYwIiBoZWlnaHQ9IjU2Ij48aW1hZ2Ugd2lkdGg9IjE2MCIgaGVpZ2h0PSI1NiIgeGxpbms6aHJlZj0iZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFYc0FBQUNGQ0FNQUFBQ05ENmprQUFBQTZsQk1WRVgvLy84ZEVReG5abXBrWTJjQUFBQmdYMlAzOS9meTh2SnJhbTRaREFiZTN0L1YwOUxiMmRndkl4NFZCQUQ4L1B6cjZla0tBQUFlRHdhM3M3S2FsWk5OUkVFQU9XTjFkSGh3YjNPT283WFgzK1lBRkV5RmhJZ0FIMUx0N2UzbzdmSE56YzRBSkZXYW1wd0FNbDY2eU5PcXVzZ0FLVml0cmErbHBLZDBibXNlU1c1eWlKN04xOTkvZm9HWnFycU5qWTlVYzVDN3U3eHJoWjB6V0hzQUdFOStsYXBGYUlhendNek8yT0RDd2NNQUNFbWVzTDgzTENnQUxsd0xQMmQ4ZG5ObVgxdzdZSUJPUmtKZWZKWkFOek1BRGtxUWlvY29HaFJwWVY1YlVrOTRjbThSUm13bFVYVk5SVUtWUFYvQkFBQWNFa2xFUVZSNG5PMmRDWHZhdU5QQXZYYXh3VkFNU1F1WUFEWTM1YjZQRUdoWm1oNGIzdS8vZGQ2WmtYd2JrdlMvM2REbjhldytEYllsV2Y1NU5CcEpZMXNRSW9ra2trZ2lpU1NTU0NLSkpKSklJb2tra2tnaWlTU1NTQ0tKSkpLcms0eFBaTi94eWpQSEZkOXhKWEFHV1FGeC9kQ3NiUUYvYU5aK2pXL3hoRElkNVNMelJOWUdpcVpra3NsVVJYYmxZR1c0MGxoN1hCVnh6dkwyY3VPVjlLM3YrTWUwNTNqMmcrLzQ1NnczL3lmL3pSRTZZancrd0I5dC9GRVIxSHc4WGtqQnRsS0NIUnZZTDhYamVTMEovNHE0VzlCcVlsenNLSkNNaTFpcUNCTnJvekF5a1ozY3pzZEZVWXlQa3JDUmdaTEV0aVpnR1NRc0RZaUpXd05XSnlpV0pGOVRyNE4rd2l2cGllLzR4N1RuK0RzLyszK3ludVBaSVB0YVRKUVllMG1VOHNnZS9zSTlBUGFTUk93aFFWNkRMVkZxSXhTMUlFbWlxa0F5VVNLSlFlcUpLUEV0U1pyZy9ZblJUOWhuUXVQa2VaTXhFZlBBLzdFT3F3ZVVMVXB4azM1M1dJR1l3SCtWYnlOL2VTWGQ5aDMvbVBZYzkrdTkvTk4zL0ZOQXBUcVNpLzJBc1JlbEdyRVhIZmJDQk84UkV0dmdENjJDeWZJamxGSkhBZmFpV0lEZmNWYUlDVW8vbUV4R1FEa3ZlOWpIOHdPQUs4WTJlTW9NRmtJbll4VVI0NE04M1kzVWIwRDVha240MkgvenNYdUdmZVp2My9GdmdUT0VzaGRCRjMzczFRTHNWa0dsTzdBOUVaQzlOSkUxR1VWQTl0S29JbXNUZ0Y0d3FkQU9zczBQd0NDNTJlZVQ2bVRBV2hpWW5KZ1lML0RmbEdlVVNiVUxrblUzM2xnZWZPeC8rR3pHTSt6TkIrL05DOWlrYyt6aGwreGxyOVVRSU5mVkRHTi9LM1AwakwwZzBCMWk3TVY4WjVKS1ZTb1pqOTVMQStoWms2ajRvTnB5VFpJR05jZ3hzU3FDek50NDlzenZnUGxLK2VwbGwzanZjMVNlWVgvclBSeTBXZWRzamhocisvUmUyT0J4RFhWVnFza0NzemtsRXBXeEw1bG1lNEIvWmV3VEFLK1VIN1ZScFQzc1dVOGlTbEN5R29mV0FlZWp1MmF6eDl1WFQvNFdtcStUVHo3Mk43NUtQY1ArVzlhWDNlOG5oYk9QQThJNFdHc1Ard3lZaW5nRk4yT213Tmp6dnRZazltQSs0bWpLQzFqRkRmMkVnL2xKQ1BzUm1pVG9RaVFzQ3JyMGZFcHcyRlBEMnZ3T21LK1VEejdGVGZnTTltWDJmbk9mZUFqcVV5Y1dZQThzZ0ZzQlRMZWJQYVlVSnpKMGxma01aeDh2a0NRWmUyd3VZcnlqc2xOM3dNbEUvQVgxSEhzRmkxTFJ4c1N3T2JyWlM5Zmc2Wmgrby9IUjI5bGVaai9KK25KL0NiaVloSmJZMzdyWWsvTW4rdGliQmV3TVFlMUJaWWw5Yk1Mc3ZjYnQvUVlabzZsbVBiQTZLY0h0Z3o0M2xQMUdVT0hmMGliWmhudFVVanpzcGF1d09aa2J2OUh4YXNSRjl0cG5IL3ZzNStBWmtCcjVqcVQzTW1PdlZRWlNnRDFZQjdHQVBTNkNJZlliVHlrak1rdElOOVB1bEVyWVhkYUlwNyt2aFZZbHhwTFVJVnRpT3V5eHFMejZMM1A4RlZHKytCWC9pK2Y0UmZiSjczNFhOY1IzUzJHM1dGTlZFNXM2ZEhxTXZaQ0tTd0gyYmVxRnBSTDFuNWk4clRLUkdYdVpVc1E2Z2pLSVNXS0grMFlkdjQ5cG90ckhLMHJCR281UkhzdkgzRkE5cm1KazIvR3BidUs3Ui9FdnNRK29mWmk1RjdRUmptYkVQSTRvNDBtYlBiTTZYdlpzS0JTai90cGw3K09ncFp5OVFxNTdodTZCMk5uVXdKekVWZSs0dGxDSUlleUpZS0orMTBCR1RORTdlTDY4RkpQc2tlNWJTOUxINzYvMFQ3ZWJlWW45SnBnMTdBd3FLaWwxaXpHOHJjUmVSa2N3WnMwcFNKeTlNRUl0WllOT1lHK0xpT3dsWkM5c2FNSUFMRHFVR2FONWhWdWN6NEcveEo1bmlPR2NRb2xTUW0rUkFaOEl6RmZOS2k0V3Y0YWVGaVRqbXhYQXNhM3I4QVgybFkrQm5NR1JGWjJpQTlvV2k4VkhKbTZwcFVKaGdLaVRnMEkrRDdzbThUemJBYjF0UHArUHM2bVlTZ21PTWlrTVZHRURmMm80bnprcTVBdGc2aXN3ZU1VeWEwbnNsM0huTGRneGtXVVlkRXdaK2daV1BJNlVDMUNxMEdZRkZrYnRxNWhSUU9tODh4SDBkTGZuMld2LytOVSs4WENtQjVNelpMVlplOUp3cXBsK1ZkaWN0R0x2WU1kY3lTelJLRkhGeWtRejJSV25USzNDc3NrOGVZVm1PbGxHRkpiWm11NittamxrNkF0OTB3S2d2aTZ6Zlo3OU43L1crN3ZwU0o2VlFJOEpFTC9hcmZJcys0bmZ4NEgyY2cyRHhUOUx6QUJGR0dGWjhNK3cxOW9obVg1ZVQyUCtZeVNvK0tENVhJZkQyY3Zmc2dIMGlYU2s5cThYODMwQTVGL3Btdy9VallXeVQzMTZGNUxqUzZUMnZ5REJiaFBVT1BzRDlmai9ndXdydGEvQmhnSnFmdzFUSkgrZVpMNkd3UDhyKy8zelJ2Q3ZDWGFVRHorellhbmZCVmVzL2h0SmRtcVRQN25GM2Q0RWJRaXEvdnNmUG5PVStQaC82VER5ZjZYL3JyeE4xYlZCYkhBbGNRZS9LSU5Rb0dCSUFvN2ttWVNKdCtwb0o5SW9HQlAwUjBubDd4QVQvZ29KeE8zWXdxYmFaV3NpWHZOc3NRUVl6TVNqb3F5OW1uM1ljMXh6c25HUmsyWkZkaTBhVUdvck5zcVZXdmFFVEhrT3VlcnBPK1E3WFdoTnZidTlWK0NxaGhYUjVmeDBSSDBJVitnWG9nK1p0K2V5NFd1dUpHMUJkVFlIMUZUVXpnRERsem8wcTFBYmxFcTB0dzJIYVdaRFV6c1lKRFZvMDNGMUJBbGNmYnF5R2JGd0tlc3FrelVLcVJwdGFOWUJFck5GRXNVY0ZlemRLT1lBVCtDR3I0NmdTbWczTTFnSk5qbXlLVm5Wb0pyVVdFMHdrUVlWQ2F1ZzBMR3U0QmF5c3NWckJVc1prVW5XSm5DNEU3Q1E1dmRmaDUvK2N0N1l0MlBPZktSVUUweG5rK2FLSnlJUGNTcVlBaTZlc0FWRG5IUEVLWGNZdzlGUmtjMTRDc21DNUo3LzVUT2trSlpkbW14SFRNVnczcTNDMTNxRlRJbWZsWFlMTEN4TG9tVVdXMUpZVGszRFFxRUFGaUJIcVVwOGZxbHRCV1BoNHErVzV4V1V2UlVVUmpHSkxjeEFWV0pzTldOanJUbFQvSXVFUy8xK3VmMWwrTm1mRi9wWllrOXJyWWlJVGJIejZja05CdEJRdFdOc1ZoNFhyc1FZVGhYWEpGcnVZS3NwN0RndVBTVnhuZDFtajZ0WVlreWt0UkUwK2hqWkk4WUtnempOMzJ2QVhxUmxkd3hHd1ZReHZuQXI0R29pMXNnOW41bkNFRU1NYnFBbGU5TDdaTUZhOGhJb1lvdktZQXRuR3E2cXRiMFZwSXFOSkxiUVlLK1NRUk5oOFZreXNaZkVNUGEvREQvNzhkS2NySW1yRjNnSkkvZzdJZmFTcWZJNVNKbmlBemZtQk5VSWxLNUUxWnpZN05VNExibmljVnB6OWJBbjFQRzJhZFo0SEpxSlpYZFNxbG1LeGFTYVlyTW5iRFhUN01CSmlEZm9zQmlQaTZUbVh2YWdBS3JObnNwbnE4ZENwV0RYUkFMb0ZudHZCV1hHbmxaL2JQYVpPSjVMTEdRdXNRZFA4MWZnWjM5Y25BN1haRTJyWUVSQ1V0QTB0clFrMlcwOXlTTFVVTVZHYmROaUQyMldzKy9ZQVdaeFN1aGhEeGNsMG1xTWpHdUVJMW11U1V6bGhFemJUR1pzdmRkd1ZRdlZUcXNOYWhORW9PUWhJUmlVZ3N2b0VIdkVaZXM5cm9hVlJqeU95clNDVTB5b2FWS3oyTmQ0YktsVlFjWWVZeWRzOWgxSVVlTnJ6K2ZaQytiRHE3MGRHUDQrNzlncldERjJoOGptWUJPbzFkb0toWWdSTFlGTnhCTjdNQ0JZUjJRL1lxRi82TVhUdFhyWXAxQXRxWWREaFk5WEZPL3F1bUN4cDNWYnlxVHdFSFlURTA1aW9qc21sckVIcTFPeDJHOGcrMlRDb3F3SUdtc21WRk9MZmNtdUlOOHhZdFpzcEZuc29lYlNLQVd0QmVNRkxyQVgxTCtEYzJUUG9QL3dBdTlhWVhwdnM4Y1ZwMWdNdklxYTVHMzRHS21HcERZMXRpU085NEpaYU5ZUVBPd3hnQzNQM0I4TUZhbFVSRzVpbUJlVnNkampVZEYwVG9JV0dEUVQxeTVMWHZaNURLbkFRQlJrajgxSXpHU1lxY2FtRlhNNUtCdzFMaCtMTEJ4c1pMUEhLNGh0T2p3RzE4VFlPS3craXpVOXp4N2NzdGZZblVUNmZUQU83UVhzV1ZROWRJOGpiZzBjOWxLK0RaZFZHUEJ3Qk1uU3pSRDJHeXVrZ1lYUjJ1eVpaeFZUejdJSDI0MnREVTVlY013bHNpOWhPOHpESFVEMkt1a3E5ZFBxT2ZiVVJwd0tNdmI4Q3VLTWZZMXFqTEhWR0ZkeGliMmdiYjRHeHJMbkpIM3o2V1VocFQ3MnJLOU5nVVh1MkE1QWtwWUs0VUx6cVEwTG0rSjZ6NXEwTUFoaEgrTTlHTmtjWUI5bjdDY0ZqSGh6MkZjS0Z2dU1Tc01ySk54UkZCNTc2N0FIS3N6b0VYdU1TZTlVS21qOUpqd1loWllpazJpNFhIclB5eGpZN0F0Sms1V0M3Q2tRSzFQQnNLKzgvQXg3U1AzNS9Zc01UenI5OFVWS0g4TGU3aUUyVmtod0pRN2Vna3pCVVVtWjJVeTA5elVXMHNPamRTYSt2bGFpQ0NpUVc0cUpRbkI0K1VxR2dObnMwWmxpY1NmdFdLR21VdDlML3FJVnRPV3cxeWpHbHRnckkxZXFDZ1hWVVNOVG9jMlltc3U4OHdvV21JZUtOc2ZFTzhYWlQwU3JGSXdCSmZhalM2aVNQNzQvU3orZC9mamh4Yk5uZnZhcENvbUN5SUZ4UnNsZ2l3VWJoT3hOSGlXTzdFM2tNS2xVTWpYbS9oQjc4Q3BCa2hwRi9vM1VTc1VrRVBUMEJHU1hjV2pxWnM4ZWVERWhIWXNWU2NiWmFFT3luQ3lIdlN5d1JnZnNVekVuRmR6aERHNjFLeFVWaTY3SkZ2c05CZ1RaRmN3d3ZUZGR6MXlNckloZWlxdEQ5dUtBNm0rZW96ZjU1K0hkQmJ1ZnlHYi8vdkNLQ0hhL3ZTK3h4MG5hTW5zbVp6QkN1NDVhdzlqVEZSRjdlY1NTVTB4eWg0MnRlRThOamlvMmJTay9LcUdQWGVEaHMxSzgxdWxnS2hmN0RIYmZoZEZJWkRjWXI3OHdBQUZWamRtQmRKdzlESTBaZTRyWXdsVFlBZGMwcmVhcXFXbTdOZGpXSkY1Qkdtc3g5dVJ5SXZzVTJqdXJsRUtGUFhkRTlZK2RqeEV5UC94ODl5N1U4aWV5Nzc1L2FyL3EyWUdBbjhNRytDTzZWSWs5QkVWUFNKWDQzTUtJaC9IaHJBRi9TSXBHcnNTZTJkSUNXTStKeERKYmdXWXBlcUFuRnVQRldlekJKMmNEV3hqMHFtU2o0eE1NRnJtTnV4NkM0T3habzR1cnpHSEZWR2ozZ1pveXNtc0NUY3dlMTdvcVdGTWM5dVRZQUh1OGd5VXNCVWRzNExKMVlsYUFhT3pTeEs5aWRyNEVMWDhpL2ZXZjI5ZkdGbFh3UGpQMlpzd1JwQ20zQy9TN01FSExPNGpGcUZmTTRFNDJLdXpBTUI0MjhoTzhNak51WjhZQm1tWU84QmNNWXZuOEdsZ0VPaGl2NFlPR0dmekpic29vUnFXTVZPd2M0R3dLVXduNGFmVzJTVHdKUGVHQ3VhRERoMUxvdm1UaVRFbVZkdHlwcVlZVjdBUXJLT0NRR3FsVzhuZ0ZjdDVXOEJyOEdzZzE1K29uUXVxc3FCblZ2TzM0Z25jU1B6c1Q5RkxPWlVxR3RnZU54Yk9peUtvakZMbWtaWktiemNaaytUSldPdnhSNFJtU2s4MGtsUW5rSm9ldm9tSm0xUjVqeUtvSk81SnNES1U1QVZrSzdhY05pdFBpdDhvK0N5dWFLa1Rua0N2V0psU1FwOUl5ckd4ZlZxcmdKc1hMeVZpbnpGQUJ6b1ZUS0pkV2NlcXZDTzh2eWNQWHIzNkw4LzdyMTRjTE9iNS9QdTlBUmVLVHhETVNOUGNYSmVUNTJrak95VE91NUdzbFl2OEtpZGkvblVUczMwNGk5bThuRWZ1M2s0ajkyMG5FL3Uwa1l2OTJFckYvTzRuWXY1MjhPZnRnZU9Jcjhtb2hBY2h5eUQ3bjRBdjMvU2Z5KzluM2RTNEdiaFYxdmVnY0syNFg0M0Z2Mk5CZ2Y4Tk8zeGNFYlRpazJjQ0dic3V3U050RGd5WFRodnAwUEQ0dWhnM1hHWTJ0ZnNRQys3Z2hEM25PSnJzYlJoTnlIQmRiS0VCZVdiVm93TDdGY00wMlZ2cFdzM1k3MWJHU0Z2WG12M3ViZmovN3hWMjFCVkt0RTVERjQrUENVa3hsMFgyc3p3NzcrNk1zYk8rUGJLZTJ1TmZoVUN0SFY3eTh2NzkvTEZmdjRNLzlGcmZ2eWpwTForekt1Y05zdG52TWpWZjJ1ZFpQNWROaFZuOTgwdUVjUnBWTzNLb3U2WVRiUTNuZW5aMTJXSTZ4cE5JRVk3cWJkdys1eHk0cmREeXZibGtscHZjOVZxSThudDhQMmMvVjQ4ejQxN2lqdkxzc2diV1RkUFp5aHVCTFhQVHFzYjhHS2VJUlk3YmZXMWRnak9mZFp0RXdpbzIxSmpUTC9HTGg3c0MxS3JrdXNTODJRTVpsSGY5QXRtTDNWRit5WkVwdTN6QU1ZOTFjbG5OTjYxekZVdzUyRnJmN0Z0d1BJOWR0ck9uTW1MelgydXY5SW1hQVRXVmN4VHpHWVg3c1kvcGNkWUhacDd2ZGlVNnJMZGdPTEdTL1A3SnJhclNXL3k3NzVBVkpxV3JTdDNhUy9nUTdVeGZ5Qko4czEyMnFJUDN5dERmbnpYazZuenJYc2cxblQ5Szdzd3lBWGg1Mjkrd0FwR0M1alY3NVpLVUY5dlJUbndNdm8zNXl5bCtVVDMybkdwejl1RHpsV0hjNzNEN1dqMVdxaHJZb2MvYk42bkhNV3V5L3ovNkNLTWx2UDBQV1RuN2NxcTh5ZTdwMWdRSmRVNk41eDR6T3F1VkNjNG05TnIyenJNcTRhdlNxekQ3WTdLSDlXS0JzOXYzZHdmQ3c3OWVmWE9nNSs3NlRRQytqeVR2VzlWTjlKYmpZeStOY1gzOWtodWcvWTYra1ByOVBwNE9MNVlsRU9uM3pzZk1LL0c3Mnh1bXB1TjdURlFQUnBpdlZpOWl2bjA0S0VHQVZkRkkwNWhZVW16MWljclBYSDNYUDFSSDdxV1ZZSUdPOUMvZm0yQm8yNTB2RnhkNm96N1JWZGN6Ni9mK0dmZWIyWi9aOGVGb2lrYjM1Ykw3MEtTZmQxa3FvZm5tTUxSMU5TUEZVWDd0U3ZZaTlEazFHZWRxVEJYS2xLRDUxZVZFVys4V2RMdGpzc2R0ZHRpeXpSY0xZSCtwOVowY1pkaHlyUS9rd0g3cllnK0pBcjFDbTR2OFQ5cFhidnk5RjV4RCtiUGJUQzU5dTA2dmo1Z3BralJUUllDeksySG4xY3dmM2xieUV2WXgzVFo0eUxLNFV4ckxLeWJLK2RxM1BaMFhxSnFjTGxDTGNIZDZIUW1kckZEWEczdWptbkJyb2VMZU9MUjBJUTRkaXNkY09hSUo2Yy9KMC9ndjJrNS9Qa1NmSnByKzk2R2xtZmRlYWc5eFBOY0hZZDhsWndXdjJYY2xMMkRkMmFBLzYxU1hhTUE5N1M2dUxzOTFwZHNwVmozakl5TlgzSkExaFhaOVJZakJhNElNYWpIM3hhZTlZVHB1OVBMMmJhaGI3WXYyQTU2MlRhL2I3MmF2LzNMd3dDRC94N3VIREM4dys2UDJxQVhwZlJIaUhkYVBSbjZFSDJLaS9XdStIZDlOK283L0trZEZ4c3ova3VQRW96dXJqNmJIYklnZktxSGNiUlpDMUxCUnpUTytMeCtseFh5N2FldS9ZVGYxdXlOaURhb0Q1NGV6MTFoak8yRHkxYUZ6M3U5bTN2NGE4S3VHY3BOTS9ubi9mbnN2SFBPNTJ1WG85dDl1Tk5kUisxd0QzSmV5TmNhc08yZXN0OG5UYzlwNXJOYmYzV3ZGNGgrUmNmYTB4cTdPV0lhUDE1dXkxazFNRDVVajJIdGtMdytwTTRld1ByVHJLcm9WanRkL01Ydm44eXNkK3NnL1BXbjNIejFHZWN2b1FaSkhiR3ppeVdybFNOY3A4WEN2MzVzMXc5djFkRjdOdkYyVTBQYTRVemZtUkQ1VjVYMXVrWXk3Mld1OXVhRjJpelI0OFZ0djVnUng5aTcyOHJPcGJjb0hXK3h6V2R6dXRuK1RmelQ3ejVaV1BuZEQ3UnA1NW9ONWh2d0tIRGY5cU14ekpETXR1bzFPczh1R3VNY3Mxd3RsdjU2eHBGSjk0Q3N1L1AvR1pBSnM5ZVB3ckQzdGhaWSsvSEwwWFZydVpaWFNHekw4bjlrSWo5N1J0SVhzWWt2TXoxSXUvbVgzcVZ4NHVUNlMvWGZZMkhmWkh5NTlldE1iWVE1WmQxd0pJbUdZMmFhOUQxbVlQM2d3YkVNalR1ZTRlMTQ2cEhaRFk0MXEwVzI3MnhxdzhaaHZ5MG1Zdkg2cDhiZ2tVSEcwU1p5LzBXZ2RpdjJ6eHBqbkdtdjlPOXFtUHYvUmNmeUw3NlNKOG03MUMyb1BTcnlPM1JyZDhZdk01RFNDd2JlV2FobUkwYzBRWXlQWU43Q2lMTnZ0aXk1b0lhdUpZQ2x1R29oakY1cWw4c24xM2kvMkt6U2s0WllBdVYwK3JJcHhnUGJQWkEvSnlEL2V0bnBqMU9YSWpaSnhhTzREZDMrLzVHYmZZWWh1dHc1cksrL2Z2d0M5cFBjbmxTZnZGUForTEdwWlAxbHNGdWpRYjJWL3U1dFg5dm5XUDQwWk4zODlQeTlQOGlkUmZxVmZyT1pENlhoRzA0ejJDMHUrbnZNVGlIdng4WTdjN0xKZW5Wcmw3ZFByczRsT0xoa0hyM0s0dkdLMVdqc3A0d3RNMmxybTcrbUY1cUZleHMxbXllWUwrc2x3OWpQZHpheDd6am5jQXpSWjIvWXRIWG5Od2ptRUVzU3F6OG5iSGYzdkdQL00vdk0waThMVUl0elI2ZlA2OE9XMWFiMzlvOXVqUzVXMXZ2RnhPRncyTkpWd2V4Z3MyUXBVWFBTWUxHVkpQMXpnYjM3UFVXOTVPKzVBQ3NoNk92YUhiV3pMMGhjRlRyRjFsVVBIeWFqRTlITVk5SGM0R0oyWmVxVHljUWdXc0dmcXRkUXB0MFlPbU51elo0MTRkdG90V2VkdG5lcmpYaXZMbGYzaVJTQ0xkK2RYemF1NlhlMml2ZWh1TEpzdXZmWHVMRXBKQmUrdFZUdTJ6L3cybHI0UC8zWHpqQy9pRHBYTm01aXhrSGpNMFhmcnJOYnpVL0krVTRMdGh1UzE1NzkvMS9pYjhMbVdqaHg1K1RiVEErNmlaaWo5OFVQemZVUHFRK3Z3OWxQNjdsejVzRzRsSGFxR3ZDWHpBQjJoRDN0R1kraGsyOFpCNHVJYlBGdjF4b29hOG9qR1IvVUl6eEtIdkptMkh2VzhrNUxOaWtUd3JINElrRTkrNXl4NytUbDQxeENOTjNFVGQ3YXNsUk8yZDcxU2RlUmQxNVhQUTZLZlB2N0F1a2pQeUllRGF1ejRSZHU0ZDdGcndQYjZKOTZIUFBCdU41bkE0WExHbFU0cTNRU0d2eUZqcDdJREdkd2pGcHI1dEtKREhrU0lrNHo4aGFiOWhqV1A3RFh0MnZyR0ZYQmh1MXVoYkx3enNyOXpqM1d1VlRPRFRHWW52anM5eTl2MzM4cWZnYS9OREZYKzQzOTNkelZ1bkhqNUYzdHZuZGlDdEo1d2owMCt0dTdzcXJrTEpYVnI5TUtaUDVidDVmV21zY25YNGI3L0h0WktGc0sxVHB0ME94dmtIYTVsWEhqK3hTVWFqZDlyTjhRU0dzSDZ5WmhyN3A5enhEM2hsNlNTZzl1NFhqWjcvN29QL20yNDR3QXE3WEwwODdxLzdpejFPWjhySDZyRzVCV2txT0R2K3BLLzdXd3pwazNNWThhUXN5OHNWSkQwYS9lbHhPajIwVHRQcDhkZ1VodlB4bGdUU3pGcDhJbG8rVURpVDBEaVZUMXM0d2ZBb0MvMmROVXV2dCtyMTYxZDhKYUMvMlg5Y2MwVVh2aldUQ3J5Ni9TWnNXb2V2R2ZhNzFUV3l0NVk1TUVpRWhhemlaN05wcVdSYkpiWFZaSHA5cXJDOVc3QzNyQTd2bk9DYVdaM1dWcEE5UlRHdHV5MmROd1NjbSthTGg4Wnl0bXdOaFd1WGxQODExSzRQYmdpWHY3RjBHN2hyUDBKT1lNM2ZUOHRiWUYrMjJUZkxZM3Nvek5qM3l1NW9LYUY1eDVkYWhuZE9oTTlzdjYxU1BzWmVXNVpkUVU4MisvNXV1czB0cjM2a2ZlczNPZDRQSlYxaVgvRVBoeE5oc3pvVys4V2MyTnZhdUdvNWE0WVcrNFU3b3hVODZHUGZPQkJ1eHI1WlA3bnNuTTErZUwvVlp2WC9MSHJ5RjBYKzVQK20zdDhlZGJuNFRiM0F4OFZ1Z3ArdnRkakx5M2tmMmR1cWJSeXFDNHNPWTkrbzU5d1I3aTcyTHB1VFd6ZXFhTlVaKzU1YjdXMzJ4cUhlc0JlaHJsY3EvbG0waFBlTjNoZlpLei84MzVJTUdkdXltRUNqOXpoVzBONVBNVlpuaFpaK1ZTL1ArRk1IakwzV3EwSlhiR3VydzM1K3hEek52b2IyZmkxTTczb2Faejh1dTBOY0xmYU5PWmlsUnYxMDVhL0ZUL3JOeG9QM1BWNlh2NkhxTjFoaEJsOXZ6WHE5M21HUDhVcnl0RVZCYW85alBMSTZ6T2NuMG4zR1hwRDEvYng2c0phRkhQWlZGdGwyVUpCOVgxanZkdzNHSHRxTzI1dXgyRk9RbWR6TnVRTStyMUQ4M3c1T2YvSWV2OHcrNWYva2RzaXJrZlZkUFplcmx2ZW9vUEt4TlYxWmVvOVA0WXlyNVdYUlpnLzBocWR5aXlQMzYvMks2WDBmdyt0bnhnWDJ4b2xLVzFSZGdmL1hLSjl2dlBCdVRPL3haNzZaN2ZzOGsrOGpvQ1I2OVZnc0ZrSDdrZkhSNjhvSXlxcUxKa2wyQmZqcExSNWRHVzd2a1QwTUJJWUN0em51K0dMT3Z0L0t6VUNlV29mck5qb2YvN2R2eGZ1L3dKb096dUtEZjY5Um9NZFE4UGc1WEJvN3dDNjdIek5aekpsakZPN24wS0JnbGNzWlk5Ylh1bDBqeGw1YnRMb0hZSDlnZ1p2WEs3NEhTOUkvZlU3eE0rejluOFo2Ri96MkJ2ZHptaGljRk1MZU9MVDZYdlpXRE5JRjlzSzAybHZzeU1mY3V6eEp4dDdvNWxZNE9GT09WMjUwdk9pRDBSN1BzRTk5ZkNuN05jYSt1c2RXWElyZC9kckx2bGsrUHFmM0dLVkhlaStNcTJNSFBtUGZ0MnpOaWo5aGVLM2laKytmRlhpR3Zlei8vdFUvZ2F1MS9IdDBCOEhISE9KcjhQR1paS05QZ2RxTE81em5JZlpyN0V5RjliTE1Kc25jN0RXZXlXSXZERnYxSENicmQ4dkxoZ0hIRE1qTTJQZXFQSWpLMkYrMzBmR3o5L2VWSVd1R0h2SE5Cb1dFcU9sM3pIejNIblhVKzBOdml0SVhodVdsdnRVUGo5UUgxM0V1YmJ3N0RvZUwvYnpIK3B6dGZjL3ljMmFVNXdna1R6dnUwQytyZFRhWE5wdVhsOVBlZExZelFPTmgxS1hzZWJ3M25PM3VxbzJPLy9sWWYxLzU0RHZ1SHp4OWV2YjUydVpKWjJGbmg2T3M2YlBaQ1dXMkV2clRXYXU4T3l6SXNUK0FpZGRXNDI2NXVoOXZyYkRscHlGM05rOHMweDdzMWZqQWpkUDZjR0NJaS9wNFg2M3VaejFaS0I2T2hsQ2NqYTIyMXpqMXJubE81OVluL2dYdmplKzQzMzlQK282YkFadWo4TmhSRFI5MFlyR3BJUFNnYzcvUnR4NFFOT2kxb01WK3YraThaOVFLT2xXc1RIQUlDK0ZaaWhaWFk5MW9yTEVBRFl0Um5GaFZqUlViU1NTUlJCSkpKSkZFRWtra2tVUVNTU1NSUkJKSkpKRkVFa2tra1VRU1NTU1JSSEtGOHYrM1NLVmhkQVArNndBQUFBQkpSVTVFcmtKZ2dnPT0iLz48L3N2Zz4NCg==" alt="" style="position:absolute; width:1px; height:1px; opacity:0">
+  <div class="logo"><img src="logo_utn.png" alt="UTN Facultad Regional Resistencia"></div>
+  <div class="institucion">
+    Universidad Tecnológica Nacional — Facultad Regional Resistencia<br>
+    <span class="completar">Ingeniería en Sistemas de Información (verificar carrera)</span><br>
+    Cátedra: <b>Sistemas Operativos</b>
+  </div>
+  <div class="titulo">
+    <div class="tipo">Trabajo Práctico Integrador</div>
+    <div class="nombre">Simulador de Asignación de Memoria<br>y Planificación de CPU</div>
+    <div class="sub">Documentación del código</div>
+  </div>
+  <div class="datos">
+    <table>
+      <tr><td>Equipo</td><td>9</td></tr>
+      <tr><td>Integrantes</td><td>
+        <span class="completar">Apellido, Nombre — Legajo</span><br>
+        <span class="completar">Apellido, Nombre — Legajo</span><br>
+        <span class="completar">Apellido, Nombre — Legajo</span><br>
+        <span class="completar">Apellido, Nombre — Legajo</span>
+      </td></tr>
+      <tr><td>Docentes</td><td><span class="completar">Nombre del profesor / JTP</span></td></tr>
+      <tr><td>Comisión</td><td><span class="completar">Comisión</span></td></tr>
+      <tr><td>Fecha</td><td><span class="completar">Fecha de entrega</span> — 2026</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ======================================================================= -->
+<!-- ÍNDICE                                                                  -->
+<!-- ======================================================================= -->
+<section class="indice">
+<h1>Índice</h1>
+<ol>
+  <li><a href="#s1">1. Introducción</a></li>
+  <li><a href="#s2">2. Requerimientos de la consigna</a></li>
+  <li><a href="#s3">3. Arquitectura</a>
+    <ol>
+      <li><a href="#s3-1">3.1. Programación estructurada</a></li>
+      <li><a href="#s3-2">3.2. Módulos y dependencias</a></li>
+      <li><a href="#s3-3">3.3. Separación entre motor e interfaz</a></li>
+    </ol>
+  </li>
+  <li><a href="#s4">4. Estructuras de datos</a></li>
+  <li><a href="#s5">5. Algoritmos</a>
+    <ol>
+      <li><a href="#s5-1">5.1. Ciclo de un instante</a></li>
+      <li><a href="#s5-2">5.2. Estados de un proceso</a></li>
+      <li><a href="#s5-3">5.3. Admisión y grado de multiprogramación</a></li>
+      <li><a href="#s5-4">5.4. Asignación Best-Fit</a></li>
+      <li><a href="#s5-5">5.5. Liberación y fusión de huecos</a></li>
+      <li><a href="#s5-6">5.6. Planificación SRTF</a></li>
+      <li><a href="#s5-7">5.7. Alertas SRTF</a></li>
+      <li><a href="#s5-8">5.8. Fragmentación externa</a></li>
+      <li><a href="#s5-9">5.9. Estadísticas</a></li>
+    </ol>
+  </li>
+  <li><a href="#s6">6. Descripción de los módulos</a></li>
+  <li><a href="#s7">7. Interfaz gráfica</a></li>
+  <li><a href="#s8">8. Lectura y validación de archivos</a></li>
+  <li><a href="#s9">9. Pruebas</a></li>
+  <li><a href="#s10">10. Generación del ejecutable</a></li>
+  <li><a href="#s11">11. Decisiones de diseño y supuestos</a></li>
+  <li><a href="#s12">12. Conclusiones</a></li>
+</ol>
+</section>
+
+<!-- ======================================================================= -->
+<h1 id="s1">1. Introducción</h1>
+
+<p>Este documento describe la implementación del simulador desarrollado para el Trabajo Práctico
+Integrador de Sistemas Operativos. El programa simula, instante por instante, la asignación de
+memoria con <b>particiones variables (MVT)</b> usando la política <b>Best-Fit</b>, y la
+planificación de la CPU con el algoritmo <b>SRTF</b> (<i>Shortest Remaining Time First</i>,
+expropiativo).</p>
+
+<p>El usuario carga hasta 10 procesos (desde un archivo CSV o a mano), avanza la simulación de a un
+instante o hasta el próximo evento, puede volver atrás, y al final obtiene un informe con los
+tiempos de retorno y de espera de cada proceso, sus promedios y el rendimiento del sistema.</p>
+
+<p>El código está escrito en <b>Python 3</b> con <b>programación estructurada</b> (solo funciones y
+diccionarios, sin clases). La interfaz gráfica usa <b>Tkinter</b>, que viene incluido con Python, y
+se distribuye como un ejecutable de Windows generado con PyInstaller. El uso de la aplicación se
+explica en el instructivo (<code>README.pdf</code>); este documento se centra en <b>cómo está
+construida</b>.</p>
+
+<!-- ======================================================================= -->
+<h1 id="s2">2. Requerimientos de la consigna</h1>
+
+<table>
+  <thead><tr><th style="width:38%">Requerimiento</th><th>Cómo se implementa</th></tr></thead>
+  <tbody>
+    <tr><td>Memoria de 550K: 100K para el SO y 450K para usuario</td>
+        <td><code>MEMORIA_SO</code> y <code>MEMORIA_USUARIO</code> en <code>constantes.py</code>.
+            Las particiones de usuario empiezan en la dirección 100K.</td></tr>
+    <tr><td>Particiones variables (MVT)</td>
+        <td><code>memoria.py</code>: cada asignación corta un hueco al tamaño exacto del proceso.</td></tr>
+    <tr><td>Política de asignación Best-Fit</td>
+        <td><code>buscar_hueco_best_fit()</code>: el hueco libre más chico donde entra el proceso.</td></tr>
+    <tr><td>Planificación SRTF (expropiativa)</td>
+        <td><code>planificador.py</code> y <code>planificar_cpu()</code> en <code>simulacion.py</code>.</td></tr>
+    <tr><td>Grado de multiprogramación máximo 5</td>
+        <td><code>MAX_MULTIPROGRAMACION</code>; cuentan Ejecución + Listos + Listos y Suspendidos.</td></tr>
+    <tr><td>Hasta 10 procesos por simulación</td>
+        <td><code>MAX_PROCESOS</code>; si un archivo trae más, se toman los 10 primeros válidos.</td></tr>
+    <tr><td>Procesos de más de 450K no se admiten</td>
+        <td>Se rechazan al validar la entrada, con un mensaje que lo explica.</td></tr>
+    <tr><td>Mostrar el estado en cada instante: CPU, colas, tabla de particiones, fragmentación</td>
+        <td>Pantalla de simulación de <code>interfaz.py</code>.</td></tr>
+    <tr><td>Informe final: retorno, espera, promedios y rendimiento</td>
+        <td><code>calcular_estadisticas()</code>; se muestra en pantalla y se exporta a TXT.</td></tr>
+    <tr><td><span class="completar">Agregar otros requerimientos del enunciado si faltan</span></td>
+        <td></td></tr>
+  </tbody>
+</table>
+
+<!-- ======================================================================= -->
+<h1 id="s3">3. Arquitectura</h1>
+
+<h2 id="s3-1">3.1. Programación estructurada</h2>
+
+<p>El programa no usa clases. Todo el estado de una simulación vive en <b>un único diccionario</b>,
+<code>estado</code>, que se pasa como parámetro a cada función. Los procesos y las particiones de
+memoria también son diccionarios. Se eligió este enfoque porque todos los integrantes del equipo
+pueden leer y explicar cualquier parte del código, y porque hace muy simple guardar una copia de
+la simulación completa (alcanza con <code>copy.deepcopy(estado)</code>).</p>
+
+<h2 id="s3-2">3.2. Módulos y dependencias</h2>
+
+<p>El código se divide en siete módulos. Cada uno importa solo de los que están por debajo en el
+diagrama, así que no hay dependencias circulares.</p>
+
+<figure>
+<svg viewBox="0 0 700 400" width="640" xmlns="http://www.w3.org/2000/svg" font-family="Cambria, Georgia, serif">
+  <defs>
+    <marker id="flecha" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1f3864"/>
+    </marker>
+  </defs>
+  <g font-size="12" fill="#555" font-style="italic">
+    <text x="10" y="40">Presentación</text>
+    <text x="10" y="125">Entrada / salida</text>
+    <text x="10" y="210">Motor</text>
+    <text x="10" y="295">Políticas</text>
+    <text x="10" y="370">Configuración</text>
+  </g>
+  <g stroke="#1f3864" stroke-width="1.3" fill="none" marker-end="url(#flecha)">
+    <line x1="365" y1="55" x2="228" y2="99"/>
+    <line x1="365" y1="55" x2="502" y2="99"/>
+    <line x1="365" y1="55" x2="365" y2="184"/>
+    <line x1="225" y1="140" x2="320" y2="184"/>
+    <line x1="505" y1="140" x2="410" y2="184"/>
+    <line x1="330" y1="225" x2="258" y2="269"/>
+    <line x1="400" y1="225" x2="472" y2="269"/>
+    <line x1="255" y1="310" x2="330" y2="344"/>
+    <line x1="365" y1="225" x2="365" y2="344"/>
+  </g>
+  <g font-size="13" text-anchor="middle">
+    <rect x="290" y="15" width="150" height="40" rx="4" fill="#1f3864"/>
+    <text x="365" y="40" fill="#fff" font-weight="bold">interfaz.py</text>
+    <rect x="150" y="100" width="150" height="40" rx="4" fill="#dfe5ee" stroke="#1f3864"/>
+    <text x="225" y="125" fill="#1f3864" font-weight="bold">entrada.py</text>
+    <rect x="430" y="100" width="150" height="40" rx="4" fill="#dfe5ee" stroke="#1f3864"/>
+    <text x="505" y="125" fill="#1f3864" font-weight="bold">informe.py</text>
+    <rect x="290" y="185" width="150" height="40" rx="4" fill="#dfe5ee" stroke="#1f3864" stroke-width="2"/>
+    <text x="365" y="210" fill="#1f3864" font-weight="bold">simulacion.py</text>
+    <rect x="180" y="270" width="150" height="40" rx="4" fill="#f6f7f9" stroke="#1f3864"/>
+    <text x="255" y="295" fill="#1f3864" font-weight="bold">memoria.py</text>
+    <rect x="400" y="270" width="150" height="40" rx="4" fill="#f6f7f9" stroke="#1f3864"/>
+    <text x="475" y="295" fill="#1f3864" font-weight="bold">planificador.py</text>
+    <rect x="290" y="345" width="150" height="40" rx="4" fill="#fff" stroke="#1f3864" stroke-dasharray="4 3"/>
+    <text x="365" y="370" fill="#1f3864" font-weight="bold">constantes.py</text>
+  </g>
+</svg>
+<figcaption><b>Figura 1:</b> Dependencias entre módulos (una flecha de A a B significa «A importa de B»).
+Por claridad se omiten algunas: <code>interfaz.py</code> también usa <code>memoria.py</code>,
+<code>planificador.py</code> y <code>constantes.py</code> para dibujar, e <code>informe.py</code> usa
+<code>memoria.py</code> para calcular la fragmentación.</figcaption>
+</figure>
+
+<table>
+  <thead><tr><th style="width:20%">Módulo</th><th style="width:9%">Líneas</th><th>Responsabilidad</th></tr></thead>
+  <tbody>
+    <tr><td><code>constantes.py</code></td><td>6</td><td>Valores fijados por la consigna: tamaños de memoria, grado de multiprogramación y cantidad de procesos.</td></tr>
+    <tr><td><code>memoria.py</code></td><td>80</td><td>Memoria MVT: crear, buscar hueco Best-Fit, asignar, liberar con fusión de huecos, tabla de particiones y resumen de fragmentación.</td></tr>
+    <tr><td><code>planificador.py</code></td><td>29</td><td>SRTF: claves de orden y elección del proceso que ocupa la CPU.</td></tr>
+    <tr><td><code>simulacion.py</code></td><td>261</td><td>Motor: creación del estado, arribos, admisión, planificación, ejecución, avance y estadísticas.</td></tr>
+    <tr><td><code>entrada.py</code></td><td>163</td><td>Lectura del CSV y validación de los procesos (del archivo y del formulario).</td></tr>
+    <tr><td><code>informe.py</code></td><td>65</td><td>Texto del informe estadístico para exportar a TXT.</td></tr>
+    <tr><td><code>interfaz.py</code></td><td>673</td><td>Interfaz gráfica en Tkinter: pantalla de carga, pantalla de simulación e informe.</td></tr>
+  </tbody>
+</table>
+
+<h2 id="s3-3">3.3. Separación entre motor e interfaz</h2>
+
+<p>Los módulos de la simulación (<code>simulacion.py</code>, <code>memoria.py</code> y
+<code>planificador.py</code>) <b>no importan nada de Tkinter ni de la interfaz</b>. La interfaz solo
+llama a las funciones del motor y después dibuja lo que hay en <code>estado</code>. Esto tiene tres
+ventajas:</p>
+<ul>
+  <li>El motor se puede probar con tests automáticos sin abrir ninguna ventana (sección 9).</li>
+  <li>Los cálculos no dependen de cómo se muestran: cambiar la interfaz no puede alterar los resultados.</li>
+  <li>«Volver atrás» es trivial: la interfaz guarda una copia del <code>estado</code> antes de cada avance.</li>
+</ul>
+
+<!-- ======================================================================= -->
+<h1 id="s4">4. Estructuras de datos</h1>
+
+<h2>4.1. Proceso</h2>
+<p>Lo crea <code>crear_proceso()</code> en <code>simulacion.py</code>.</p>
+<table>
+  <thead><tr><th style="width:18%">Campo</th><th style="width:16%">Tipo</th><th>Significado</th></tr></thead>
+  <tbody>
+    <tr><td><code>id</code></td><td>texto</td><td>Identificador, por ejemplo <code>"P3"</code>.</td></tr>
+    <tr><td><code>tamano</code></td><td>entero</td><td>Memoria que necesita, en K (1 a 450).</td></tr>
+    <tr><td><code>arribo</code></td><td>entero</td><td>Instante de llegada (TA).</td></tr>
+    <tr><td><code>irrupcion</code></td><td>entero</td><td>Tiempo de CPU total que necesita (TI).</td></tr>
+    <tr><td><code>restante</code></td><td>entero</td><td>Tiempo de CPU que le falta; empieza igual a <code>irrupcion</code>.</td></tr>
+    <tr><td><code>estado</code></td><td>texto o <code>None</code></td><td><code>None</code> mientras no arribó; después Nuevo, Listo, Listo y Suspendido, Ejecución o Terminado.</td></tr>
+    <tr><td><code>fin</code></td><td>entero o <code>None</code></td><td>Instante de finalización.</td></tr>
+  </tbody>
+</table>
+
+<h2>4.2. Partición de memoria</h2>
+<p>La memoria de usuario es una <b>lista de particiones ordenada por dirección</b>. Una partición
+ocupada y un hueco tienen la misma forma; la diferencia es el campo <code>proceso</code>:</p>
+<pre><code>{"inicio": 100, "tamano": 120, "proceso": "P1"}    # ocupada por P1
+{"inicio": 220, "tamano": 330, "proceso": None}    # hueco libre</code></pre>
+<p>Al comenzar hay un solo hueco de 450K que empieza en la dirección 100K. La partición del SO
+(0K a 99K) no está en la lista: se agrega solo al mostrar la tabla de particiones.</p>
+
+<h2>4.3. Estado de la simulación</h2>
+<p>Lo crea <code>crear_estado()</code>, que además deja la simulación lista en T = 0.</p>
+<table>
+  <thead><tr><th style="width:18%">Campo</th><th>Contenido</th></tr></thead>
+  <tbody>
+    <tr><td><code>t</code></td><td>Instante actual.</td></tr>
+    <tr><td><code>procesos</code></td><td>Todos los procesos, ordenados por arribo y luego por número de Id.</td></tr>
+    <tr><td><code>nuevos</code></td><td>Cola de Nuevos: arribaron pero esperan cupo de multiprogramación (FIFO).</td></tr>
+    <tr><td><code>listos</code></td><td>Cola de Listos: tienen memoria y esperan la CPU.</td></tr>
+    <tr><td><code>suspendidos</code></td><td>Cola de Listos y Suspendidos: admitidos, pero sin memoria (FIFO).</td></tr>
+    <tr><td><code>en_cpu</code></td><td>Proceso en ejecución, o <code>None</code> si la CPU está ociosa.</td></tr>
+    <tr><td><code>terminados</code></td><td>Procesos terminados, en orden de finalización.</td></tr>
+    <tr><td><code>memoria</code></td><td>Lista de particiones (4.2).</td></tr>
+    <tr><td><code>historial_cpu</code></td><td>Id del proceso en CPU en cada instante ejecutado (<code>None</code> = ociosa). Con esto se dibuja el diagrama de Gantt.</td></tr>
+    <tr><td><code>registro</code></td><td>Todos los sucesos: <code>{"t", "texto", "alerta"}</code>.</td></tr>
+    <tr><td><code>inicio_paso</code></td><td>Posición en <code>registro</code> donde empiezan los sucesos del último avance (se muestran en negrita).</td></tr>
+    <tr><td><code>hubo_evento</code></td><td>Si en el último instante llegó o terminó algún proceso; lo usa «Siguiente Evento».</td></tr>
+  </tbody>
+</table>
+
+<!-- ======================================================================= -->
+<h1 id="s5">5. Algoritmos</h1>
+
+<h2 id="s5-1">5.1. Ciclo de un instante</h2>
+
+<p>El corazón del simulador es <code>ejecutar_instante()</code>, que pasa del instante T al T+1
+siempre en el mismo orden:</p>
+
+<pre><code>def ejecutar_instante(estado):
+    estado["hubo_evento"] = False
+    ejecutar_unidad(estado)      # el proceso en CPU ejecuta [T, T+1)
+    estado["t"] += 1
+    procesar_arribos(estado)     # los procesos con TA = T+1 pasan a Nuevo
+    admitir_procesos(estado)     # Suspendidos y Nuevos que pueden pasar a Listo
+    planificar_cpu(estado)       # SRTF decide quién usa la CPU en [T+1, T+2)</code></pre>
+
+<figure>
+<svg viewBox="0 0 700 95" width="660" xmlns="http://www.w3.org/2000/svg" font-family="Cambria, Georgia, serif">
+  <defs>
+    <marker id="flecha2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1f3864"/>
+    </marker>
+  </defs>
+  <g stroke="#1f3864" stroke-width="1.3" marker-end="url(#flecha2)">
+    <line x1="120" y1="40" x2="139" y2="40"/>
+    <line x1="255" y1="40" x2="274" y2="40"/>
+    <line x1="390" y1="40" x2="409" y2="40"/>
+    <line x1="525" y1="40" x2="544" y2="40"/>
+  </g>
+  <g font-size="12" text-anchor="middle">
+    <rect x="5" y="15" width="115" height="50" rx="4" fill="#dfe5ee" stroke="#1f3864"/>
+    <text x="62" y="36" fill="#1f3864" font-weight="bold">1. Ejecutar</text>
+    <text x="62" y="53" fill="#333">CPU en [T, T+1)</text>
+    <rect x="140" y="15" width="115" height="50" rx="4" fill="#dfe5ee" stroke="#1f3864"/>
+    <text x="197" y="36" fill="#1f3864" font-weight="bold">2. Avanzar reloj</text>
+    <text x="197" y="53" fill="#333">T = T + 1</text>
+    <rect x="275" y="15" width="115" height="50" rx="4" fill="#dfe5ee" stroke="#1f3864"/>
+    <text x="332" y="36" fill="#1f3864" font-weight="bold">3. Arribos</text>
+    <text x="332" y="53" fill="#333">TA = T → Nuevo</text>
+    <rect x="410" y="15" width="115" height="50" rx="4" fill="#dfe5ee" stroke="#1f3864"/>
+    <text x="467" y="36" fill="#1f3864" font-weight="bold">4. Admisión</text>
+    <text x="467" y="53" fill="#333">memoria y cupo</text>
+    <rect x="545" y="15" width="150" height="50" rx="4" fill="#1f3864"/>
+    <text x="620" y="36" fill="#fff" font-weight="bold">5. Planificación</text>
+    <text x="620" y="53" fill="#fff">SRTF</text>
+  </g>
+  <text x="350" y="88" font-size="11" fill="#555" font-style="italic" text-anchor="middle">Lo que se muestra en la pantalla del instante T es el estado después del paso 5.</text>
+</svg>
+<figcaption><b>Figura 2:</b> Pasos de un instante de simulación.</figcaption>
+</figure>
+
+<p>«Siguiente Ciclo» llama una vez a <code>avanzar_instante()</code>. «Siguiente Evento» llama a
+<code>avanzar_hasta_evento()</code>, que repite <code>ejecutar_instante()</code> hasta que
+<code>hubo_evento</code> sea verdadero (llegó o terminó un proceso) o termine la simulación. Los
+dos caminos ejecutan exactamente los mismos pasos, por eso dan los mismos resultados; hay un test
+que lo verifica.</p>
+
+<h2 id="s5-2">5.2. Estados de un proceso</h2>
+
+<figure>
+<svg viewBox="0 0 700 250" width="640" xmlns="http://www.w3.org/2000/svg" font-family="Cambria, Georgia, serif">
+  <defs>
+    <marker id="flecha3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1f3864"/>
+    </marker>
+  </defs>
+  <g stroke="#1f3864" stroke-width="1.3" fill="none" marker-end="url(#flecha3)">
+    <line x1="130" y1="122" x2="299" y2="66"/>
+    <line x1="130" y1="138" x2="269" y2="194"/>
+    <line x1="355" y1="180" x2="355" y2="81"/>
+    <line x1="410" y1="52" x2="539" y2="52"/>
+    <line x1="540" y1="70" x2="411" y2="70"/>
+    <line x1="595" y1="80" x2="595" y2="179"/>
+  </g>
+  <g font-size="11" fill="#333" font-style="italic">
+    <text x="150" y="80">hay cupo y hueco</text>
+    <text x="140" y="190">hay cupo, no hay hueco</text>
+    <text x="362" y="135">se libera un hueco</text>
+    <text x="362" y="149">donde entra</text>
+    <text x="440" y="44">SRTF lo elige</text>
+    <text x="440" y="86">expropiación</text>
+    <text x="602" y="135">restante = 0</text>
+  </g>
+  <g font-size="13" text-anchor="middle" font-weight="bold">
+    <rect x="20" y="110" width="110" height="40" rx="20" fill="#f6f7f9" stroke="#1f3864"/>
+    <text x="75" y="135" fill="#1f3864">Nuevo</text>
+    <rect x="300" y="40" width="110" height="40" rx="20" fill="#dfe5ee" stroke="#1f3864"/>
+    <text x="355" y="65" fill="#1f3864">Listo</text>
+    <rect x="270" y="180" width="170" height="40" rx="20" fill="#fff3d6" stroke="#1f3864"/>
+    <text x="355" y="205" fill="#1f3864">Listo y Suspendido</text>
+    <rect x="540" y="40" width="110" height="40" rx="20" fill="#1f3864"/>
+    <text x="595" y="65" fill="#fff">Ejecución</text>
+    <rect x="540" y="180" width="110" height="40" rx="20" fill="#e3efe3" stroke="#1f3864"/>
+    <text x="595" y="205" fill="#1f3864">Terminado</text>
+  </g>
+</svg>
+<figcaption><b>Figura 3:</b> Transiciones de estado que implementa el simulador. Un proceso de Listo
+nunca vuelve a Listo y Suspendido: no hay <i>swap-out</i>.</figcaption>
+</figure>
+
+<h2 id="s5-3">5.3. Admisión y grado de multiprogramación</h2>
+
+<p>El grado de multiprogramación es la cantidad de procesos en Ejecución + Listos + Listos y
+Suspendidos, con un máximo de 5. <code>admitir_procesos()</code> trabaja en dos pasos:</p>
+
+<pre><code>def admitir_procesos(estado):
+    memoria = estado["memoria"]
+
+    # 1. Los suspendidos que ahora entran en algún hueco pasan a Listo
+    for proceso in list(estado["suspendidos"]):
+        if asignar_memoria(memoria, proceso["id"], proceso["tamano"]):
+            estado["suspendidos"].remove(proceso)
+            proceso["estado"] = LISTO
+            estado["listos"].append(proceso)
+
+    # 2. Mientras haya cupo, los Nuevos pasan a Listo (con hueco) o a Suspendido (sin hueco)
+    while len(estado["nuevos"]) &gt; 0 and grado_multiprogramacion(estado) &lt; MAX_MULTIPROGRAMACION:
+        proceso = estado["nuevos"].pop(0)
+        if asignar_memoria(memoria, proceso["id"], proceso["tamano"]):
+            proceso["estado"] = LISTO
+            estado["listos"].append(proceso)
+        else:
+            proceso["estado"] = LISTO_SUSPENDIDO
+            estado["suspendidos"].append(proceso)</code></pre>
+
+<p>Los suspendidos ya cuentan para el grado de multiprogramación, así que pasar a Listo no consume
+cupo nuevo. Se recorren en orden FIFO, pero <b>si uno no entra, los que vienen detrás igual
+pueden entrar</b>: un proceso grande no bloquea a uno más chico (lo muestra el lote 11).</p>
+
+<h2 id="s5-4">5.4. Asignación Best-Fit</h2>
+
+<pre><code>def buscar_hueco_best_fit(memoria, tamano):
+    mejor = -1
+    for i in range(len(memoria)):
+        particion = memoria[i]
+        if particion["proceso"] is None and particion["tamano"] &gt;= tamano:
+            if mejor == -1 or particion["tamano"] &lt; memoria[mejor]["tamano"]:
+                mejor = i
+    return mejor</code></pre>
+
+<p>Recorre la lista una sola vez y se queda con el hueco más chico en el que entra el proceso. Como
+la lista está ordenada por dirección y solo se reemplaza el candidato si aparece uno
+<b>estrictamente</b> más chico, ante dos huecos del mismo tamaño gana el de menor dirección.</p>
+
+<p><code>asignar_memoria()</code> corta el hueco elegido: la primera parte queda para el proceso y,
+si sobra memoria, el resto se inserta como un hueco nuevo justo después. Por eso la
+<b>fragmentación interna es siempre 0K</b>.</p>
+
+<h2 id="s5-5">5.5. Liberación y fusión de huecos</h2>
+
+<pre><code>def liberar_memoria(memoria, id_proceso):
+    for particion in memoria:
+        if particion["proceso"] == id_proceso:
+            particion["proceso"] = None
+            break
+
+    # Fusionar huecos libres contiguos
+    i = 0
+    while i &lt; len(memoria) - 1:
+        actual = memoria[i]
+        siguiente = memoria[i + 1]
+        if actual["proceso"] is None and siguiente["proceso"] is None:
+            actual["tamano"] += siguiente["tamano"]
+            memoria.pop(i + 1)
+        else:
+            i += 1</code></pre>
+
+<p>Cuando un proceso termina, su partición pasa a ser un hueco y se une con los huecos vecinos,
+tanto el de la izquierda como el de la derecha. Así nunca quedan dos huecos libres contiguos.</p>
+
+<h2 id="s5-6">5.6. Planificación SRTF</h2>
+
+<pre><code>def clave_orden_llegada(proceso):
+    return (proceso["arribo"], numero_de_id(proceso["id"]), proceso["id"])
+
+def clave_srtf(proceso):
+    return (proceso["restante"],) + clave_orden_llegada(proceso)
+
+def elegir_proceso_srtf(en_cpu, listos):
+    mejor_listo = None
+    for proceso in listos:
+        if mejor_listo is None or clave_srtf(proceso) &lt; clave_srtf(mejor_listo):
+            mejor_listo = proceso
+
+    if en_cpu is None:
+        return mejor_listo
+    if mejor_listo is not None and mejor_listo["restante"] &lt; en_cpu["restante"]:
+        return mejor_listo
+    return en_cpu</code></pre>
+
+<p>Las reglas de desempate quedan resueltas por las claves de orden:</p>
+<ul>
+  <li><b>Contra el proceso en CPU:</b> solo se expropia si el Listo tiene un restante
+      <b>estrictamente menor</b>. Ante empate sigue el que está en CPU, lo que evita cambios de
+      contexto innecesarios.</li>
+  <li><b>Entre Listos:</b> gana el de menor restante; si empatan, el de menor tiempo de arribo; si
+      también empatan, el de menor número de Id.</li>
+  <li><b>Ids numéricos:</b> <code>numero_de_id()</code> extrae el número del Id para que
+      <code>P2</code> vaya antes que <code>P10</code> (comparados como texto, sería al revés).</li>
+</ul>
+
+<h2 id="s5-7">5.7. Alertas SRTF</h2>
+<p><code>planificar_cpu()</code> registra una alerta (se muestra en amarillo arriba y en rojo en el
+registro) en dos casos:</p>
+<ul>
+  <li><b>Expropiación:</b> el elegido desaloja al proceso que estaba en CPU, que vuelve a Listos.</li>
+  <li><b>Adelantamiento:</b> con la CPU libre, el elegido pasa delante de Listos que llegaron antes
+      que él. Es el comportamiento propio de SRTF que más se diferencia de FCFS, por eso se avisa.</li>
+</ul>
+
+<h2 id="s5-8">5.8. Fragmentación externa</h2>
+<p><code>fragmentacion_externa()</code> resume la memoria libre: total, cantidad de huecos y el
+hueco más grande. Con eso, <code>suspendidos_bloqueados_por_fragmentacion()</code> detecta los
+suspendidos a los que <b>les alcanzaría la memoria libre total, pero no entran en ningún hueco</b>:
+es exactamente la situación en que la fragmentación externa impide admitir un proceso, y la
+interfaz la avisa en rojo.</p>
+
+<h2 id="s5-9">5.9. Estadísticas</h2>
+<table class="angosta">
+  <thead><tr><th>Medida</th><th>Fórmula</th></tr></thead>
+  <tbody>
+    <tr><td>Tiempo de retorno</td><td>fin − TA</td></tr>
+    <tr><td>Tiempo de espera</td><td>retorno − TI</td></tr>
+    <tr><td>TRP y TEP</td><td>promedio sobre los procesos terminados</td></tr>
+    <tr><td>Tiempo total</td><td>finalización del último proceso, contada desde T = 0</td></tr>
+    <tr><td>Rendimiento</td><td>procesos terminados / tiempo total</td></tr>
+  </tbody>
+</table>
+<p>Si se pide el informe antes de terminar, <code>calcular_estadisticas()</code> calcula sobre los
+procesos que ya terminaron y la interfaz lo muestra como «informe parcial».</p>
+
+<!-- ======================================================================= -->
+<h1 id="s6">6. Descripción de los módulos</h1>
+
+<h2><code>memoria.py</code></h2>
+<table>
+  <thead><tr><th style="width:36%">Función</th><th>Qué hace</th></tr></thead>
+  <tbody>
+    <tr><td><code>crear_memoria()</code></td><td>Devuelve la memoria inicial: un hueco de 450K desde la dirección 100K.</td></tr>
+    <tr><td><code>buscar_hueco_best_fit(memoria, tamano)</code></td><td>Posición del hueco Best-Fit, o −1 si no entra en ninguno.</td></tr>
+    <tr><td><code>asignar_memoria(memoria, id, tamano)</code></td><td>Asigna con Best-Fit cortando el hueco. Devuelve si pudo.</td></tr>
+    <tr><td><code>liberar_memoria(memoria, id)</code></td><td>Libera la partición del proceso y fusiona huecos contiguos.</td></tr>
+    <tr><td><code>tabla_particiones(memoria)</code></td><td>Filas para la tabla de particiones, incluida la del SO.</td></tr>
+    <tr><td><code>fragmentacion_externa(memoria)</code></td><td>Total libre, cantidad de huecos y hueco mayor.</td></tr>
+  </tbody>
+</table>
+
+<h2><code>planificador.py</code></h2>
+<table>
+  <thead><tr><th style="width:36%">Función</th><th>Qué hace</th></tr></thead>
+  <tbody>
+    <tr><td><code>numero_de_id(id)</code></td><td>Número dentro del Id (<code>"P10"</code> → 10), para ordenar bien.</td></tr>
+    <tr><td><code>clave_orden_llegada(proceso)</code></td><td>Clave (arribo, número de Id, Id).</td></tr>
+    <tr><td><code>clave_srtf(proceso)</code></td><td>Clave (restante, arribo, número de Id, Id).</td></tr>
+    <tr><td><code>elegir_proceso_srtf(en_cpu, listos)</code></td><td>Proceso que debe ocupar la CPU, con las reglas de desempate.</td></tr>
+  </tbody>
+</table>
+
+<h2><code>simulacion.py</code></h2>
+<table>
+  <thead><tr><th style="width:36%">Función</th><th>Qué hace</th></tr></thead>
+  <tbody>
+    <tr><td><code>crear_proceso(...)</code></td><td>Diccionario de un proceso (4.1).</td></tr>
+    <tr><td><code>crear_estado(procesos)</code></td><td>Arma el estado y procesa arribos, admisión y planificación de T = 0.</td></tr>
+    <tr><td><code>simulacion_terminada(estado)</code></td><td>Si todos los procesos terminaron.</td></tr>
+    <tr><td><code>grado_multiprogramacion(estado)</code></td><td>Ejecución + Listos + Suspendidos.</td></tr>
+    <tr><td><code>sucesos_del_ultimo_paso(estado)</code></td><td>Sucesos registrados en el último avance.</td></tr>
+    <tr><td><code>alertas_del_ultimo_paso(estado)</code></td><td>Solo las alertas SRTF del último avance.</td></tr>
+    <tr><td><code>registrar(estado, texto, ...)</code></td><td>Agrega un suceso al registro.</td></tr>
+    <tr><td><code>procesar_arribos(estado)</code></td><td>Procesos con TA = T pasan a Nuevo.</td></tr>
+    <tr><td><code>admitir_procesos(estado)</code></td><td>Admisión (5.3).</td></tr>
+    <tr><td><code>planificar_cpu(estado)</code></td><td>Aplica SRTF y registra alertas (5.6 y 5.7).</td></tr>
+    <tr><td><code>ejecutar_unidad(estado)</code></td><td>Una unidad de CPU; si el proceso termina, libera su memoria.</td></tr>
+    <tr><td><code>ejecutar_instante(estado)</code></td><td>Un ciclo completo T → T+1 (5.1).</td></tr>
+    <tr><td><code>avanzar_instante(estado)</code></td><td>Lo que llama «Siguiente Ciclo».</td></tr>
+    <tr><td><code>avanzar_hasta_evento(estado)</code></td><td>Lo que llama «Siguiente Evento».</td></tr>
+    <tr><td><code>ejecutar_completa(estado)</code></td><td>Corre hasta el final (lo usan los tests).</td></tr>
+    <tr><td><code>calcular_estadisticas(estado)</code></td><td>Retorno y espera por proceso, promedios, tiempo total y rendimiento.</td></tr>
+  </tbody>
+</table>
+
+<h2><code>entrada.py</code></h2>
+<table>
+  <thead><tr><th style="width:36%">Función</th><th>Qué hace</th></tr></thead>
+  <tbody>
+    <tr><td><code>leer_archivo(ruta)</code></td><td>Lee un CSV y devuelve <code>(procesos_validos, errores)</code>.</td></tr>
+    <tr><td><code>leer_texto_archivo(ruta)</code></td><td>Lee en UTF-8 y, si falla, en Latin-1 (como guarda Excel en español).</td></tr>
+    <tr><td><code>separar_linea(linea)</code></td><td>Detecta el separador: punto y coma, coma, tabulación o espacios.</td></tr>
+    <tr><td><code>es_encabezado(campos)</code></td><td>Si la primera línea es un encabezado (tiene campos no numéricos).</td></tr>
+    <tr><td><code>normalizar_encabezado(texto)</code></td><td><code>"Tamaño (K)"</code> → <code>"tamano"</code>, para reconocer columnas.</td></tr>
+    <tr><td><code>validar_filas(filas)</code></td><td>Valida cada fila, descarta inválidos e Ids repetidos y limita a 10.</td></tr>
+    <tr><td><code>validar_proceso(...)</code></td><td>Valida los cuatro campos; la usan el archivo y el formulario.</td></tr>
+    <tr><td><code>normalizar_id(texto)</code></td><td><code>"p1"</code> → <code>"P1"</code>; <code>"3"</code> → <code>"P3"</code>.</td></tr>
+  </tbody>
+</table>
+
+<h2><code>informe.py</code></h2>
+<table>
+  <thead><tr><th style="width:36%">Función</th><th>Qué hace</th></tr></thead>
+  <tbody>
+    <tr><td><code>texto_informe(estado)</code></td><td>Informe estadístico en texto, para exportar a TXT.</td></tr>
+    <tr><td><code>tabla_texto(encabezados, filas)</code></td><td>Tabla de texto con columnas alineadas.</td></tr>
+    <tr><td><code>formato_numero(valor, decimales)</code></td><td>Número con coma decimal (<code>2,60</code>).</td></tr>
+    <tr><td><code>suspendidos_bloqueados_por_fragmentacion(estado)</code></td><td>Suspendidos frenados por fragmentación externa (5.8).</td></tr>
+  </tbody>
+</table>
+
+<!-- ======================================================================= -->
+<h1 id="s7">7. Interfaz gráfica</h1>
+
+<p><code>interfaz.py</code> está organizado en seis secciones: estado de la interfaz, control de la
+simulación (botones), dibujo de la pantalla de simulación, controladores de la pantalla de carga,
+construcción visual de las pantallas y punto de entrada. Tiene dos pantallas que se intercambian
+dentro de la misma ventana: la de <b>carga de procesos</b> y la de <b>simulación</b>.</p>
+
+<figure>
+  <img src="../capturas/02_simulacion.png" alt="Pantalla de simulación">
+  <figcaption><b>Figura 4:</b> Pantalla de simulación (lote 4 en T = 8).</figcaption>
+</figure>
+
+<h2>7.1. Volver atrás</h2>
+<p>Antes de cada avance, la interfaz guarda una copia completa del estado en una pila. «Ciclo
+Anterior» saca la última copia y la vuelve a mostrar:</p>
+<pre><code>def ejecutar_paso_a_paso():
+    if estado is None or simulacion_terminada(estado):
+        return
+    pila_estados.append(copy.deepcopy(estado))
+    avanzar_instante(estado)
+    actualizar_interfaz_grafica()
+
+def retroceder_un_ciclo():
+    global estado
+    if len(pila_estados) == 0:
+        return
+    estado = pila_estados.pop()
+    actualizar_interfaz_grafica()</code></pre>
+<p>Como el estado es un único diccionario, la copia incluye todo: colas, memoria, registro e
+historial del Gantt. No hace falta «deshacer» operaciones una por una.</p>
+
+<h2>7.2. Actualización de la pantalla</h2>
+<p><code>actualizar_interfaz_grafica()</code> redibuja todos los paneles a partir del
+<code>estado</code>: reloj y alerta SRTF, panel de CPU y grado de multiprogramación, colas (los
+Listos ordenados con <code>clave_srtf</code>, como los elegiría el planificador), tabla de
+particiones, aviso de fragmentación, gráfico de la memoria a escala
+(<code>dibujar_canvas_memoria()</code>), diagrama de Gantt (<code>dibujar_canvas_gantt()</code>,
+que agrupa instantes consecutivos del mismo proceso) y registro de sucesos. Los botones de avanzar se
+deshabilitan al terminar y el de retroceder cuando no hay copias guardadas.</p>
+
+<!-- ======================================================================= -->
+<h1 id="s8">8. Lectura y validación de archivos</h1>
+
+<p>Solo se aceptan archivos <code>.csv</code>. El lector es flexible con el formato para aceptar
+archivos guardados desde Excel o escritos a mano:</p>
+<ul>
+  <li><b>Separador:</b> punto y coma, coma, tabulación o espacios; se detecta solo.</li>
+  <li><b>Codificación:</b> UTF-8 (con o sin BOM) o Latin-1.</li>
+  <li><b>Encabezado opcional:</b> si está, las columnas pueden venir en cualquier orden y con
+      distintos nombres (<code>Proceso</code>, <code>TA</code>, <code>TI</code>,
+      <code>Tamaño (K)</code>, <code>Llegada</code>, <code>Ráfaga</code>, etc.).</li>
+</ul>
+
+<p>Los procesos con errores <b>no frenan la carga</b>: se informa cada error con su número de línea y
+el usuario decide si sigue con los procesos válidos.</p>
+
+<table>
+  <thead><tr><th style="width:40%">Validación</th><th>Mensaje de ejemplo</th></tr></thead>
+  <tbody>
+    <tr><td>Cantidad de columnas</td><td>Línea 8: se esperaban 4 valores y hay 3.</td></tr>
+    <tr><td>Valores numéricos enteros</td><td>P5: tamaño, arribo e irrupción deben ser números enteros.</td></tr>
+    <tr><td>Tamaño mayor que 0</td><td>P3: el tamaño debe ser mayor que 0K.</td></tr>
+    <tr><td>Tamaño hasta 450K</td><td>P7: ocupa 460K y nunca podría entrar en memoria.</td></tr>
+    <tr><td>Arribo mayor o igual a 0</td><td>P4: el tiempo de arribo debe ser mayor o igual a 0.</td></tr>
+    <tr><td>Irrupción mayor que 0</td><td>P2: el tiempo de irrupción debe ser mayor que 0.</td></tr>
+    <tr><td>Id no repetido</td><td>Línea 7: el Id P1 está repetido.</td></tr>
+    <tr><td>Máximo 10 procesos</td><td>Se toman los 10 primeros y se informan los descartados.</td></tr>
+  </tbody>
+</table>
+
+<p>El formulario de carga manual usa la misma función <code>validar_proceso()</code>, así que las
+reglas son idénticas por los dos caminos.</p>
+
+<!-- ======================================================================= -->
+<h1 id="s9">9. Pruebas</h1>
+
+<p>El proyecto tiene <b>42 tests automáticos</b> escritos con <b>pytest</b>, en la carpeta
+<code>tests/</code>. Prueban el motor directamente, sin la interfaz, y se ejecutan con
+<code>python -m pytest</code>. El script de compilación los corre antes de generar el ejecutable y
+se detiene si alguno falla.</p>
+
+<table>
+  <thead><tr><th style="width:26%">Archivo</th><th style="width:8%">Tests</th><th>Qué prueba</th></tr></thead>
+  <tbody>
+    <tr><td><code>test_memoria.py</code></td><td>6</td><td>Corte exacto del hueco, Best-Fit y su desempate por dirección, proceso que no entra, fusión de huecos y fragmentación externa.</td></tr>
+    <tr><td><code>test_planificador.py</code></td><td>6</td><td>Menor restante, empate con el proceso en CPU, expropiación estricta, desempate por arribo y por número de Id.</td></tr>
+    <tr><td><code>test_entrada.py</code></td><td>9</td><td>Formatos de archivo, separadores, Latin-1, errores que no frenan la carga, encabezado inválido, rechazo de <code>.txt</code>, archivo vacío y límites de validación.</td></tr>
+    <tr><td><code>test_simulacion.py</code></td><td>21</td><td>Resultados completos de los lotes (fin, retorno y espera de cada proceso, TRP, TEP, tiempo total y rendimiento), casos de cada lote propio, grado de multiprogramación, alertas, volver atrás y equivalencia entre «Siguiente Ciclo» y «Siguiente Evento».</td></tr>
+  </tbody>
+</table>
+
+<h2>9.1. Lotes de prueba</h2>
+<p>Además de los 6 lotes de la cátedra, el equipo armó 5 lotes propios, cada uno pensado para
+mostrar un comportamiento que los lotes de la cátedra no cubren. Todos los resultados están
+verificados por los tests.</p>
+
+<table>
+  <thead><tr><th style="width:7%">Lote</th><th>Qué prueba</th><th style="width:9%">TRP</th><th style="width:9%">TEP</th><th style="width:10%">Total</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>Arribos espaciados, CPU ociosa</td><td>2,60</td><td>0,40</td><td>22</td></tr>
+    <tr><td>2</td><td>Todos en T=0, procesos suspendidos</td><td>26,20</td><td>15,00</td><td>56</td></tr>
+    <tr><td>3</td><td>Más de 5 procesos simultáneos</td><td>20,00</td><td>13,12</td><td>55</td></tr>
+    <tr><td>4</td><td>10 procesos con expropiaciones</td><td>15,90</td><td>10,30</td><td>56</td></tr>
+    <tr><td>5</td><td>Proceso de 451K (se descarta)</td><td>6,00</td><td>1,50</td><td>9</td></tr>
+    <tr><td>6</td><td>12 procesos (se toman los 10 primeros)</td><td>19,40</td><td>14,90</td><td>45</td></tr>
+    <tr><td>7</td><td><i>Propio.</i> Fragmentación externa: 300K libres en dos huecos de 150K no alcanzan para 200K</td><td>14,20</td><td>8,00</td><td>31</td></tr>
+    <tr><td>8</td><td><i>Propio.</i> Empates SRTF con el proceso en CPU y entre Listos (P3 antes que P10)</td><td>6,00</td><td>3,25</td><td>11</td></tr>
+    <tr><td>9</td><td><i>Propio.</i> Best-Fit frente a First-Fit y Worst-Fit</td><td>10,14</td><td>5,43</td><td>33</td></tr>
+    <tr><td>10</td><td><i>Propio.</i> Archivo con 7 errores distintos</td><td>2,50</td><td>0,50</td><td>4</td></tr>
+    <tr><td>11</td><td><i>Propio.</i> Columnas en otro orden, Ids numéricos y suspendido que no bloquea a otro</td><td>9,50</td><td>5,25</td><td>17</td></tr>
+  </tbody>
+</table>
+
+<figure>
+  <img src="../capturas/04_fragmentacion.png" alt="Lote 7 en T = 5">
+  <figcaption><b>Figura 5:</b> Lote 7 en T = 5: P5 (200K) queda suspendido aunque hay 300K libres,
+  porque están en dos huecos de 150K separados por P2.</figcaption>
+</figure>
+
+<!-- ======================================================================= -->
+<h1 id="s10">10. Generación del ejecutable</h1>
+
+<p>El script <code>build.ps1</code> genera la carpeta de entrega en tres pasos:</p>
+<ol>
+  <li>Corre los tests; si alguno falla, no genera nada.</li>
+  <li>Genera <code>dist\Simulador_Equipo9.exe</code> con PyInstaller, en un solo archivo y sin
+      ventana de consola.</li>
+  <li>Copia al lado del ejecutable la carpeta <code>lotes</code> y el instructivo
+      <code>README.pdf</code>.</li>
+</ol>
+<pre><code>python -m pip install pytest pyinstaller
+powershell -ExecutionPolicy Bypass -File build.ps1</code></pre>
+<p>Cuando corre como ejecutable, la interfaz busca la carpeta <code>lotes</code> al lado del
+<code>.exe</code> (y no en la carpeta temporal donde PyInstaller descomprime el programa), para que
+el selector de archivos se abra directamente ahí.</p>
+
+<!-- ======================================================================= -->
+<h1 id="s11">11. Decisiones de diseño y supuestos</h1>
+
+<p>La consigna no especifica algunos detalles. Estas son las decisiones que tomó el equipo:</p>
+<table>
+  <thead><tr><th style="width:28%">Tema</th><th>Decisión y motivo</th></tr></thead>
+  <tbody>
+    <tr><td>Orden dentro de un instante</td><td>Ejecución, arribos, admisión y planificación. Así, un proceso que llega en T ya puede usar la CPU en T, y uno que termina en T libera su memoria antes de admitir.</td></tr>
+    <tr><td>Empate con el proceso en CPU</td><td>No se expropia: solo con restante estrictamente menor. Evita un cambio de contexto sin beneficio.</td></tr>
+    <tr><td>Empate entre Listos</td><td>Menor arribo y luego menor número de Id: es el criterio más natural y hace la simulación reproducible.</td></tr>
+    <tr><td>Empate en Best-Fit</td><td>Hueco de menor dirección.</td></tr>
+    <tr><td>Sin swap-out</td><td>Un proceso solo es Listo y Suspendido si no había hueco al admitirlo; nunca se suspende un Listo para hacer lugar.</td></tr>
+    <tr><td>Suspendidos sin bloqueo</td><td>Si un suspendido no entra, los que están detrás en la cola igual pueden entrar.</td></tr>
+    <tr><td>Fragmentación interna</td><td>Siempre 0K en MVT; la columna se muestra porque la consigna la pide.</td></tr>
+    <tr><td>Más de 10 procesos</td><td>Se toman los 10 primeros válidos y se informan los descartados. <span class="completar">Confirmar con la cátedra si el lote 6 debe rechazarse.</span></td></tr>
+    <tr><td>Tiempo total</td><td>Finalización del último proceso contada desde T = 0, aunque el primer arribo sea posterior.</td></tr>
+  </tbody>
+</table>
+
+<!-- ======================================================================= -->
+<h1 id="s12">12. Conclusiones</h1>
+
+<p class="nota"><span class="completar">Completar en clase.</span> Ideas para desarrollar: qué
+aprendió el equipo sobre SRTF (adelantamientos y expropiaciones) y sobre MVT (cómo aparece la
+fragmentación externa aunque haya memoria libre suficiente); por qué se eligió programación
+estructurada; dificultades encontradas (por ejemplo, definir el orden de los pasos dentro de un
+instante y los desempates); y posibles mejoras (compactación de memoria, otras políticas de
+asignación o de planificación para comparar).</p>
+
+</body>
+</html>
