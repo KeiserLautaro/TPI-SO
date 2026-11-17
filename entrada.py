@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Lectura y validación de los procesos (desde archivo o desde el formulario).
+Lectura y validación de los procesos (desde archivo CSV o desde el formulario).
 
+Solo se aceptan archivos .csv.
 Formato del archivo: un proceso por línea con Id, tamaño, arribo e irrupción.
   - Separador: coma, punto y coma, tabulación o espacios.
   - Encabezado opcional. Si está, las columnas pueden venir en cualquier orden
@@ -145,6 +146,8 @@ def leer_archivo(ruta):
     Si `errores` no está vacío, la interfaz debe mostrarlos y preguntar si se
     continúa con los procesos válidos.
     """
+    if not str(ruta).lower().endswith(".csv"):
+        return [], ["Solo se aceptan archivos .csv."]
     try:
         texto = leer_texto_archivo(ruta)
     except OSError as error:

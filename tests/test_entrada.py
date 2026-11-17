@@ -41,6 +41,12 @@ def test_encabezado_invalido(tmp_path):
     assert procesos == [] and "Encabezado" in errores[0]
 
 
+def test_rechaza_txt(tmp_path):
+    ruta = tmp_path / "procesos.txt"
+    ruta.write_text("P1,120,0,8", encoding="utf-8")
+    assert leer_archivo(ruta) == ([], ["Solo se aceptan archivos .csv."])
+
+
 def test_archivo_vacio(tmp_path):
     assert leer_archivo(escribir(tmp_path, "\n\n")) == ([], ["El archivo está vacío."])
 

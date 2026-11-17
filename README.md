@@ -96,7 +96,7 @@ Supuestos (la consigna no los especifica):
 
 ## Archivo de entrada
 
-Un proceso por línea: Id, tamaño (K), arribo, irrupción. Se acepta coma, punto
+Solo se aceptan archivos `.csv`. Un proceso por línea: Id, tamaño (K), arribo, irrupción. Se acepta coma, punto
 y coma, tabulación o espacios como separador. El encabezado es opcional; si
 está, las columnas pueden venir en cualquier orden (por ejemplo
 `Proceso,TA,TI,Tamaño`, como en los lotes de la cátedra). Los Id numéricos se

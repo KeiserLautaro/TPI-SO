@@ -398,9 +398,9 @@ def accion_cargar_csv_inicio():
     """Botón para elegir el archivo de procesos."""
     carpeta = CARPETA_LOTES if os.path.isdir(CARPETA_LOTES) else CARPETA
     ruta = filedialog.askopenfilename(
-        title="Seleccionar archivo de procesos (CSV o TXT)",
+        title="Seleccionar archivo de procesos (CSV)",
         initialdir=carpeta,
-        filetypes=[("Archivos CSV o Texto", "*.csv *.txt"), ("Todos los archivos", "*.*")],
+        filetypes=[("Archivos CSV", "*.csv")],
     )
     if ruta:
         cargar_archivo(ruta)
@@ -449,15 +449,6 @@ def accion_limpiar_todos_los_procesos():
     procesos_cargados.clear()
     lbl_ruta_csv_inicio.config(text="Ningún archivo cargado.", fg="#7f8c8d")
     refrescar_tabla_procesos_inicio()
-
-
-def accion_cargar_ejemplo_defecto():
-    """Carga el lote 4 de la cátedra (10 procesos)."""
-    ruta = os.path.join(CARPETA_LOTES, "lote_4.csv")
-    if not os.path.exists(ruta):
-        messagebox.showerror("Ejemplo", f"No se encontró {ruta}")
-        return
-    cargar_archivo(ruta)
 
 
 def iniciar_simulacion_desde_inicio():
@@ -528,13 +519,13 @@ def construir_pantalla_inicio(parent):
     col_izq.pack(side=tk.LEFT, fill=tk.BOTH, padx=(0, 10))
 
     # Opción A: archivo
-    lf_csv = tk.LabelFrame(col_izq, text="Opción A: Cargar desde Archivo (CSV / TXT)",
+    lf_csv = tk.LabelFrame(col_izq, text="Opción A: Cargar desde Archivo CSV",
                            font=("Arial", 10, "bold"), padx=12, pady=10, bg="white")
     lf_csv.pack(fill=tk.X, pady=(0, 10))
     tk.Label(lf_csv, text="Columnas: Id, tamaño, arribo, irrupción.\n"
                           "Con encabezado pueden venir en cualquier orden\n(como en los lotes de la cátedra).",
              font=("Arial", 8), justify=tk.LEFT, bg="white", fg="#555555").pack(anchor="w", pady=(0, 8))
-    crear_boton(lf_csv, "📁 Seleccionar Archivo CSV / TXT", "#3498db", "#2980b9",
+    crear_boton(lf_csv, "📁 Seleccionar Archivo CSV", "#3498db", "#2980b9",
                 accion_cargar_csv_inicio).pack(fill=tk.X)
     lbl_ruta_csv_inicio = tk.Label(lf_csv, text="Ningún archivo cargado.", font=("Arial", 8, "italic"),
                                    bg="white", fg="#7f8c8d")
@@ -578,8 +569,6 @@ def construir_pantalla_inicio(parent):
               cursor="hand2", command=accion_limpiar_todos_los_procesos).pack(side=tk.RIGHT, padx=4)
     tk.Button(frame_acciones_tabla, text="Eliminar Seleccionado", font=("Arial", 8), bg="#95a5a6", fg="white",
               cursor="hand2", command=accion_eliminar_proceso_seleccionado).pack(side=tk.RIGHT, padx=4)
-    tk.Button(frame_acciones_tabla, text="Cargar Ejemplo (Lote 4)", font=("Arial", 8, "bold"), bg="#f39c12",
-              fg="white", cursor="hand2", command=accion_cargar_ejemplo_defecto).pack(side=tk.RIGHT, padx=4)
 
 
 def construir_pantalla_simulador(parent):
