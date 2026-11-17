@@ -17,7 +17,8 @@ if ($LASTEXITCODE -ne 0) { throw "Hay tests fallando: no se genera el ejecutable
 if ($LASTEXITCODE -ne 0) { throw "PyInstaller fallo (si Simulador_Equipo9.exe esta abierto, cerrarlo y reintentar)." }
 
 # 3. Al lado del .exe van los lotes de prueba y el instructivo en PDF
-Copy-Item -Recurse -Force lotes dist\lotes
+if (Test-Path dist\lotes) { Remove-Item -Recurse -Force dist\lotes }
+Copy-Item -Recurse lotes dist\lotes
 Copy-Item -Force README.pdf dist\README.pdf
 if (Test-Path dist\README.md) { Remove-Item -Force dist\README.md }
 Write-Host ""

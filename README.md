@@ -31,9 +31,11 @@ lista. Cuando estén listos, apretar **INICIAR SIMULACIÓN CON ESTOS PROCESOS**.
 ### Formato del archivo CSV
 
 - Un proceso por línea: Id, tamaño (K), arribo e irrupción.
-- Separador: coma, punto y coma, tabulación o espacios.
+- Separador: punto y coma (como guarda Excel en español), coma, tabulación o
+  espacios. Los lotes usan punto y coma, así que en Excel se ven con un dato
+  por celda.
 - El encabezado es opcional. Si está, las columnas pueden venir en cualquier
-  orden (por ejemplo `Proceso,TA,TI,Tamaño`, como en los lotes de la cátedra).
+  orden (por ejemplo `Proceso;TA;TI;Tamaño`, como en los lotes de la cátedra).
   Si no está, el orden es Id, tamaño, arribo, irrupción.
 - Los Id numéricos se convierten a `P` + número (`3` → `P3`).
 
