@@ -16,9 +16,9 @@ if ($LASTEXITCODE -ne 0) { throw "Hay tests fallando: no se genera el ejecutable
     interfaz.py
 if ($LASTEXITCODE -ne 0) { throw "PyInstaller fallo (si SimuladorMVT.exe esta abierto, cerrarlo y reintentar)." }
 
-# 3. Al lado del .exe van los lotes de prueba y el README (en Markdown y en PDF)
+# 3. Al lado del .exe van los lotes de prueba y el instructivo en PDF
 Copy-Item -Recurse -Force lotes dist\lotes
-Copy-Item -Force README.md dist\README.md
 Copy-Item -Force README.pdf dist\README.pdf
+if (Test-Path dist\README.md) { Remove-Item -Force dist\README.md }
 Write-Host ""
 Write-Host "Listo: dist\SimuladorMVT.exe (con dist\lotes y dist\README.pdf). Para entregar, comprimir la carpeta dist completa."

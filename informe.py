@@ -1,14 +1,6 @@
-from constantes import MAX_MULTIPROGRAMACION
-from memoria import tabla_particiones, fragmentacion_externa
-from planificador import clave_srtf
-from simulacion import (
-    calcular_estadisticas, grado_multiprogramacion, sucesos_del_ultimo_paso, simulacion_terminada,
-)
+from memoria import fragmentacion_externa
+from simulacion import calcular_estadisticas, simulacion_terminada
 
-
-# =============================================================================
-# Herramientas de formato
-# =============================================================================
 
 def tabla_texto(encabezados, filas):
     celdas = [[str(c) for c in encabezados]]
@@ -42,16 +34,6 @@ def formato_numero(valor, decimales=2):
     return f"{valor:.{decimales}f}".replace(".", ",")
 
 
-def lista_o_vacia(partes, vacia="(vacía)"):
-    if len(partes) == 0:
-        return vacia
-    return ", ".join(partes)
-
-
-# =============================================================================
-# Estado en cada pausa
-# =============================================================================
-
 def suspendidos_bloqueados_por_fragmentacion(estado):
     resumen = fragmentacion_externa(estado["memoria"])
     bloqueados = []
@@ -60,105 +42,6 @@ def suspendidos_bloqueados_por_fragmentacion(estado):
             bloqueados.append(p["id"])
     return bloqueados
 
-
-def texto_fragmentacion(estado):
-    resumen = fragmentacion_externa(estado["memoria"])
-    if resumen["cantidad_huecos"] == 0:
-        return "Fragmentación externa: 0K (no hay huecos libres)"
-    if resumen["cantidad_huecos"] == 1:
-        huecos = "1 hueco"
-    else:
-        huecos = f"{resumen['cantidad_huecos']} huecos"
-    texto = (f"Fragmentación externa: {resumen['total_libre']}K libres en {huecos} "
-             f"(el mayor de {resumen['mayor_hueco']}K)")
-    bloqueados = suspendidos_bloqueados_por_fragmentacion(estado)
-    if len(bloqueados) > 0:
-        texto += (f". Impide admitir a {', '.join(bloqueados)}: entraría en el total libre, "
-                  f"pero no en un solo hueco")
-    return texto
-
-
-def texto_tabla_particiones(estado):
-    filas = []
-    for fila in tabla_particiones(estado["memoria"]):
-        if fila["numero"] == 0 or fila["libre"]:
-            frag_interna = "-"
-        else:
-            frag_interna = f"{fila['frag_interna']}K"
-        frag_externa = f"{fila['tamano']}K" if fila["libre"] else "-"
-        filas.append((fila["numero"], f"{fila['inicio']}K", f"{fila['tamano']}K", fila["proceso"],
-                      frag_interna, frag_externa))
-    return tabla_texto(("Partición", "Inicio", "Tamaño", "Proceso", "Frag. interna", "Frag. externa"), filas)
-
-
-def texto_colas(estado):
-    en_cpu = estado["en_cpu"]
-    if en_cpu is None:
-        ejecucion = "CPU libre (ociosa)"
-    else:
-        ejecucion = f"{en_cpu['id']} (restante {en_cpu['restante']})"
-
-    nuevos = [p["id"] for p in estado["nuevos"]]
-    listos = [f"{p['id']} (restante {p['restante']})" for p in sorted(estado["listos"], key=clave_srtf)]
-    suspendidos = [f"{p['id']} (tamaño {p['tamano']}K)" for p in estado["suspendidos"]]
-    terminados = [f"{p['id']} (finalización {p['fin']})" for p in estado["terminados"]]
-
-    colas = [
-        ("En ejecución", ejecucion),
-        ("Nuevo", lista_o_vacia(nuevos)),
-        ("Listos", lista_o_vacia(listos)),
-        ("Listos y Suspendidos", lista_o_vacia(suspendidos)),
-        (f"Terminados ({len(estado['terminados'])}/{len(estado['procesos'])})", lista_o_vacia(terminados)),
-    ]
-    lineas = []
-    for titulo, contenido in colas:
-        lineas.append(f"  {(titulo + ':'):<24}{contenido}")
-    return "\n".join(lineas)
-
-
-def texto_estado(estado):
-    es_evento = estado["t"] == 0 or estado["hubo_evento"]
-    marca = "  [EVENTO]" if es_evento else ""
-    lineas = [f"=============== T = {estado['t']}{marca} ==============="]
-
-    sucesos = sucesos_del_ultimo_paso(estado)
-    for suceso in sucesos:
-        if suceso["alerta"]:
-            lineas.append(f"  [!] {suceso['texto']}")
-
-    lineas.append("Sucesos:")
-    hay_sucesos = False
-    for suceso in sucesos:
-        if not suceso["alerta"]:
-            lineas.append(f"  - T={suceso['t']}: {suceso['texto']}")
-            hay_sucesos = True
-    if not hay_sucesos:
-        lineas.append("  (ninguno)")
-
-    en_cpu = estado["en_cpu"]
-    if en_cpu is None:
-        cpu = "Libre (ociosa)"
-    else:
-        cpu = f"{en_cpu['id']} (restante {en_cpu['restante']})"
-
-    lineas += [
-        "",
-        f"Procesador: {cpu}",
-        f"Grado de multiprogramación: {grado_multiprogramacion(estado)}/{MAX_MULTIPROGRAMACION}",
-        "",
-        "Tabla de particiones:",
-        texto_tabla_particiones(estado),
-        texto_fragmentacion(estado),
-        "",
-        "Colas:",
-        texto_colas(estado),
-    ]
-    return "\n".join(lineas)
-
-
-# =============================================================================
-# Informe final
-# =============================================================================
 
 def texto_informe(estado):
     est = calcular_estadisticas(estado)

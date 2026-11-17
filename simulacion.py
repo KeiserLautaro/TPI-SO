@@ -197,7 +197,7 @@ def ejecutar_instante(estado):
 
 
 # =============================================================================
-# Avance (lo que llaman la consola y la interfaz)
+# Avance (lo que llama la interfaz)
 # =============================================================================
 
 def avanzar_instante(estado):

@@ -23,11 +23,7 @@ Requiere Python 3 (Tkinter viene incluido en el instalador de Windows).
 | Comando | Qué hace |
 |---|---|
 | `python interfaz.py` | Interfaz gráfica |
-| `python consola.py lotes/lote_1.csv` | Versión por consola |
 | `python -m pytest` | Corre los tests (requiere `pytest`) |
-
-En la consola: **Enter** avanza un instante, **e** avanza hasta el próximo
-evento (arribo o fin de un proceso) y **q** sale.
 
 Si `python` no se encuentra, usar `py` (por ejemplo `py interfaz.py`).
 
@@ -39,8 +35,8 @@ powershell -ExecutionPolicy Bypass -File build.ps1
 ```
 
 El script corre los tests y, si pasan, genera `dist\SimuladorMVT.exe` con
-PyInstaller. Después copia `lotes/` y este README (en Markdown y en PDF) a
-`dist\`. Para entregar, comprimir la carpeta `dist\` completa.
+PyInstaller. Después copia `lotes/` y `README.pdf` a `dist\`. Para entregar,
+comprimir la carpeta `dist\` completa.
 
 ## Archivo de entrada
 
@@ -116,15 +112,13 @@ aparece en la pantalla de T.
 | `planificador.py` | SRTF: elección del proceso en CPU y desempates |
 | `simulacion.py` | Motor: estado, arribos, admisión, planificación, ejecución y estadísticas |
 | `entrada.py` | Lectura y validación del CSV y del formulario |
-| `informe.py` | Textos del estado y del informe (consola y exportación a TXT) |
-| `consola.py` | Versión por consola |
+| `informe.py` | Texto del informe estadístico (exportación a TXT) |
 | `interfaz.py` | Interfaz gráfica (Tkinter) |
 | `lotes/` | Los 6 lotes de prueba de la cátedra |
 | `tests/` | Tests con pytest |
 
 La simulación (`simulacion.py`, `memoria.py`, `planificador.py`) no importa
 nada de la interfaz. Todo su estado vive en un único diccionario `estado` que se
-pasa a cada función; la consola y la interfaz gráfica solo llaman a esas
-funciones y muestran el `estado`, así que las dos dan siempre los mismos
-resultados. Para "Ciclo Anterior", la interfaz guarda una copia del `estado`
-antes de cada avance.
+pasa a cada función; la interfaz gráfica solo llama a esas funciones y muestra
+el `estado`. Para "Ciclo Anterior", guarda una copia del `estado` antes de
+cada avance.
