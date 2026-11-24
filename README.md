@@ -1,60 +1,109 @@
 # TPI SO - Simulador de Planificación de CPU y Asignación de Memoria
 
-Trabajo Práctico Integrador para la cátedra de **Sistemas Operativos** - **Universidad Tecnológica Nacional (UTN) - Facultad Regional Resistencia (FRRe)**.
+Trabajo Práctico Integrador de **Sistemas Operativos** - UTN Facultad Regional Resistencia.
 
-Simula un procesador con memoria de **particiones variables (MVT)**: 100K para el
-SO y 450K para procesos de usuario. Asignación **Best-Fit**, planificación
-**SRTF** (expropiativo), grado de multiprogramación máximo 5 y hasta 10 procesos.
+Simula un procesador con memoria de **particiones variables (MVT)**:
 
-Implementado con **programación estructurada** (solo funciones, sin clases).
+- 550K de memoria: 100K para el SO y 450K para procesos de usuario.
+- Asignación **Best-Fit**.
+- Planificación **SRTF** (expropiativo).
+- Grado de multiprogramación máximo 5, hasta 10 procesos por simulación.
 
-## Cómo ejecutar
+## Cómo abrirlo
 
-**Ejecutable (Windows, no requiere Python):** abrir `SimuladorMVT.exe` con doble
-clic. La carpeta `lotes/` tiene que estar al lado del ejecutable.
+Abrir `Simulador_Equipo9.exe` con doble clic (Windows, no requiere instalar nada).
+Los lotes de prueba están en la carpeta `lotes`, al lado del ejecutable.
 
-**Desde el código** (Python 3; Tkinter viene incluido en el instalador de Windows):
+## 1. Cargar los procesos
 
-```
-python interfaz.py                              interfaz gráfica
-python consola.py lotes/lote_1.csv              consola ([Enter] siguiente instante, [e] siguiente evento)
-python -m pytest                                tests
-```
+La primera pantalla tiene dos formas de cargar procesos, que se pueden combinar:
 
-Si `python` no se encuentra, usar `py` (por ejemplo `py interfaz.py`).
+- **Opción A - Archivo CSV:** el botón **Seleccionar Archivo CSV** abre la
+  carpeta `lotes`. Al elegir un archivo, sus procesos reemplazan a los que
+  estaban cargados.
+- **Opción B - Carga manual:** completar Id, tamaño, tiempo de arribo y tiempo
+  de irrupción, y apretar **Agregar Proceso a la Lista**.
 
-## Generar el ejecutable
+La tabla de la derecha muestra los procesos cargados (máximo 10).
+**Eliminar Seleccionado** quita el proceso marcado y **Limpiar Todo** vacía la
+lista. Cuando estén listos, apretar **INICIAR SIMULACIÓN CON ESTOS PROCESOS**.
 
-```
-python -m pip install -r requirements.txt
-powershell -ExecutionPolicy Bypass -File build.ps1
-```
+![Figura 1: Pantalla de carga con el lote 4 de la cátedra](capturas/01_carga.png)
 
-Corre los tests y, si pasan, genera `dist\SimuladorMVT.exe` con PyInstaller y
-copia `lotes/` y este README a `dist\`. Para entregar, comprimir la carpeta
-`dist\` completa. `build/` y `dist/` no se suben al repositorio.
+### Formato del archivo CSV
 
-## Organización del código
+- Un proceso por línea: Id, tamaño (K), arribo e irrupción.
+- Separador: punto y coma (como guarda Excel en español), coma, tabulación o
+  espacios. Los lotes usan punto y coma, así que en Excel se ven con un dato
+  por celda.
+- El encabezado es opcional. Si está, las columnas pueden venir en cualquier
+  orden (por ejemplo `Proceso;TA;TI;Tamaño`, como en los lotes de la cátedra).
+  Si no está, el orden es Id, tamaño, arribo, irrupción.
+- Los Id numéricos se convierten a `P` + número (`3` → `P3`).
 
-```
-constantes.py     Valores de la consigna (memoria, límites)
-memoria.py        MVT: Best-Fit, asignar, liberar con fusión de huecos, tabla de particiones
-planificador.py   SRTF: elegir el proceso que ocupa la CPU y reglas de desempate
-simulacion.py     Motor: estado, arribos, admisión, planificación, ejecución, estadísticas
-entrada.py        Lectura y validación de archivos y del formulario
-informe.py        Textos del estado, del informe y del Gantt (consola y exportación)
-consola.py        Interfaz por consola
-interfaz.py       Interfaz gráfica (Tkinter)
-lotes/            Los 6 lotes de prueba de la cátedra
-tests/            Tests con pytest
-```
+Los procesos con errores (más de 450K, valores no numéricos, Id repetido, etc.)
+**no frenan la carga**: se informan y se pregunta si se sigue con los válidos.
+Si hay más de 10, se toman los 10 primeros del archivo.
 
-La simulación (`simulacion.py`, `memoria.py`, `planificador.py`) **no importa
-nada de la interfaz**. Todo su estado está en un único diccionario `estado` que
-se pasa a cada función. La consola y la interfaz gráfica solo llaman a esas
-funciones y muestran el `estado`; por eso las dos dan siempre los mismos
-resultados. Para "Ciclo Anterior", la interfaz guarda `copy.deepcopy(estado)`
-antes de cada avance.
+## 2. Simular
+
+La simulación arranca en T = 0. Botones de la barra inferior:
+
+| Botón | Qué hace |
+|---|---|
+| **Ciclo Anterior** | Vuelve al instante anterior (también con la flecha ←) |
+| **Siguiente Ciclo (T + 1)** | Avanza un instante (también con la flecha →) |
+| **Siguiente Evento (Arribo/Fin)** | Avanza hasta que llega o termina un proceso |
+| **Reiniciar (T=0)** | Vuelve al principio con los mismos procesos |
+| **Informe Estadístico** | Muestra las métricas hasta el momento |
+| **Volver a Inicio / Carga** | Regresa a la pantalla de carga de procesos |
+
+Qué muestra la pantalla en cada instante:
+
+- **Arriba:** el tiempo T y, en amarillo, la alerta SRTF cuando un proceso
+  expropia la CPU o pasa delante de otros que llegaron antes.
+- **Izquierda:** el proceso en CPU, el grado de multiprogramación y las colas
+  de Listos, Listos y Suspendidos, y Nuevos.
+- **Derecha:** la tabla de particiones, la fragmentación externa, un gráfico de
+  la memoria, el diagrama de Gantt y el registro de sucesos (los del último
+  paso en negrita y las alertas en rojo).
+
+![Figura 2: Lote 4 en T = 8. P5 se adelanta a P1 y P2 (alerta SRTF) y P7 queda suspendido: hay 140K libres, pero en dos huecos de 70K](capturas/02_simulacion.png)
+
+## 3. Informe final
+
+Cuando terminan todos los procesos se abre el informe estadístico: tiempo de
+retorno y de espera de cada proceso, sus promedios, el tiempo total y el
+rendimiento del sistema. **Exportar a TXT** lo guarda en un archivo de texto.
+
+![Figura 3: Informe estadístico final del lote 4](capturas/03_informe.png)
+
+## Lotes de prueba
+
+Resultados esperados de cada lote de la carpeta `lotes`.
+
+**Lotes de la cátedra:**
+
+| Lote | Qué prueba | TRP | TEP | Tiempo total |
+|---|---|---|---|---|
+| 1 | Arribos espaciados, CPU ociosa | 2,60 | 0,40 | 22 |
+| 2 | Todos en T=0, procesos suspendidos | 26,20 | 15,00 | 56 |
+| 3 | Más de 5 procesos simultáneos | 20,00 | 13,12 | 55 |
+| 4 | 10 procesos con expropiaciones | 15,90 | 10,30 | 56 |
+| 5 | P2 de 451K (se descarta; se simulan P1 y P3) | 6,00 | 1,50 | 9 |
+| 6 | 12 procesos (se toman P1 a P10) | 19,40 | 14,90 | 45 |
+
+**Lotes propios del equipo:**
+
+| Lote | Qué prueba | TRP | TEP | Tiempo total |
+|---|---|---|---|---|
+| 7 | Fragmentación externa: entre T=5 y T=15 hay 300K libres, pero en dos huecos de 150K, y P5 (200K) no entra hasta que P2 termina y los huecos se fusionan | 14,20 | 8,00 | 31 |
+| 8 | Empates SRTF: P1 no es expropiado por procesos con el mismo restante, y entre P3 y P10 (mismo arribo y restante) gana P3 | 6,00 | 3,25 | 11 |
+| 9 | Best-Fit: en T=7, P6 (55K) va al hueco de 60K y P7 (95K) al de 100K, aunque hay otros huecos donde entran | 10,14 | 5,43 | 33 |
+| 10 | Archivo con 7 errores distintos (irrupción 0, tamaño 0, arribo negativo, valor no numérico, Id repetido, fila incompleta y más de 450K): se informan todos y se simulan P1 y P8 | 2,50 | 0,50 | 4 |
+| 11 | Columnas en otro orden e Id numéricos. En T=3, P3 (350K) sigue suspendido, pero P4, que está detrás en la cola, entra igual | 9,50 | 5,25 | 17 |
+
+![Figura 4: Lote 7 en T = 5. Los huecos de 150K quedan separados por P2 y P5 (200K) no entra](capturas/04_fragmentacion.png)
 
 ## Reglas de la simulación
 
@@ -64,53 +113,31 @@ En cada instante T, en este orden:
    su finalización es T, libera su partición y los huecos vecinos se fusionan.
 2. **Arribos:** los procesos con TA = T pasan a Nuevo (por orden de Id).
 3. **Admisión:**
-   - Los Listos/Suspendidos, en orden FIFO, que ahora entran en algún hueco
+   - Los Listos y Suspendidos que ahora entran en algún hueco (en orden FIFO)
      reciben memoria y pasan a Listo. Ya cuentan para el grado de
-     multiprogramación, así que no consumen cupo. Si uno no entra, los de
-     atrás igual pueden entrar.
-   - Mientras Ejecución + Listos + Suspendidos < 5, los Nuevos (FIFO) pasan a
-     Listo si hay hueco, o a Listo/Suspendido si no lo hay.
+     multiprogramación, así que no ocupan cupo nuevo. Si uno no entra, los que
+     vienen detrás igual pueden entrar.
+   - Mientras Ejecución + Listos + Suspendidos sea menor que 5, los Nuevos
+     (FIFO) pasan a Listo si hay hueco, o a Listo y Suspendido si no lo hay.
 4. **Planificación SRTF** entre el proceso en CPU y los Listos.
 
-**Lo que se muestra en el instante T** es el estado después de esos pasos: qué
-proceso usa la CPU durante [T, T+1). Un proceso que llega en T ya aparece en la
-pantalla de T.
+Lo que se muestra en el instante T es el estado después de esos pasos, es
+decir, qué proceso usa la CPU durante [T, T+1). Un proceso que llega en T ya
+aparece en la pantalla de T.
 
-Supuestos (la consigna no los especifica):
+Además:
 
 - **Desempates SRTF:** si un Listo empata con el que está en CPU, sigue el que
   está en CPU (solo se expropia con restante estrictamente menor). Entre
-  Listos, gana el de menor TA y luego el de menor Id (P2 antes que P10).
-- **Best-Fit:** hueco de menor tamaño suficiente; ante empate, el de menor dirección.
-- **No hay swap-out:** un proceso solo va a Listo/Suspendido si no había hueco
+  Listos gana el de menor TA, y luego el de menor Id (P2 antes que P10).
+- **Best-Fit:** el hueco más chico en el que entra el proceso; ante empate, el
+  de menor dirección.
+- **Sin swap-out:** un proceso solo va a Listo y Suspendido si no había hueco
   al admitirlo. Nunca se suspende un Listo para hacer lugar.
 - **Fragmentación interna:** siempre 0K, porque en MVT cada partición se corta
-  al tamaño exacto del proceso. Se muestra la columna porque la consigna la
-  pide. La fragmentación que sí aparece es la **externa**: se informa el total
-  libre, la cantidad de huecos y el mayor, y se avisa cuando a un suspendido le
-  alcanza la memoria libre total pero no entra en ningún hueco.
-- **Alerta SRTF:** cuando el proceso que toma la CPU expropia al que estaba, o
-  pasa delante de Listos que llegaron antes.
+  al tamaño exacto del proceso.
+- **Fragmentación externa:** se informa el total libre, la cantidad de huecos y
+  el mayor, y se avisa cuando a un suspendido le alcanza la memoria libre total
+  pero no entra en ningún hueco.
 - **Estadísticas:** retorno = fin − TA; espera = retorno − TI;
   rendimiento = procesos terminados / tiempo total (fin del último, desde T = 0).
-
-## Archivo de entrada
-
-Un proceso por línea: Id, tamaño (K), arribo, irrupción. Se acepta coma, punto
-y coma, tabulación o espacios como separador. El encabezado es opcional; si
-está, las columnas pueden venir en cualquier orden (por ejemplo
-`Proceso,TA,TI,Tamaño`, como en los lotes de la cátedra). Los Id numéricos se
-convierten a `P` + número.
-
-Los procesos con errores (más de 450K, valores no numéricos, Id repetido, etc.)
-**no frenan la carga**: se informan y se pregunta si se continúa con los
-válidos. Si hay más de 10, se toman los 10 primeros del archivo.
-
-| Lote | Qué prueba | TRP | TEP | Tiempo total |
-|---|---|---|---|---|
-| 1 | Arribos espaciados, CPU ociosa | 2.60 | 0.40 | 22 |
-| 2 | Todos en T=0, procesos suspendidos | 26.20 | 15.00 | 56 |
-| 3 | Más de 5 procesos simultáneos | 20.00 | 13.12 | 55 |
-| 4 | 10 procesos con expropiaciones | 15.90 | 10.30 | 56 |
-| 5 | P2 de 451K (se descarta, se simulan P1 y P3) | 6.00 | 1.50 | 9 |
-| 6 | 12 procesos (se toman P1 a P10) | 19.40 | 14.90 | 45 |

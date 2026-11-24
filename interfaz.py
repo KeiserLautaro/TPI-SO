@@ -1,18 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-===============================================================================
-UNIVERSIDAD TECNOLÓGICA NACIONAL - FACULTAD REGIONAL RESISTENCIA
-Cátedra: Sistemas Operativos
-Trabajo Práctico Integrador: Simulador de Asignación de Memoria y Planificación de CPU
-
-INTERFAZ GRÁFICA (Tkinter, programación estructurada: solo funciones)
-
-Esta interfaz NO simula nada: llama a las funciones de `simulacion.py` y
-muestra el diccionario `estado`. Para volver atrás guarda copias del estado
-en una pila antes de cada avance.
-===============================================================================
-"""
-
 import copy
 import os
 import sys
@@ -23,7 +8,7 @@ from constantes import MAX_PROCESOS, MEMORIA_TOTAL, MAX_MULTIPROGRAMACION
 from entrada import leer_archivo, validar_proceso
 from informe import texto_informe, suspendidos_bloqueados_por_fragmentacion
 from memoria import tabla_particiones, fragmentacion_externa
-from planificador import clave_orden_llegada, numero_de_id
+from planificador import clave_orden_llegada, clave_srtf, numero_de_id
 from simulacion import (
     crear_estado, avanzar_instante, avanzar_hasta_evento, simulacion_terminada,
     calcular_estadisticas, grado_multiprogramacion, alertas_del_ultimo_paso,
@@ -48,12 +33,10 @@ procesos_cargados = []   # Procesos de la pantalla de carga (todavía sin simula
 estado = None            # Estado de la simulación en curso (ver simulacion.py)
 pila_estados = []        # Copias del estado anteriores, para "Ciclo Anterior"
 
-# Ventana y pantallas
 ventana_principal = None
 frame_pantalla_inicio = None
 frame_pantalla_simulador = None
 
-# Widgets de la Pantalla de Inicio
 entry_manual_id = None
 entry_manual_tam = None
 entry_manual_ta = None
@@ -62,7 +45,6 @@ tree_procesos_inicio = None
 lbl_contador_procesos = None
 lbl_ruta_csv_inicio = None
 
-# Widgets de la Pantalla de Simulación
 lbl_badge_reloj_t = None
 lbl_alerta = None
 lbl_cpu_actual = None
@@ -88,7 +70,6 @@ btn_siguiente_evento = None
 # =============================================================================
 
 def iniciar_estado():
-    """Crea el estado en T = 0 con una copia de los procesos cargados."""
     global estado, pila_estados
     estado = crear_estado(copy.deepcopy(procesos_cargados))
     pila_estados = []
@@ -96,7 +77,6 @@ def iniciar_estado():
 
 
 def ejecutar_paso_a_paso():
-    """Avanza un instante (T -> T + 1)."""
     if estado is None or simulacion_terminada(estado):
         return
     pila_estados.append(copy.deepcopy(estado))
@@ -107,7 +87,6 @@ def ejecutar_paso_a_paso():
 
 
 def ejecutar_hasta_siguiente_evento():
-    """Avanza hasta el próximo arribo o terminación."""
     if estado is None or simulacion_terminada(estado):
         return
     pila_estados.append(copy.deepcopy(estado))
@@ -118,7 +97,6 @@ def ejecutar_hasta_siguiente_evento():
 
 
 def retroceder_un_ciclo():
-    """Vuelve a la pantalla anterior (el mismo estado que se mostró en su momento)."""
     global estado
     if len(pila_estados) == 0:
         return
@@ -127,7 +105,6 @@ def retroceder_un_ciclo():
 
 
 def reiniciar_simulacion():
-    """Vuelve a T = 0 con los mismos procesos."""
     if len(procesos_cargados) > 0:
         iniciar_estado()
 
@@ -141,7 +118,6 @@ def color_de_proceso(id_proceso):
 
 
 def actualizar_tabla_tree(tree, lista_datos):
-    """Limpia y carga filas en un Treeview."""
     for item in tree.get_children():
         tree.delete(item)
     for fila in lista_datos:
@@ -159,7 +135,6 @@ def filas_de_procesos(procesos, con_restante=True):
 
 
 def dibujar_canvas_memoria():
-    """Dibuja la distribución de la memoria a escala (incluye el SO)."""
     if canvas_memoria is None or estado is None:
         return
     canvas_memoria.delete("all")
@@ -184,7 +159,6 @@ def dibujar_canvas_memoria():
 
 
 def dibujar_canvas_gantt():
-    """Diagrama de Gantt: un bloque por cada tramo en que la CPU la usa el mismo proceso."""
     if canvas_gantt is None or estado is None:
         return
     canvas_gantt.delete("all")
@@ -217,7 +191,6 @@ def dibujar_canvas_gantt():
 
 
 def actualizar_registro():
-    """Muestra todos los sucesos; los del último paso en negrita y las alertas en rojo."""
     txt_logs.config(state=tk.NORMAL)
     txt_logs.delete("1.0", tk.END)
     for i in range(len(estado["registro"])):
@@ -233,11 +206,10 @@ def actualizar_registro():
 
 
 def actualizar_interfaz_grafica():
-    """Refresca todos los paneles con el estado actual."""
     if ventana_principal is None or estado is None:
         return
 
-    # 1. Reloj T, alerta SRTF y botones (avanzar: no al terminar; retroceder: no en el primer paso)
+    # Avanzar: no al terminar; retroceder: no en el primer paso
     lbl_badge_reloj_t.config(text=f"T = {estado['t']}")
     estado_botones = tk.DISABLED if simulacion_terminada(estado) else tk.NORMAL
     btn_siguiente_ciclo.config(state=estado_botones)
@@ -252,7 +224,6 @@ def actualizar_interfaz_grafica():
     else:
         lbl_alerta.config(text="", bg="#1e272e")
 
-    # 2. Panel CPU
     en_cpu = estado["en_cpu"]
     if en_cpu is not None:
         lbl_cpu_actual.config(text=f"Proceso en CPU: {en_cpu['id']}", fg="#27ae60")
@@ -266,13 +237,11 @@ def actualizar_interfaz_grafica():
         lbl_cpu_tamano.config(text="Tamaño: -")
     lbl_grado.config(text=f"Grado de multiprogramación: {grado_multiprogramacion(estado)} / {MAX_MULTIPROGRAMACION}")
 
-    # 3. Colas (Listos ordenados como los elegiría SRTF)
-    listos = sorted(estado["listos"], key=lambda p: (p["restante"],) + clave_orden_llegada(p))
+    listos = sorted(estado["listos"], key=clave_srtf)
     actualizar_tabla_tree(tree_listos, filas_de_procesos(listos))
     actualizar_tabla_tree(tree_suspendidos, filas_de_procesos(estado["suspendidos"]))
     actualizar_tabla_tree(tree_nuevos, filas_de_procesos(estado["nuevos"], con_restante=False))
 
-    # 4. Memoria
     filas = []
     for fila in tabla_particiones(estado["memoria"]):
         filas.append((fila["numero"], f"{fila['inicio']}K", f"{fila['tamano']}K", fila["proceso"],
@@ -290,12 +259,10 @@ def actualizar_interfaz_grafica():
     dibujar_canvas_memoria()
     dibujar_canvas_gantt()
 
-    # 5. Registro de sucesos
     actualizar_registro()
 
 
 def exportar_informe():
-    """Guarda el informe (y el Gantt) en un archivo de texto."""
     ruta = filedialog.asksaveasfilename(
         title="Guardar informe", defaultextension=".txt", initialfile="informe.txt",
         filetypes=[("Texto", "*.txt")],
@@ -307,7 +274,6 @@ def exportar_informe():
 
 
 def mostrar_dialogo_informe_final():
-    """Ventana con las métricas (finales, o parciales si la simulación sigue)."""
     if estado is None:
         return
     stats = calcular_estadisticas(estado)
@@ -359,7 +325,6 @@ def mostrar_dialogo_informe_final():
 # =============================================================================
 
 def refrescar_tabla_procesos_inicio():
-    """Actualiza la tabla de procesos en la pantalla de carga."""
     procesos_cargados.sort(key=clave_orden_llegada)
     filas = []
     for p in procesos_cargados:
@@ -369,10 +334,6 @@ def refrescar_tabla_procesos_inicio():
 
 
 def cargar_archivo(ruta):
-    """
-    Lee el archivo. Si tiene problemas, los muestra y pregunta si se continúa
-    con los procesos válidos (por ejemplo, sin el proceso de más de 450K).
-    """
     global procesos_cargados
     procesos, errores = leer_archivo(ruta)
     if len(errores) > 0:
@@ -395,19 +356,17 @@ def cargar_archivo(ruta):
 
 
 def accion_cargar_csv_inicio():
-    """Botón para elegir el archivo de procesos."""
     carpeta = CARPETA_LOTES if os.path.isdir(CARPETA_LOTES) else CARPETA
     ruta = filedialog.askopenfilename(
-        title="Seleccionar archivo de procesos (CSV o TXT)",
+        title="Seleccionar archivo de procesos (CSV)",
         initialdir=carpeta,
-        filetypes=[("Archivos CSV o Texto", "*.csv *.txt"), ("Todos los archivos", "*.*")],
+        filetypes=[("Archivos CSV", "*.csv")],
     )
     if ruta:
         cargar_archivo(ruta)
 
 
 def accion_agregar_proceso_manual():
-    """Valida y agrega un proceso desde el formulario."""
     if len(procesos_cargados) >= MAX_PROCESOS:
         messagebox.showerror("Cantidad de procesos superada",
                              f"Ya se cargó el máximo de {MAX_PROCESOS} procesos.")
@@ -431,7 +390,6 @@ def accion_agregar_proceso_manual():
 
 
 def accion_eliminar_proceso_seleccionado():
-    """Elimina el proceso seleccionado en la tabla."""
     seleccion = tree_procesos_inicio.selection()
     if not seleccion:
         messagebox.showinfo("Atención", "Seleccione un proceso de la tabla para eliminarlo.")
@@ -445,23 +403,12 @@ def accion_eliminar_proceso_seleccionado():
 
 
 def accion_limpiar_todos_los_procesos():
-    """Borra todos los procesos cargados."""
     procesos_cargados.clear()
     lbl_ruta_csv_inicio.config(text="Ningún archivo cargado.", fg="#7f8c8d")
     refrescar_tabla_procesos_inicio()
 
 
-def accion_cargar_ejemplo_defecto():
-    """Carga el lote 4 de la cátedra (10 procesos)."""
-    ruta = os.path.join(CARPETA_LOTES, "lote_4.csv")
-    if not os.path.exists(ruta):
-        messagebox.showerror("Ejemplo", f"No se encontró {ruta}")
-        return
-    cargar_archivo(ruta)
-
-
 def iniciar_simulacion_desde_inicio():
-    """Pasa de la Pantalla de Inicio al Simulador."""
     if len(procesos_cargados) == 0:
         messagebox.showwarning("Sin procesos", "Debe cargar al menos 1 proceso (archivo o manual).")
         return
@@ -472,7 +419,6 @@ def iniciar_simulacion_desde_inicio():
 
 
 def volver_a_pantalla_inicio():
-    """Regresa a la pantalla de carga de procesos."""
     frame_pantalla_simulador.pack_forget()
     frame_pantalla_inicio.pack(fill=tk.BOTH, expand=True)
     refrescar_tabla_procesos_inicio()
@@ -500,7 +446,6 @@ def crear_tabla(padre, columnas, alto, ancho_columna):
 
 
 def construir_pantalla_inicio(parent):
-    """Pantalla de bienvenida y carga de procesos."""
     global frame_pantalla_inicio, entry_manual_id, entry_manual_tam, entry_manual_ta, entry_manual_ti
     global tree_procesos_inicio, lbl_contador_procesos, lbl_ruta_csv_inicio
 
@@ -527,20 +472,15 @@ def construir_pantalla_inicio(parent):
     col_izq = tk.Frame(cuerpo, bg="#f5f6fa", width=420)
     col_izq.pack(side=tk.LEFT, fill=tk.BOTH, padx=(0, 10))
 
-    # Opción A: archivo
-    lf_csv = tk.LabelFrame(col_izq, text="Opción A: Cargar desde Archivo (CSV / TXT)",
+    lf_csv = tk.LabelFrame(col_izq, text="Opción A: Cargar desde Archivo CSV",
                            font=("Arial", 10, "bold"), padx=12, pady=10, bg="white")
     lf_csv.pack(fill=tk.X, pady=(0, 10))
-    tk.Label(lf_csv, text="Columnas: Id, tamaño, arribo, irrupción.\n"
-                          "Con encabezado pueden venir en cualquier orden\n(como en los lotes de la cátedra).",
-             font=("Arial", 8), justify=tk.LEFT, bg="white", fg="#555555").pack(anchor="w", pady=(0, 8))
-    crear_boton(lf_csv, "📁 Seleccionar Archivo CSV / TXT", "#3498db", "#2980b9",
+    crear_boton(lf_csv, "📁 Seleccionar Archivo CSV", "#3498db", "#2980b9",
                 accion_cargar_csv_inicio).pack(fill=tk.X)
     lbl_ruta_csv_inicio = tk.Label(lf_csv, text="Ningún archivo cargado.", font=("Arial", 8, "italic"),
                                    bg="white", fg="#7f8c8d")
     lbl_ruta_csv_inicio.pack(anchor="w", pady=(5, 0))
 
-    # Opción B: carga manual
     lf_manual = tk.LabelFrame(col_izq, text="Opción B: Carga Manual de Proceso",
                               font=("Arial", 10, "bold"), padx=12, pady=10, bg="white")
     lf_manual.pack(fill=tk.BOTH, expand=True)
@@ -561,7 +501,6 @@ def construir_pantalla_inicio(parent):
     crear_boton(lf_manual, "➕ Agregar Proceso a la Lista", "#27ae60", "#219a52",
                 accion_agregar_proceso_manual).pack(fill=tk.X, pady=(10, 4))
 
-    # Columna derecha: procesos cargados
     col_der = tk.LabelFrame(cuerpo, text="Procesos Cargados para la Simulación",
                             font=("Arial", 10, "bold"), padx=12, pady=10, bg="white")
     col_der.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
@@ -578,12 +517,9 @@ def construir_pantalla_inicio(parent):
               cursor="hand2", command=accion_limpiar_todos_los_procesos).pack(side=tk.RIGHT, padx=4)
     tk.Button(frame_acciones_tabla, text="Eliminar Seleccionado", font=("Arial", 8), bg="#95a5a6", fg="white",
               cursor="hand2", command=accion_eliminar_proceso_seleccionado).pack(side=tk.RIGHT, padx=4)
-    tk.Button(frame_acciones_tabla, text="Cargar Ejemplo (Lote 4)", font=("Arial", 8, "bold"), bg="#f39c12",
-              fg="white", cursor="hand2", command=accion_cargar_ejemplo_defecto).pack(side=tk.RIGHT, padx=4)
 
 
 def construir_pantalla_simulador(parent):
-    """Pantalla de la simulación, con los botones abajo."""
     global frame_pantalla_simulador, lbl_badge_reloj_t, lbl_alerta, lbl_grado
     global lbl_cpu_actual, lbl_cpu_restante, lbl_cpu_arribo, lbl_cpu_tamano
     global tree_listos, tree_suspendidos, tree_nuevos, tree_particiones, lbl_fragmentacion
@@ -716,7 +652,7 @@ def main():
     global ventana_principal
 
     ventana_principal = tk.Tk()
-    ventana_principal.title("Simulador de Memoria y CPU - Sistemas Operativos (UTN FRRe)")
+    ventana_principal.title("Simulador de Memoria y CPU - Sistemas Operativos (UTN FRRe) - Equipo 9")
     ventana_principal.geometry("1120x820")
     ventana_principal.minsize(980, 720)
 
@@ -727,7 +663,6 @@ def main():
     construir_pantalla_simulador(contenedor_raiz)
     frame_pantalla_inicio.pack(fill=tk.BOTH, expand=True)
 
-    # Atajos de teclado en la pantalla de simulación
     ventana_principal.bind("<Right>", lambda evento: ejecutar_paso_a_paso() if frame_pantalla_simulador.winfo_ismapped() else None)
     ventana_principal.bind("<Left>", lambda evento: retroceder_un_ciclo() if frame_pantalla_simulador.winfo_ismapped() else None)
 

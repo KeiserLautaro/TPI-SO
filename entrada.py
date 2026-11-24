@@ -1,18 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Lectura y validación de los procesos (desde archivo o desde el formulario).
-
-Formato del archivo: un proceso por línea con Id, tamaño, arribo e irrupción.
-  - Separador: coma, punto y coma, tabulación o espacios.
-  - Encabezado opcional. Si está, las columnas pueden venir en cualquier orden
-    (por ejemplo "Proceso TA TI Tamaño (K)", como en los lotes de la cátedra).
-    Si no está, el orden es: id, tamaño, arribo, irrupción.
-
-Los procesos con errores NO frenan la carga: se informan y se descartan, y se
-devuelven los válidos para que el usuario decida si sigue sin ellos.
-Si hay más de 10 válidos, se toman los 10 primeros del archivo.
-"""
-
 import csv
 
 from constantes import MEMORIA_USUARIO, MAX_PROCESOS
@@ -30,7 +15,6 @@ ALIAS_COLUMNAS = {
 
 
 def normalizar_id(texto):
-    """'p1' -> 'P1'; un Id solo numérico se convierte en 'P' + número ('3' -> 'P3')."""
     id_limpio = texto.strip().upper()
     if id_limpio.isdigit():
         id_limpio = "P" + str(int(id_limpio))
@@ -38,10 +22,6 @@ def normalizar_id(texto):
 
 
 def validar_proceso(texto_id, texto_tamano, texto_arribo, texto_irrupcion):
-    """
-    Valida los cuatro campos de un proceso.
-    Devuelve (proceso, "") si es válido, o (None, mensaje_de_error) si no.
-    """
     id_proceso = normalizar_id(str(texto_id))
     if id_proceso == "":
         return None, "el Id no puede estar vacío."
@@ -67,11 +47,6 @@ def validar_proceso(texto_id, texto_tamano, texto_arribo, texto_irrupcion):
 
 
 def validar_filas(filas):
-    """
-    `filas` es una lista de (numero_de_linea, [id, tamaño, arribo, irrupción]).
-    Devuelve (procesos_validos, errores). Descarta los inválidos y los Ids
-    repetidos, y si quedan más de 10 se queda con los 10 primeros.
-    """
     procesos = []
     errores = []
     ids_vistos = []
@@ -104,7 +79,6 @@ def validar_filas(filas):
 
 
 def normalizar_encabezado(texto):
-    """'Tamaño (K)' -> 'tamano'; 'Irrupción' -> 'irrupcion'."""
     texto = texto.strip().lower()
     for viejo, nuevo in [("á", "a"), ("é", "e"), ("í", "i"), ("ó", "o"), ("ú", "u"), ("ñ", "n")]:
         texto = texto.replace(viejo, nuevo)
@@ -114,7 +88,6 @@ def normalizar_encabezado(texto):
 
 
 def separar_linea(linea):
-    """Divide una línea según el separador que use (; , tab o espacios)."""
     for separador in [";", ",", "\t"]:
         if separador in linea:
             return next(csv.reader([linea], delimiter=separador))
@@ -122,7 +95,6 @@ def separar_linea(linea):
 
 
 def es_encabezado(campos):
-    """Una línea es encabezado si alguno de los campos numéricos no es un número."""
     for campo in campos[1:]:
         if not campo.strip().lstrip("-").isdigit():
             return True
@@ -130,7 +102,6 @@ def es_encabezado(campos):
 
 
 def leer_texto_archivo(ruta):
-    """Lee el archivo en UTF-8 y, si falla, en Latin-1 (como lo guarda Excel en español)."""
     try:
         with open(ruta, encoding="utf-8-sig") as archivo:
             return archivo.read()
@@ -140,11 +111,8 @@ def leer_texto_archivo(ruta):
 
 
 def leer_archivo(ruta):
-    """
-    Lee los procesos de un archivo. Devuelve (procesos_validos, errores).
-    Si `errores` no está vacío, la interfaz debe mostrarlos y preguntar si se
-    continúa con los procesos válidos.
-    """
+    if not str(ruta).lower().endswith(".csv"):
+        return [], ["Solo se aceptan archivos .csv."]
     try:
         texto = leer_texto_archivo(ruta)
     except OSError as error:
@@ -193,12 +161,3 @@ def leer_archivo(ruta):
     if len(procesos) == 0 and len(errores) == 0:
         errores.append("El archivo no tiene procesos.")
     return procesos, errores
-
-
-def guardar_archivo(ruta, procesos):
-    """Guarda los procesos en CSV (id,tamano,arribo,irrupcion)."""
-    with open(ruta, "w", newline="", encoding="utf-8") as archivo:
-        escritor = csv.writer(archivo)
-        escritor.writerow(COLUMNAS)
-        for proceso in procesos:
-            escritor.writerow([proceso["id"], proceso["tamano"], proceso["arribo"], proceso["irrupcion"]])

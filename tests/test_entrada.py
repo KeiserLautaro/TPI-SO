@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from entrada import leer_archivo, validar_proceso, normalizar_id
 
 
@@ -39,6 +38,12 @@ def test_errores_no_frenan_a_los_validos(tmp_path):
 def test_encabezado_invalido(tmp_path):
     procesos, errores = leer_archivo(escribir(tmp_path, "a,b,c,d\n1,2,3,4\n"))
     assert procesos == [] and "Encabezado" in errores[0]
+
+
+def test_rechaza_txt(tmp_path):
+    ruta = tmp_path / "procesos.txt"
+    ruta.write_text("P1,120,0,8", encoding="utf-8")
+    assert leer_archivo(ruta) == ([], ["Solo se aceptan archivos .csv."])
 
 
 def test_archivo_vacio(tmp_path):

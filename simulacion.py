@@ -1,24 +1,7 @@
-# -*- coding: utf-8 -*-
-"""
-Motor de la simulación: une memoria (Best-Fit), planificación (SRTF) y los
-estados de los procesos. NO importa nada de la interfaz: la consola y la
-interfaz gráfica solo llaman a estas funciones y muestran el `estado`.
-
-Todo el estado de la simulación vive en un único diccionario `estado`, que
-se pasa como parámetro a cada función. Para "volver atrás" alcanza con
-guardar copias: copy.deepcopy(estado).
-
-Qué significa el estado en el instante T: es lo que queda después de procesar,
-en ese orden, los arribos, la admisión y la planificación de T. Es decir, qué
-proceso usa la CPU durante [T, T+1). Un proceso que termina al final de
-[T-1, T) figura como terminado en T.
-"""
-
 from constantes import MAX_MULTIPROGRAMACION
 from memoria import crear_memoria, asignar_memoria, liberar_memoria
 from planificador import elegir_proceso_srtf, clave_orden_llegada
 
-# Estados posibles de un proceso
 NUEVO = "Nuevo"
 LISTO = "Listo"
 LISTO_SUSPENDIDO = "Listo y Suspendido"
@@ -31,7 +14,6 @@ TERMINADO = "Terminado"
 # =============================================================================
 
 def crear_proceso(id_proceso, tamano, arribo, irrupcion):
-    """Diccionario que representa un proceso."""
     return {
         "id": id_proceso,
         "tamano": tamano,
@@ -44,11 +26,6 @@ def crear_proceso(id_proceso, tamano, arribo, irrupcion):
 
 
 def crear_estado(procesos):
-    """
-    Crea la simulación con la lista de procesos y la deja en el instante T = 0
-    (ya procesados los arribos, la admisión y la planificación de T = 0).
-    `procesos` es una lista de diccionarios creados con crear_proceso().
-    """
     if len(procesos) == 0:
         raise ValueError("No hay procesos para simular.")
 
@@ -78,12 +55,10 @@ def crear_estado(procesos):
 # =============================================================================
 
 def simulacion_terminada(estado):
-    """True cuando todos los procesos terminaron."""
     return len(estado["terminados"]) == len(estado["procesos"])
 
 
 def grado_multiprogramacion(estado):
-    """Cantidad de procesos en Ejecución + Listos + Listos/Suspendidos."""
     en_cpu = 0
     if estado["en_cpu"] is not None:
         en_cpu = 1
@@ -91,12 +66,10 @@ def grado_multiprogramacion(estado):
 
 
 def sucesos_del_ultimo_paso(estado):
-    """Sucesos registrados desde la pantalla anterior."""
     return estado["registro"][estado["inicio_paso"]:]
 
 
 def alertas_del_ultimo_paso(estado):
-    """Alertas SRTF registradas desde la pantalla anterior."""
     alertas = []
     for suceso in sucesos_del_ultimo_paso(estado):
         if suceso["alerta"]:
@@ -105,7 +78,6 @@ def alertas_del_ultimo_paso(estado):
 
 
 def registrar(estado, texto, alerta=False, t=None):
-    """Agrega un suceso al registro."""
     if t is None:
         t = estado["t"]
     estado["registro"].append({"t": t, "texto": texto, "alerta": alerta})
@@ -116,7 +88,6 @@ def registrar(estado, texto, alerta=False, t=None):
 # =============================================================================
 
 def procesar_arribos(estado):
-    """Los procesos cuyo tiempo de arribo es T pasan a Nuevo (en orden de llegada)."""
     for proceso in estado["procesos"]:
         if proceso["estado"] is None and proceso["arribo"] == estado["t"]:
             proceso["estado"] = NUEVO
@@ -126,14 +97,6 @@ def procesar_arribos(estado):
 
 
 def admitir_procesos(estado):
-    """
-    1. Los Listos/Suspendidos (en orden FIFO) que ahora entran en algún hueco
-       reciben memoria y pasan a Listo. Ya cuentan para el grado de
-       multiprogramación, así que no consumen cupo. Si uno no entra, los que
-       vienen detrás igual pueden entrar.
-    2. Mientras el grado de multiprogramación sea menor a 5, los Nuevos (FIFO)
-       pasan a Listo si hay hueco, o a Listo/Suspendido si no lo hay.
-    """
     memoria = estado["memoria"]
 
     for proceso in list(estado["suspendidos"]):
@@ -156,7 +119,6 @@ def admitir_procesos(estado):
 
 
 def planificar_cpu(estado):
-    """Aplica SRTF. Registra una alerta si el elegido se adelanta al orden de llegada."""
     en_cpu = estado["en_cpu"]
     elegido = elegir_proceso_srtf(en_cpu, estado["listos"])
     if elegido is None or elegido is en_cpu:
@@ -202,10 +164,6 @@ def planificar_cpu(estado):
 
 
 def ejecutar_unidad(estado):
-    """
-    El proceso en CPU ejecuta durante [T, T+1). Si termina, su finalización es
-    T+1 y libera su memoria (los huecos vecinos se fusionan).
-    """
     proceso = estado["en_cpu"]
     if proceso is None:
         estado["historial_cpu"].append(None)
@@ -230,7 +188,6 @@ def ejecutar_unidad(estado):
 
 
 def ejecutar_instante(estado):
-    """Pasa de T a T+1: ejecuta una unidad y procesa arribos, admisión y planificación de T+1."""
     estado["hubo_evento"] = False
     ejecutar_unidad(estado)
     estado["t"] += 1
@@ -240,11 +197,10 @@ def ejecutar_instante(estado):
 
 
 # =============================================================================
-# Avance (lo que llaman la consola y la interfaz)
+# Avance (lo que llama la interfaz)
 # =============================================================================
 
 def avanzar_instante(estado):
-    """Avanza un instante (T -> T+1). No hace nada si la simulación ya terminó."""
     if simulacion_terminada(estado):
         return
     estado["inicio_paso"] = len(estado["registro"])
@@ -252,7 +208,6 @@ def avanzar_instante(estado):
 
 
 def avanzar_hasta_evento(estado):
-    """Avanza hasta el próximo instante en que llega o termina algún proceso."""
     if simulacion_terminada(estado):
         return
     estado["inicio_paso"] = len(estado["registro"])
@@ -262,7 +217,6 @@ def avanzar_hasta_evento(estado):
 
 
 def ejecutar_completa(estado):
-    """Corre hasta el final (para tests y verificación)."""
     while not simulacion_terminada(estado):
         avanzar_instante(estado)
 
@@ -272,12 +226,6 @@ def ejecutar_completa(estado):
 # =============================================================================
 
 def calcular_estadisticas(estado):
-    """
-    Retorno = finalización - arribo; espera = retorno - irrupción.
-    Rendimiento = procesos terminados / tiempo total, donde el tiempo total es
-    la finalización del último proceso contada desde T = 0.
-    Si la simulación no terminó, calcula sobre los procesos ya terminados.
-    """
     detalle = []
     suma_retorno = 0
     suma_espera = 0
