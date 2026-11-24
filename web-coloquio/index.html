@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador TPI-SO - Coloquio de Sistemas Operativos</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#00d2d3">
+</head>
+<body>
+  <div class="pwa-container">
+    <!-- Header con título y modo oscuro/claro -->
+    <header class="pwa-header">
+      <div class="header-left">
+        <h1><i class="fas fa-cpu pwa-icon"></i> Simulador TPI-SO</h1>
+        <p class="header-subtitle">Sistemas Operativos - UTN FRRe - Coloquio de Preparación</p>
+      </div>
+      <div class="header-right">
+        <button id="theme-toggle" class="theme-btn" aria-label="Alternar modo oscuro/claro">
+          <i class="fas fa-moon moon-icon"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Navegación de pestañas -->
+    <nav class="pwa-tabs">
+      <div class="tab-header">
+        <span class="tab-indicator"></span>
+      </div>
+      <ul class="tab-nav">
+        <li class="tab-item active" data-tab="elevator" role="tab" aria-selected="true" aria-label="Elevator Pitch">
+          <div class="tab-icon"><i class="fas fa-quote-left"></i></div>
+          <span class="tab-label">Elevator Pitch</span>
+        </li>
+        <li class="tab-item" data-tab="simulator" role="tab" aria-selected="false" aria-label="Simulador Interactivo">
+          <div class="tab-icon"><i class="fas fa-simulator"></i></span>
+          <span class="tab-label">Simulador</span>
+        </li>
+        <li class="tab-item" data-tab="metrics" role="tab" aria-selected="false" aria-label="Métricas y Fórmulas">
+          <div class="tab-icon"><i class="fas fa-chart-bar"></i></span>
+          <span class="tab-label">Métricas</span>
+        </li>
+        <li class="tab-item" data-tab="flashcards" role="tab" aria-selected="false" aria-label="Trainer de Coloquio">
+          <div class="tab-icon"><i class="fas fa-brain"></i></span>
+          <span class="tab-label">Trainer</span>
+        </li>
+        <li class="tab-item" data-tab="tips" role="tab" aria-selected="false" aria-label="Recomendaciones">
+          <div class="tab-icon"><i class="fas fa-lightbulb"></i></span>
+          <span class="tab-label">Tips</span>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Contenido de las pestañas -->
+    <main class="pwa-main">
+      <!-- TAB 1: Elevator Pitch -->
+      <section id="elevator" class="pwa-section active">
+        <div class="section-header">
+          <h2><i class="fas fa-diagram-project"></i> Arquitectura del Sistema</h2>
+          <button class="info-btn" aria-label="Más información sobre la arquitectura">
+            <i class="fas fa-info-circle"></i>
+          </button>
+        </div>
+
+        <div class="architecture-grid">
+          <div class="arch-card">
+            <div class="arch-icon"><i class="fas fa-database"></i></div>
+            <h3>Motor de Simulación</h3>
+            <p>Motor desacoplado de la interfaz Tkinter. Todo el estado vive en un diccionario `estado` único que se pasa a cada función. Implementa memoria MVT, planificación SRTF y gestión de procesos.</p>
+          </div>
+
+          <div class="arch-card">
+            <div class="arch-icon"><i class="fas fa-memory"></i></div>
+            <h3>Memoria MVT Best-Fit</h3>
+            <p>Asignación de memoria con particiones variables. Política Best-Fit: se elige el hueco libre más pequeño que cabe. La fragmentación interna es siempre 0K (MVT particiona exactamente). La fragmentación externa es el problema real.</p>
+          </div>
+
+          <div class="arch-card">
+            <div class="arch-icon"><i class="fas fa-cpu"></i></div>
+            <h3>Planificación SRTF</h3>
+            <p>Shortest Remaining Time First, planificación expropiativa. Siempre elige el proceso con menor tiempo restante. Reglas de desempate: menor tiempo de arribo, luego menor ID (P2 antes que P10).</p>
+          </div>
+        </div>
+
+        <div class="architecture-grid">
+          <div class="arch-card">
+            <div class="arch-icon"><i class="fas fa-users"></i></div>
+            <h3>Restricciones del Sistema</h3>
+            <ul class="constraints-list">
+              <li><strong>Grado de multiprogramación máximo 5:</strong> Ejecución + Listos + Listos/Suspendidos</li>
+              <li><strong>Sin swap-out:</strong> Un proceso solo va a Listo/Suspendido si no hay hueco al admitirlo</li>
+              <li><strong>Memoria total 550K:</strong> 100K para SO (direcciones 0-99) + 450K para usuario (direcciones 100-549)</li>
+              <li><strong>Hasta 10 procesos:</strong> Límite máximo por simulación</li>
+            </ul>
+          </div>
+
+          <div class="arch-card">
+            <div class="arch-icon"><i class="fas fa-clock"></i></div>
+            <h3>Ciclo de Vida de los Procesos</h3>
+            <p>Etapas por instante T: <strong>No arribó → Nuevo → Listo / Listo y Suspendido → Ejecución → Terminado</strong>. Lo que se muestra en el instante T es el estado después de procesar arribos, admisión y planificación de T.</p>
+          </div>
+        </div>
+
+        <div class="section-header">
+          <h2><i class="fas fa-folder"></i> Módulos del Proyecto (.py)</h2>
+          <p>Haz clic en cada módulo para ver su responsabilidad y funciones principales:</p>
+        </div>
+
+        <div class="modules-list">
+          <div class="module-item" data-module="constantes">
+            <div class="module-header">
+              <h4><i class="fas fa-history"></i> constantes.py</h4>
+              <span class="module-expand">▶</span>
+            </div>
+            <div class="module-content">
+              <p>Define las constantes del sistema: MEMORY_SO=100K, MEMORY_USUARIO=450K, MAX_MULTIPROGRAMACION=5, MAX_PROCESOS=10. Establece los valores fijados por la consigna del TPI.</p>
+            </div>
+          </div>
+
+          <div class="module-item" data-module="memoria">
+            <div class="module-header">
+              <h4><i class="fas fa-layer-group"></i> memoria.py</h4>
+              <span class="module-expand">▶</span>
+            </div>
+            <div class="module-content">
+              <p>Implementa la memoria con particiones variables (MVT) y política Best-Fit. Funciones principales: crear_memoria, buscar_hueco_best_fit, asignar_memoria, liberar_memoria con fusión de huecos, tabla_particiones, fragmentacion_externa.</p>
+            </div>
+          </div>
+
+          <div class="module-item" data-module="planificador">
+            <div class="module-header">
+              <h4><i class="fas fa-sort-alpha-down"></i> planificador.py</h4>
+              <span class="module-expand">▶</span>
+            </div>
+            <div class="module-content">
+              <p>Implementa la planificación SRTF (Shortest Remaining Time First, expropiativa). Funciones: numero_de_id (para ordenar P2 antes que P10), clave_orden_llegada, clave_srtf, elegir_proceso_srtf con reglas de desempate detalladas.</p>
+            </div>
+          </div>
+
+          <div class="module-item" data-module="simulacion">
+            <div class="module-header">
+              <h4><i class="fas fa-server"></i> simulacion.py</h4>
+              <span class="module-expand">▶</span>
+            </div>
+            <div class="module-content">
+              <p>Motor principal de la simulación. Une memoria, planificación y estados de procesos. Funciones clave: crear_proceso, crear_estado, procesar_arribos, admitir_procesos, planificar_cpu, ejecutar_unidad, ejecutar_instante, avanzar_instante, avanzar_hasta_evento, calcular_estadisticas.</p>
+            </div>
+          </div>
+
+          <div class="module-item" data-module="entrada">
+            <div class="module-header">
+              <h4><i class="fas fa-file-import"></i> entrada.py</h4>
+              <span class="module-expand">▶</span>
+            </div>
+            <div class="module-content">
+              <p>Lectura y validación de procesos desde archivos CSV/TXT. Validación de campos, IDs duplicados, tamaño máximo (450K), límite de 10 procesos. Formato flexible de separadores (coma, punto y coma, tabulación).</p>
+            </div>
+          </div>
+
+          <div class="module-item" data-module="interfaz">
+            <div class="module-header">
+              <h4><i class="fas fa-desktop"></i> interfaz.py</h4>
+              <span class="module-expand">▶</span>
+            </div>
+            <div class="module-content">
+              <p>Interfaz gráfica Tkinter que muestra el estado de la simulación. No contiene lógica de simulación: llama a las funciones de simulacion.py y muestra el diccionario estado. Pila de estados para "Ciclo Anterior".</p>
+            </div>
+          </div>
+
+          <div class="module-item" data-module="informe">
+            <div class="module-header">
+              <h4><i class="fas fa-file-text"></i> informe.py</h4>
+              <span class="module-expand">▶</span>
+            </div>
+            <div class="module-content">
+              <p>Genera textos formateados del estado, tablas de particiones, colas y el informe final con estadísticas y diagrama de Gantt. Textos para consola y exportación a TXT.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: Simulador Interactivo -->
+      <section id="simulator" class="pwa-section">
+        <div class="section-header">
+          <h2><i class="fas fa-simulator"></i> Simulador Interactivo Paso a Paso</h2>
+          <p>Replica exacta la lógica de la simulación Python. Inicialización en T=0, las 5 micro-etapas de cada avance [T, T+1), visualización en vivo.</p>
+        </div>
+
+        <!-- Controles de simulación -->
+        <div class="simulation-controls">
+          <div class="control-group">
+            <button class="btn btn-primary" id="btn-reiniciar" disabled>
+              <i class="fas fa-undo"></i> Reiniciar (T=0)
+            </button>
+            <button class="btn btn-success" id="btn-paso" disabled>
+              <i class="fas fa-step-forward"></i> Avanzar 1 Instante (T → T+1)
+            </button>
+            <button class="btn btn-info" id="btn-evento" disabled>
+              <i class="fas fa-arrow-right"></i> Siguiente Evento (Arribo/Fin)
+            </button>
+            <button class="btn btn-warning" id="btn-retroceder" disabled>
+              <i class="fas fa-step-backward"></i> Ciclo Anterior
+            </button>
+          </div>
+
+          <div class="control-group" style="justify-content: flex-start;">
+            <button class="btn btn-secondary" id="btn-lote-1">Lote 1</button>
+            <button class="btn btn-secondary" id="btn-lote-2">Lote 2</button>
+            <button class="btn btn-secondary" id="btn-lote-3">Lote 3</button>
+            <button class="btn btn-secondary" id="btn-lote-4">Lote 4</button>
+            <button class="btn btn-secondary" id="btn-lote-5">Lote 5</button>
+            <button class="btn btn-secondary" id="btn-lote-6">Lote 6</button>
+          </div>
+        </div>
+
+        <!-- Panel de estado en vivo -->
+        <div class="live-status">
+          <div class="status-card">
+            <div class="status-header">
+              <span class="status-label">Reloj del Sistema</span>
+              <span class="status-value" id="reloj-t">--</span>
+            </div>
+            <div class="status-header">
+              <span class="status-label">Grado Multiprogramación</span>
+              <span class="status-value" id="grado">0/5</span>
+            </div>
+          </div>
+
+          <div class="status-card">
+            <div class="status-header">
+              <span class="status-label">CPU</span>
+              <span class="status-value" id="estado-cpu">LIBRE</span>
+            </div>
+            <div class="status-header">
+              <span class="status-label">Restante</span>
+              <span class="status-value" id="resto-cpu">-</span>
+            </div>
+          </div>
+
+          <div class="status-card">
+            <div class="status-header">
+              <span class="status-label">Alertas SRTF</span>
+              <span class="status-value" id="alertas">--</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Visualización de Memoria -->
+        <div class="memory-visualization">
+          <h3>Memoria MVT (550K: 100K SO + 450K Usuario)</h3>
+          <div class="memory-bar" id="memory-bar">
+            <div class="memory-segment so" style="width: 18.18%; background: #ff7675;">
+              SO (100K)
+            </div>
+          </div>
+          <p class="memory-desc">Particiones de memoria en tiempo real. Best-Fit con fusión de huecos contiguos al liberar.</p>
+        </div>
+
+        <!-- Tabla de procesos -->
+        <div class="process-table">
+          <h3>Colas de Procesos</h3>
+          <div class="table-tabs">
+            <button class="table-tab active" data-table="listos">Listos</button>
+            <button class="table-tab" data-table="suspendidos">Listos y Suspendidos</button>
+            <button class="table-tab" data-table="nuevos">Nuevos</button>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Tamaño</th>
+                <th>Arribo</th>
+                <th>Irrupción</th>
+                <th>Restante</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="processes-body">
+              <tr><td colspan="6" class="empty-state">Cargue un lote o agregue procesos</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Diagrama de Gantt -->
+        <div class="gantt-chart">
+          <h3>Diagrama de Gantt Dinámico</h3>
+          <canvas id="gantt-canvas" width="800" height="50"></canvas>
+          <p class="gantt-legend">
+            <span class="legend-item"><div class="legend-color" style="background: #3498db;"></div>CPU</span>
+            <span class="legend-item"><div class="legend-color" style="background: #f1c40f;"></div>Ociosa</span>
+          </p>
+        </div>
+
+        <!-- Log de sucesos -->
+        <div class="event-log">
+          <h3>Log de Sucesos (últimos)</h3>
+          <div class="log-container">
+            <div class="log-empty" id="log-empty">
+              Cargue un lote para ver los sucesos de simulación
+            </div>
+            <div class="log-content" id="log-content"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: Métricas y Fórmulas -->
+      <section id="metrics" class="pwa-section">
+        <div class="section-header">
+          <h2><i class="fas fa-chart-bar"></i> Métricas y Fórmulas en Vivo</h2>
+          <p>Cálculo automático de Retorno, Espera, TRP, TEP y rendimiento. Fórmulas conceptuales explicadas.</p>
+        </div>
+
+        <div class="metrics-cards">
+          <div class="metric-card card-trp">
+            <div class="metric-value" id="metric-trp">--</div>
+            <div class="metric-label">TRP (Retorno Promedio)</div>
+            <div class="metric-description">Retorno = Fin - Arribo</div>
+          </div>
+
+          <div class="metric-card card-tep">
+            <div class="metric-value" id="metric-tep">--</div>
+            <div class="metric-label">TEP (Espera Promedio)</div>
+            <div class="metric-description">Espera = Retorno - Irrupción</div>
+          </div>
+
+          <div class="metric-card card-rendimiento">
+            <div class="metric-value" id="metric-rendimiento">--</div>
+            <div class="metric-label">Rendimiento</div>
+            <div class="metric-description">Procesos / Tiempo total</div>
+          </div>
+
+          <div class="metric-card card-tiempo">
+            <div class="metric-value" id="metric-tiempo">--</div>
+            <div class="metric-label">Tiempo Total</div>
+            <div class="metric-description">Unidades de tiempo</div>
+          </div>
+        </div>
+
+        <div class="process-stats-table">
+          <h4>Tabla de Procesos con Cálculo de Métricas</h4>
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Tamaño</th>
+                <th>Arribo</th>
+                <th>Irrupción</th>
+                <th>Fin</th>
+                <th>Retorno</th>
+                <th>Espera</th>
+              </tr>
+            </thead>
+            <tbody id="processes-stats-body">
+              <tr><td colspan="7" class="empty-state">Cargue un lote para ver las métricas</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="formulas-section">
+          <h4>Fórmulas Conceptuales</h4>
+          <div class="formulas-grid">
+            <div class="formula-box">
+              <h5>Retorno (TR)</h5>
+              <p><strong>TR = Fin - Arribo</strong></p>
+              <p>Mide el tiempo total que un proceso estuvo en el sistema, desde su arribo hasta su finalización.</p>
+            </div>
+
+            <div class="formula-box">
+              <h5>Espera (TE)</h5>
+              <p><strong>TE = TR - Irrupción</strong></p>
+              <p>Mide el tiempo que el proceso esperó en colas (Listos, Suspendido) y ejecutándose en CPU. Incluye tiempo en estado suspendido.</p>
+            </div>
+
+            <div class="formula-box">
+              <h5>Tiempo de Retorno Promedio (TRP)</h5>
+              <p><strong>TRP = ΣTR / N</strong></p>
+              <p>Promedio de los retornos de todos los procesos terminados.</p>
+            </div>
+
+            <div class="formula-box">
+              <h5>Tiempo de Espera Promedio (TEP)</h5>
+              <p><strong>TEP = ΣTE / N</strong></p>
+              <p>Promedio de las esperas de todos los procesos terminados.</p>
+            </div>
+
+            <div class="formula-box">
+              <h5>Rendimiento del Sistema</h5>
+              <p><strong>Rendimiento = N / Tiempo_total</strong></p>
+              <p>Cantidad de procesos terminados divididos por el tiempo total de simulación (desde T=0).</p>
+            </div>
+
+            <div class="formula-box">
+              <h5>Concepto Clave: Espera incluye...</h5>
+              <p><strong>El tiempo en estado suspendido y en cola de listos cuenta como espera.</strong></p>
+              <p>Desde el arribo hasta la finalización, todo el tiempo que el proceso no está ejecutándose en CPU cuenta como "espera". Esto es crucial en sistemas con suspensión por fragmentación externa.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="lotes-info">
+          <h4>Datos de los Lotes de Prueba de la Cátedra</h4>
+          <div class="lotes-grid">
+            <div class="lote-card">
+              <div class="lote-header">
+                <span class="lote-number">Lote 1</span>
+                <span class="lote-trp">TRP: 2.60</span>
+              </div>
+              <p class="lote-descripcion">Arribos espaciados, CPU ociosa</p>
+            </div>
+
+            <div class="lote-card">
+              <div class="lote-header">
+                <span class="lote-number">Lote 2</span>
+                <span class="lote-trp">TRP: 26.20</span>
+              </div>
+              <p class="lote-descripcion">Todos en T=0, procesos suspendidos</p>
+            </div>
+
+            <div class="lote-card">
+              <div class="lote-header">
+                <span class="lote-number">Lote 3</span>
+                <span class="lote-trp">TRP: 20.00</span>
+              </div>
+              <p class="lote-descripcion">Más de 5 procesos simultáneos</p>
+            </div>
+
+            <div class="lote-card">
+              <div class="lote-header">
+                <span class="lote-number">Lote 4</span>
+                <span class="lote-trp">TRP: 15.90</span>
+              </div>
+              <p class="lote-descripcion">10 procesos con expropiaciones</p>
+            </div>
+
+            <div class="lote-card">
+              <div class="lote-header">
+                <span class="lote-number">Lote 5</span>
+                <span class="lote-trp">TRP: 6.00</span>
+              </div>
+              <p class="lote-descripcion">P2 de 451K (se descarta P1 y P3)</p>
+            </div>
+
+            <div class="lote-card">
+              <div class="lote-header">
+                <span class="lote-number">Lote 6</span>
+                <span class="lote-trp">TRP: 19.40</span>
+              </div>
+              <p class="lote-descripcion">12 procesos (se toman P1 a P10)</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: Trainer de Coloquio -->
+      <section id="flashcards" class="pwa-section">
+        <div class="section-header">
+          <h2><i class="fas fa-brain"></i> Trainer de Coloquio - Preguntas Difíciles</h2>
+          <p>Flashcards interactivas con preguntas basadas en la documentación y casos borde del código. Práctica para la defensa oral.</p>
+        </div>
+
+        <div class="flashcards-area">
+          <div class="flashcards-intro">
+            <p>Seleccione un conjunto de preguntas para practicar:</p>
+            <div class="flashcard-options">
+              <button class="flashcard-option option-lote1" data-set="lote1">Lote 1 - Casos básicos</button>
+              <button class="flashcard-option option-lote2" data-set="lote2">Lote 2 - Procesos suspendidos</button>
+              <button class="flashcard-option option-lote3" data-set="lote3">Lote 3 - Más de 5 procesos</button>
+              <button class="flashcard-option option-lote4" data-set="lote4">Lote 4 - Expropiaciones</button>
+              <button class="flashcard-option option-lote5" data-set="lote5">Lote 5 - Validación CSV</button>
+              <button class="flashcard-option option-lote6" data-set="lote6">Lote 6 - 12 procesos</button>
+              <button class="flashcard-option option-custom" data-set="custom">Preguntas Personalizadas</button>
+            </div>
+          </div>
+
+          <div class="flashcard-container" id="flashcard-container">
+            <!-- Flashcards se cargarán aquí -->
+            <div class="no-flashcards" id="no-flashcards">
+              <i class="fas fa-hand-pointer"></i>
+              <h3>Seleccione un conjunto de preguntas arriba</h3>
+              <p>Las flashcards aparecerán aquí después de cargar un conjunto.</p>
+            </div>
+          </div>
+
+          <div class="flashcard-controls">
+            <button class="btn btn-prev" id="btn-prev" disabled>
+              <i class="fas fa-chevron-left"></i> Anterior
+            </button>
+            <span class="flashcard-counter" id="flashcard-counter">1 / 0</span>
+            <button class="btn btn-next" id="btn-next" disabled>
+              Siguiente <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="flashcard-details">
+          <div class="flashcard-panel question" id="flashcard-question">
+            <div class="panel-header">
+              <h4>Pregunta</h4>
+              <span class="panel-close" aria-label="Cerrar">×</span>
+            </div>
+            <div class="panel-body" id="question-text">
+              Seleccione un conjunto de preguntas para comenzar
+            </div>
+          </div>
+
+          <div class="flashcard-panel answer" id="flashcard-answer" style="display: none;">
+            <div class="panel-header">
+              <h4>Respuesta</h4>
+              <span class="panel-close" aria-label="Cerrar">×</span>
+            </div>
+            <div class="panel-body" id="answer-text">
+              Seleccione un conjunto de preguntas para comenzar
+            </div>
+            <div class="panel-footer">
+              <button class="btn btn-reveal" id="btn-reveal">
+                <i class="fas fa-eye"></i> Revelar Respuesta
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 5: Recomendaciones -->
+      <section id="tips" class="pwa-section">
+        <div class="section-header">
+          <h2><i class="fas fa-lightbulb"></i> Recomendaciones para Defender el TPI</h2>
+          <p>Consejos prácticos para tu exposición de 5 minutos: estructura, lotes a elegir, preguntas trampa, checklist.</p>
+        </div>
+
+        <div class="tips-container">
+          <div class="tip-card">
+            <div class="tip-header">
+              <div class="tip-icon"><i class="fas fa-align-left"></i></div>
+              <span class="tip-number">1</span>
+            </div>
+            <div class="tip-content">
+              <h4>Estructura de la Charla (5 minutos)</h4>
+              <ol>
+                <li><strong>Problema (1 min):</strong>Qué simula el sistema, por qué es importante MVT + SRTF</li>
+                <li><strong>Arquitectura Desacoplada (1 min):</strong>Motor Python separado de la interfaz Tkinter</li>
+                <li><strong>Flujo de un Instante (1 min):</strong>De T a T+1: ejecución, arribos, admisión, planificación</li>
+                <li><strong>Demostración de Casos Bordes (2 min):</strong>Lote con fragmentación, suspendidos, expropiación</li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-header">
+              <div class="tip-icon"><i class="fas fa-database"></i></div>
+              <span class="tip-number">2</span>
+            </div>
+            <div class="tip-content">
+              <h4>Qué Lotes Elegir para Demostrar</h4>
+              <ul>
+                <li><strong>Lote 2:</strong> Todos en T=0, buena muestra de procesos suspendidos por fragmentación</li>
+                <li><strong>Lote 3:</strong> Más de 5 procesos simultáneos, demuestra límite de multiprogramación 5</li>
+                <li><strong>Lote 4:</strong> 10 procesos con expropiaciones, muestra SRTF preemptivo en acción</li>
+                <li><strong>Lote 5:</strong> Valida CSV, proceso de 451K descartado, conceptos de límite de memoria</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-header">
+              <div class="tip-icon"><i class="fas fa-shield-alt"></i></div>
+              <span class="tip-number">3</span>
+            </div>
+            <div class="tip-content">
+              <h4>Posibles Preguntas Trampa y Cómo Responder</h4>
+              <ul>
+                <li><strong>"¿Por qué no hay swap-out?"</strong>: Porque la consigna lo prohíbe; un proceso solo va a suspendido si al admitirlo no hay hueco</li>
+                <li><strong>"¿Qué pasa con la fragmentación interna?"</strong>: Siempre 0K en MVT porque particiona exactamente al tamaño del proceso</li>
+                <li><strong>"¿Por qué P2 antes que P10 en SRTF?"</strong>: Desempate por menor ID numérico (número de dígitos), no comparación textual</li>
+                <li><strong>"¿Qué sucede cuando un proceso termina en T=3?"</strong>: En T=4 ya no está en CPU, su memoria se libera y fusiona huecos</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="tip-card">
+            <div class="tip-header">
+              <div class="tip-icon"><i class="fas fa-check-circle"></i></div>
+              <span class="tip-number">4</span>
+            </div>
+            <div class="tip-content">
+              <h4>Checklist Previo a la Entrega</h4>
+              <ul>
+                <li>[ ] Tests con pytest pasaron (ejecutar `python -m pytest tests/`)</li>
+                <li>[ ] Ejecutable generado con PyInstaller (build.ps1)</li>
+                <li>[ ] Carpeta lotes/ al lado del ejecutable</li>
+                <li>[ ] README actualizado con resultados de los lotes</li>
+                <li>[ ] Documentación del código (constantes.py, memoria.py, planificador.py, simulacion.py)</li>
+                <li>[ ] Informe final generado y exportado</li>
+                <li>[ ] Diagrama de Gantt verificado contra resultados esperados</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal para flashcard personalizada -->
+  <div id="custom-flashcard-modal" class="modal">
+    <div class="modal-content">
+      <span class="modal-close" aria-label="Cerrar">&times;</span>
+      <h2>Nueva Flashcard Personalizada</h2>
+      <form id="custom-flashcard-form">
+        <div class="form-group">
+          <label for="question-text">Pregunta</label>
+          <textarea id="question-text" rows="3" placeholder="Escriba su pregunta difícil de defensa..." required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="answer-text">Respuesta</label>
+          <textarea id="answer-text" rows="3" placeholder="Escriba la respuesta correcta..." required></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Guardar Flashcard</button>
+          <button type="button" class="btn btn-secondary" onclick="closeCustomModal()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
